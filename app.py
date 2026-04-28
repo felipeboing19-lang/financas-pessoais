@@ -13,11 +13,9 @@ from functools import wraps
 app = Flask(__name__)
 
 # ─── CONFIGURAÇÕES ────────────────────────────────────────────────────────────
-# 🔐 MUDE ESTAS CREDENCIAIS ANTES DE SUBIR NO RENDER!
-USUARIO = os.environ.get("APP_USER",  "felipe.boing")
-SENHA   = os.environ.get("APP_PASS",  "24Hsobvqi@")
-app.secret_key = os.environ.get("SECRET_KEY", "a}_I$=4.9@_0~x3uk_QH1mgdUK0Ij$(geP6_+C}Bm3)w|,a?gv")
-
+USUARIO = os.environ.get("APP_USER",  "felipe")
+SENHA   = os.environ.get("APP_PASS",  "minhasenha123")
+app.secret_key = os.environ.get("SECRET_KEY", "chave-super-secreta-mude-isso")
 DATA_FILE = os.environ.get("DATA_PATH", "financas_data.json")
 
 # ─── DADOS ────────────────────────────────────────────────────────────────────
@@ -25,7 +23,7 @@ def carregar():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
-    return {"salarios": {"A": 0.0, "B": 0.0}, "despesas": {}}
+    return {"salarios": {"A": 0.0, "B": 0.0}, "despesas": {}, "poupanca": 0.0}
 
 def salvar(dados):
     with open(DATA_FILE, "w", encoding="utf-8") as f:
@@ -43,7 +41,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated
 
-# ─── ROTAS DE AUTENTICAÇÃO ────────────────────────────────────────────────────
+# ─── AUTENTICAÇÃO ─────────────────────────────────────────────────────────────
 @app.route("/login", methods=["GET", "POST"])
 def login():
     erro = None
@@ -75,7 +73,7 @@ def get_dados():
 @app.route("/api/salarios", methods=["POST"])
 @login_required
 def salvar_salarios():
-    body = request.json
+    body  = request.json
     dados = carregar()
     try:
         dados["salarios"]["A"] = float(body.get("A", 0))
@@ -85,10 +83,22 @@ def salvar_salarios():
     except Exception as e:
         return jsonify({"ok": False, "erro": str(e)}), 400
 
+@app.route("/api/poupanca", methods=["POST"])
+@login_required
+def salvar_poupanca():
+    body  = request.json
+    dados = carregar()
+    try:
+        dados["poupanca"] = float(body.get("valor", 0))
+        salvar(dados)
+        return jsonify({"ok": True})
+    except Exception as e:
+        return jsonify({"ok": False, "erro": str(e)}), 400
+
 @app.route("/api/despesas", methods=["POST"])
 @login_required
 def adicionar_despesa():
-    body = request.json
+    body  = request.json
     dados = carregar()
     try:
         mes = body.get("mes") or mes_atual()
