@@ -495,7 +495,7 @@
 			if(id==='historico'){setTimeout(()=>renderChartHist(),50)}
 			}
 
-			// ── RESUMO ──
+			// -- RESUMO --
 			function renderResumo(){
 			const renda=(D.salarios.A||0)+(D.salarios.B||0);
 			const m=mesAtual();
@@ -569,7 +569,7 @@
 			</div>`).join('');
 			}
 
-			// ── POUPANÇA ──
+			// -- POUPANÇA --
 			async function salvarPoupanca(){
 			const val=parseFloat(document.getElementById('poup-input').value)||0;
 			const r=await fetch('/api/poupanca',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({valor:val})});
@@ -577,7 +577,7 @@
 			if(j.ok){ D.poupanca=val; document.getElementById('poup-val').textContent=brl(val); toast('Poupança atualizada ✅','ok') }
 			}
 
-			// ── SALÁRIOS ──
+			// -- SALÁRIOS --
 			function previewSal(){
 			const a=parseFloat(document.getElementById('sal-a').value)||0;
 			const b=parseFloat(document.getElementById('sal-b').value)||0;
@@ -598,7 +598,7 @@
 			}finally{btn.innerHTML='💾 Salvar Salários';btn.disabled=false}
 			}
 
-			// ── DESPESAS ──
+			// -- DESPESAS --
 			async function adicionarDespesa(){
 			const desc=document.getElementById('d-desc').value.trim();
 			const valor=document.getElementById('d-valor').value;
@@ -665,7 +665,7 @@
 			</div>`).join('');
 			}
 
-			// ── HISTÓRICO ──
+			// -- HISTÓRICO --
 			function renderHistorico(){
 			const renda=(D.salarios.A||0)+(D.salarios.B||0);
 			const meses=Object.keys(D.despesas).sort().reverse();
@@ -696,7 +696,7 @@
   renderChartHist=''();
 }
 
-// ── GRÁFICOS ──
+// -- GRÁFICOS --
 			function renderChartDonut(){
 			const m=mesAtual();const desps=D.despesas[m]||[];const map={};
 			desps.forEach(d=>{map[d.cat]=(map[d.cat]||0)+d.valor});
@@ -742,7 +742,7 @@
 			scales:{x:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11}}},y:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11},callback:v=>'R$'+v.toLocaleString('pt-BR')}}}}});
 			}
 
-			// ── TOAST ──
+			// -- TOAST --
 			let toastT;
 			function toast(msg,tipo){
 			const t=document.getElementById('toast');
