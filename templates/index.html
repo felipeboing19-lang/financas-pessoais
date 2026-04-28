@@ -495,7 +495,7 @@
 			if(id==='historico'){setTimeout(()=>renderChartHist(),50)}
 			}
 
-			// -- RESUMO --
+			// RESUMO
 			function renderResumo(){
 			const renda=(D.salarios.A||0)+(D.salarios.B||0);
 			const m=mesAtual();
@@ -506,7 +506,7 @@
 
 			document.getElementById('s-renda').textContent=brl(renda);
 			document.getElementById('s-desp').textContent=brl(total);
-			document.getElementById('s-desp-qt').textContent=desps.length+' lançamento'+(desps.length!==1?'s':'');
+			document.getElementById('s-desp-qt').textContent=desps.length+' lancamento'+(desps.length!==1?'s':'');
 
 			const eS=document.getElementById('s-saldo');
 			eS.textContent=brl(saldo);
@@ -528,7 +528,7 @@
   fill.style.width=pct
   fill.style.background='pct'<70?'linear-gradient(90deg,var(--verde),var(--azul))':pct=''<90?'linear-gradient(90deg,var(--amar),var(--verm))':='''var(--verm)';
 
-  // poupança
+  // poupanca
 			document.getElementById('poup-val').textContent=brl(D.poupanca||0);
 
 			// lista
@@ -536,8 +536,8 @@
 			const sorted=[...desps].sort((a,b)=>b.valor-a.valor);
 			lista.innerHTML=!sorted.length
 			?'<div class="empty">
-				<div class="empty-ico">🌿</div>
-				<p>Nenhuma despesa este mês.</p>
+				<div class="empty-ico"></div>
+				<p>Nenhuma despesa este mes.</p>
 			</div>'
 			:sorted.map((d,i)=>`<div class="res-row" style="animation-delay:${i*.04}s">
 				<div style="min-width:0;flex:1">
@@ -564,20 +564,20 @@
 				<div class="cat-dot" style="background:${CAT_CORES[i%CAT_CORES.length]}"></div>
 				<div>
 					<div class="cat-name">${esc(cat)}</div>
-					<div class="cat-pct">${brl(val)} · ${total>0?((val/total)*100).toFixed(0):0}%</div>
+					<div class="cat-pct">${brl(val)} - ${total>0?((val/total)*100).toFixed(0):0}%</div>
 				</div>
 			</div>`).join('');
 			}
 
-			// -- POUPANÇA --
+			// POUPANCA
 			async function salvarPoupanca(){
 			const val=parseFloat(document.getElementById('poup-input').value)||0;
 			const r=await fetch('/api/poupanca',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({valor:val})});
 			const j=await r.json();
-			if(j.ok){ D.poupanca=val; document.getElementById('poup-val').textContent=brl(val); toast('Poupança atualizada ✅','ok') }
+			if(j.ok){ D.poupanca=val; document.getElementById('poup-val').textContent=brl(val); toast('Poupanca atualizada!','ok') }
 			}
 
-			// -- SALÁRIOS --
+			// SALARIOS
 			function previewSal(){
 			const a=parseFloat(document.getElementById('sal-a').value)||0;
 			const b=parseFloat(document.getElementById('sal-b').value)||0;
@@ -594,19 +594,19 @@
 			try{
 			const r=await fetch('/api/salarios',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({A,B})});
 			const j=await r.json();
-			if(j.ok){D.salarios={A,B};renderResumo();renderHistorico();toast('Salários salvos ✅','ok')}
-			}finally{btn.innerHTML='💾 Salvar Salários';btn.disabled=false}
+			if(j.ok){D.salarios={A,B};renderResumo();renderHistorico();toast('Salarios salvos!','ok')}
+			}finally{btn.innerHTML='Salvar Salarios';btn.disabled=false}
 			}
 
-			// -- DESPESAS --
+			// DESPESAS
 			async function adicionarDespesa(){
 			const desc=document.getElementById('d-desc').value.trim();
 			const valor=document.getElementById('d-valor').value;
 			const mes=document.getElementById('d-mes').value||mesAtual();
 			const cat=document.getElementById('d-cat2').value.trim()||document.getElementById('d-cat').value||'Outros';
 
-			if(!desc){toast('Informe a descrição','err');return}
-			if(!valor||isNaN(parseFloat(valor))){toast('Informe um valor válido','err');return}
+			if(!desc){toast('Informe a descricao','err');return}
+			if(!valor||isNaN(parseFloat(valor))){toast('Informe um valor valido','err');return}
 
 			const btn=document.getElementById('btn-add');
 			btn.innerHTML='<span class="spin"></span> Salvando...';btn.disabled=true;
@@ -619,9 +619,9 @@
 			document.getElementById('d-valor').value='';
 			document.getElementById('d-cat2').value='';
 			document.getElementById('d-cat').value='';
-			toast('Despesa adicionada ✅','ok');
+			toast('Despesa adicionada!','ok');
 			}
-			}finally{btn.innerHTML='➕ Adicionar Despesa';btn.disabled=false}
+			}finally{btn.innerHTML='Adicionar Despesa';btn.disabled=false}
 			}
 
 			async function removerDespesa(mes,id){
@@ -642,7 +642,7 @@
 			const desps=D.despesas[filtroAtivo]||[];
 			if(!desps.length){
 			lista.innerHTML=`<div class="empty">
-				<div class="empty-ico">🧾</div>
+				<div class="empty-ico"></div>
 				<p>Nenhuma despesa em ${filtroAtivo}.</p>
 			</div>`;
 			bar.style.display='none';return;
@@ -660,19 +660,19 @@
 				</div>
 				<div class="desp-right">
 					<div class="desp-val">${brl(d.valor)}</div>
-					<button class="btn-del" onclick="removerDespesa('${d.mes}','${d.id}')">🗑</button>
+					<button class="btn-del" onclick="removerDespesa('${d.mes}','${d.id}')">X</button>
 				</div>
 			</div>`).join('');
 			}
 
-			// -- HISTÓRICO --
+			// HISTORICO
 			function renderHistorico(){
 			const renda=(D.salarios.A||0)+(D.salarios.B||0);
 			const meses=Object.keys(D.despesas).sort().reverse();
 			const lista=document.getElementById('hist-lista');
 			if(!meses.length){lista.innerHTML='<div class="empty">
-				<div class="empty-ico">📈</div>
-				<p>Nenhum histórico.</p>
+				<div class="empty-ico"></div>
+				<p>Nenhum historico.</p>
 			</div>';renderChartHist();return}
 			lista.innerHTML=meses.map((m,i)=>{
 			const total=(D.despesas[m]||[]).reduce((s,d)=>s+d.valor,0);
@@ -683,7 +683,7 @@
     const=''[ano='',mo='']=m.split=''
     const='' nm='new' Date=''(ano='',mo-1='').toLocaleDateString=''('pt-BR',{month:=''
     return=''
-      <div class="hist-hdr"><span class="hist-mes">${nm.charAt(0).toUpperCase()+nm.slice(1)} ${ano}</span><span class="hist-badge ${ok?'ok':'bad'}">${ok?'✅ Positivo':'⚠️ Déficit'}</span></div>
+      <div class="hist-hdr"><span class="hist-mes">${nm.charAt(0).toUpperCase()+nm.slice(1)} ${ano}</span><span class="hist-badge ${ok?'ok':'bad'}">${ok?'Positivo':'Deficit'}</span></div>
       <div class="hist-body">
         <div class="hkv"><div class="k">Renda</div><div class="v" style="color:var(--verde)">${brl(renda)}</div></div>
         <div class="hkv"><div class="k">Despesas</div><div class="v" style="color:var(--verm)">${brl(total)}</div></div>
@@ -696,7 +696,7 @@
   renderChartHist=''();
 }
 
-// -- GRÁFICOS --
+// GRAFICOS
 			function renderChartDonut(){
 			const m=mesAtual();const desps=D.despesas[m]||[];const map={};
 			desps.forEach(d=>{map[d.cat]=(map[d.cat]||0)+d.valor});
@@ -742,7 +742,7 @@
 			scales:{x:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11}}},y:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11},callback:v=>'R$'+v.toLocaleString('pt-BR')}}}}});
 			}
 
-			// -- TOAST --
+			// TOAST
 			let toastT;
 			function toast(msg,tipo){
 			const t=document.getElementById('toast');
