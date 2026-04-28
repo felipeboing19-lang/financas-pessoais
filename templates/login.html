@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — Finanças Pessoais</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080b14;--card:#111627;--card2:#161d30;
+  --borda:#1c2438;--borda2:#26304a;
+  --verde:#00e5a0;--verde2:#00b87f;
+  --verm:#ff3d5a;
+  --texto:#edf0fb;--texto2:#8b93b5;--texto3:#4a5270;
+}
+body{
+  background:var(--bg);color:var(--texto);
+  font-family:'DM Sans',sans-serif;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+
+/* Fundo animado */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(0,229,160,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(56,180,255,.06) 0%, transparent 60%);
+  pointer-events:none;
+}
+
+.wrap{
+  position:relative;z-index:1;
+  width:100%;max-width:400px;
+}
+
+/* Logo */
+.logo{text-align:center;margin-bottom:36px}
+.logo-icon{
+  width:56px;height:56px;border-radius:16px;
+  background:linear-gradient(135deg,var(--verde),#38b4ff);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:26px;margin-bottom:14px;
+  box-shadow:0 8px 24px rgba(0,229,160,.25);
+}
+.logo h1{
+  font-family:'Fraunces',serif;font-size:26px;
+  letter-spacing:-.3px;color:var(--texto);
+}
+.logo p{font-size:13px;color:var(--texto3);margin-top:4px}
+
+/* Card */
+.card{
+  background:var(--card);border:1px solid var(--borda);
+  border-radius:18px;padding:32px;
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+}
+
+/* Erro */
+.erro{
+  background:rgba(255,61,90,.1);border:1px solid rgba(255,61,90,.3);
+  border-radius:8px;padding:12px 16px;
+  font-size:13px;color:var(--verm);
+  margin-bottom:20px;display:flex;align-items:center;gap:8px;
+}
+
+/* Campos */
+.field{margin-bottom:16px}
+.field label{
+  display:block;font-size:11px;font-weight:700;
+  color:var(--texto3);text-transform:uppercase;
+  letter-spacing:.8px;margin-bottom:8px;
+}
+.field input{
+  width:100%;background:var(--card2);
+  border:1px solid var(--borda2);border-radius:10px;
+  padding:14px 16px;color:var(--texto);
+  font-family:'DM Sans',sans-serif;font-size:15px;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.field input:focus{
+  border-color:var(--verde);
+  box-shadow:0 0 0 3px rgba(0,229,160,.1);
+}
+.field input::placeholder{color:var(--texto3)}
+
+/* Botão */
+.btn{
+  width:100%;padding:15px;border:none;border-radius:10px;
+  background:var(--verde);color:#051a11;
+  font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .2s;margin-top:6px;
+  letter-spacing:.3px;
+}
+.btn:hover{background:var(--verde2);transform:translateY(-1px)}
+.btn:active{transform:scale(.98)}
+
+/* Rodapé */
+.foot{text-align:center;margin-top:20px;font-size:12px;color:var(--texto3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="logo">
+    <div class="logo-icon">💰</div>
+    <h1>Finanças Pessoais</h1>
+    <p>Faça login para continuar</p>
+  </div>
+
+  <div class="card">
+    {% if erro %}
+    <div class="erro">⚠️ {{ erro }}</div>
+    {% endif %}
+
+    <form method="POST" action="/login">
+      <div class="field">
+        <label>Usuário</label>
+        <input type="text" name="usuario" placeholder="Digite seu usuário" autocomplete="username" autofocus required>
+      </div>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" name="senha" placeholder="Digite sua senha" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn">Entrar →</button>
+    </form>
+  </div>
+
+  <div class="foot">Acesso restrito — uso pessoal</div>
+</div>
+</body>
+</html>
