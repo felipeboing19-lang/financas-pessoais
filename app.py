@@ -13,8 +13,8 @@ from functools import wraps
 app = Flask(__name__)
 
 # ─── CONFIGURAÇÕES ────────────────────────────────────────────────────────────
-USUARIO = os.environ.get("APP_USER",  "felipe")
-SENHA   = os.environ.get("APP_PASS",  "minhasenha123")
+USUARIO = os.environ.get("APP_USER",  "felipe.boing")
+SENHA   = os.environ.get("APP_PASS",  "24Hsobvqi@")
 app.secret_key = os.environ.get("SECRET_KEY", "chave-super-secreta-mude-isso")
 DATA_FILE = os.environ.get("DATA_PATH", "financas_data.json")
 
