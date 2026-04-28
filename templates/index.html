@@ -1,688 +1,625 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-	<head>
-		<meta charset="UTF-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<meta name="theme-color" content="#080b14">
-					<title>💰 Finanças Pessoais</title>
-					<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-						<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-						<style>
-							*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-							:root{
-							--bg:#080b14;--bg2:#0c1020;--card:#111627;--card2:#161d30;
-							--borda:#1c2438;--borda2:#26304a;
-							--verde:#00e5a0;--verde2:#00b87f;
-							--verm:#ff3d5a;--verm2:#cc2040;
-							--amar:#ffc247;--azul:#38b4ff;--roxo:#b197fc;
-							--texto:#edf0fb;--texto2:#8b93b5;--texto3:#4a5270;
-							--r:14px;--rs:9px;--sh:0 12px 40px rgba(0,0,0,.5);
-							}
-							html{scroll-behavior:smooth}
-							body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
-							::-webkit-scrollbar{width:6px;height:6px}
-							::-webkit-scrollbar-track{background:var(--bg)}
-							::-webkit-scrollbar-thumb{background:var(--borda2);border-radius:99px}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b14">
+<title>💰 Finanças Pessoais</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080b14;--bg2:#0c1020;--card:#111627;--card2:#161d30;
+  --borda:#1c2438;--borda2:#26304a;
+  --verde:#00e5a0;--verde2:#00b87f;
+  --verm:#ff3d5a;--verm2:#cc2040;
+  --amar:#ffc247;--azul:#38b4ff;--roxo:#b197fc;
+  --texto:#edf0fb;--texto2:#8b93b5;--texto3:#4a5270;
+  --r:14px;--rs:9px;--sh:0 12px 40px rgba(0,0,0,.5);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--borda2);border-radius:99px}
 
-							/* HEADER */
-							.hdr{position:sticky;top:0;z-index:300;background:rgba(8,11,20,.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--borda);height:60px;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
-							.hdr-brand{display:flex;align-items:center;gap:10px}
-							.hdr-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--verde),var(--azul));display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 4px 14px rgba(0,229,160,.3)}
-							.hdr-title{font-family:'Fraunces',serif;font-size:19px;letter-spacing:-.3px}
-							.hdr-right{display:flex;align-items:center;gap:10px}
-							.hdr-badge{font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--texto3);background:var(--card);border:1px solid var(--borda);padding:5px 12px;border-radius:99px}
-							.hdr-logout{font-size:12px;color:var(--texto3);background:none;border:1px solid var(--borda);padding:5px 12px;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-							.hdr-logout:hover{border-color:var(--verm);color:var(--verm)}
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:300;background:rgba(8,11,20,.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--borda);height:60px;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.hdr-brand{display:flex;align-items:center;gap:10px}
+.hdr-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--verde),var(--azul));display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 4px 14px rgba(0,229,160,.3)}
+.hdr-title{font-family:'Fraunces',serif;font-size:19px;letter-spacing:-.3px}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.hdr-badge{font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--texto3);background:var(--card);border:1px solid var(--borda);padding:5px 12px;border-radius:99px}
+.hdr-logout{font-size:12px;color:var(--texto3);background:none;border:1px solid var(--borda);padding:5px 12px;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.hdr-logout:hover{border-color:var(--verm);color:var(--verm)}
 
-							/* NAV */
-							.nav-wrap{background:var(--bg2);border-bottom:1px solid var(--borda);overflow-x:auto;scrollbar-width:none}
-							.nav-wrap::-webkit-scrollbar{display:none}
-							.nav{display:flex;max-width:960px;margin:0 auto;padding:0 16px}
-							.nav-btn{display:flex;align-items:center;gap:6px;padding:0 16px;height:50px;background:none;border:none;border-bottom:2px solid transparent;color:var(--texto3);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s}
-							.nav-btn:hover{color:var(--texto2)}
-							.nav-btn.active{color:var(--verde);border-bottom-color:var(--verde)}
+/* NAV */
+.nav-wrap{background:var(--bg2);border-bottom:1px solid var(--borda);overflow-x:auto;scrollbar-width:none}
+.nav-wrap::-webkit-scrollbar{display:none}
+.nav{display:flex;max-width:960px;margin:0 auto;padding:0 16px}
+.nav-btn{display:flex;align-items:center;gap:6px;padding:0 16px;height:50px;background:none;border:none;border-bottom:2px solid transparent;color:var(--texto3);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s}
+.nav-btn:hover{color:var(--texto2)}
+.nav-btn.active{color:var(--verde);border-bottom-color:var(--verde)}
 
-							/* LAYOUT */
-							.page{max-width:960px;margin:0 auto;padding:28px 16px 100px}
-							.tab{display:none}
-							.tab.active{display:block;animation:fadeUp .28s ease}
-							@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* LAYOUT */
+.page{max-width:960px;margin:0 auto;padding:28px 16px 100px}
+.tab{display:none}
+.tab.active{display:block;animation:fadeUp .28s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-							/* STATS GRID */
-							.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
-							@media(min-width:640px){.stats{grid-template-columns:repeat(4,1fr)}}
-							.stat{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:18px 16px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
-							.stat:hover{transform:translateY(-2px);border-color:var(--borda2)}
-							.stat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent,var(--verde))}
-							.stat-lbl{font-size:10px;font-weight:600;color:var(--texto3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
-							.stat-num{font-family:'Fraunces',serif;font-size:clamp(15px,3.5vw,21px);color:var(--accent,var(--verde));line-height:1}
-							.stat-sub{font-size:11px;color:var(--texto3);margin-top:5px}
+/* STATS GRID */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
+@media(min-width:640px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:18px 16px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+.stat:hover{transform:translateY(-2px);border-color:var(--borda2)}
+.stat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent,var(--verde))}
+.stat-lbl{font-size:10px;font-weight:600;color:var(--texto3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.stat-num{font-family:'Fraunces',serif;font-size:clamp(15px,3.5vw,21px);color:var(--accent,var(--verde));line-height:1}
+.stat-sub{font-size:11px;color:var(--texto3);margin-top:5px}
 
-							/* POUPANÇA CARD */
-							.poup-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:20px 22px;margin-bottom:14px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-							.poup-left{flex:1;min-width:180px}
-							.poup-titulo{font-size:11px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-							.poup-val{font-family:'Fraunces',serif;font-size:28px;color:var(--roxo);line-height:1}
-							.poup-sub{font-size:12px;color:var(--texto3);margin-top:4px}
-							.poup-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-							.poup-input{background:var(--card2);border:1px solid var(--borda2);border-radius:var(--rs);padding:11px 14px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s;width:160px}
-							.poup-input:focus{border-color:var(--roxo);box-shadow:0 0 0 3px rgba(177,151,252,.1)}
-							.poup-input::placeholder{color:var(--texto3)}
-							.btn-poup{padding:11px 18px;border:none;border-radius:var(--rs);background:var(--roxo);color:#0a0714;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
-							.btn-poup:hover{background:#9b82f5;transform:translateY(-1px)}
+/* POUPANÇA CARD */
+.poup-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:20px 22px;margin-bottom:14px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.poup-left{flex:1;min-width:180px}
+.poup-titulo{font-size:11px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.poup-val{font-family:'Fraunces',serif;font-size:28px;color:var(--roxo);line-height:1}
+.poup-sub{font-size:12px;color:var(--texto3);margin-top:4px}
+.poup-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.poup-input{background:var(--card2);border:1px solid var(--borda2);border-radius:var(--rs);padding:11px 14px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s;width:160px}
+.poup-input:focus{border-color:var(--roxo);box-shadow:0 0 0 3px rgba(177,151,252,.1)}
+.poup-input::placeholder{color:var(--texto3)}
+.btn-poup{padding:11px 18px;border:none;border-radius:var(--rs);background:var(--roxo);color:#0a0714;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-poup:hover{background:#9b82f5;transform:translateY(-1px)}
 
-							/* PROGRESS */
-							.prog-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:20px 22px;margin-bottom:20px}
-							.prog-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px}
-							.prog-label{font-size:13px;color:var(--texto2);font-weight:500}
-							.prog-num{font-family:'Fraunces',serif;font-size:28px;line-height:1}
-							.prog-track{background:var(--borda);border-radius:99px;height:8px;overflow:hidden;margin-bottom:10px}
-							.prog-fill{height:100%;border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1),background .4s}
-							.prog-info{display:flex;justify-content:space-between;font-size:12px;color:var(--texto3)}
+/* PROGRESS */
+.prog-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:20px 22px;margin-bottom:20px}
+.prog-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px}
+.prog-label{font-size:13px;color:var(--texto2);font-weight:500}
+.prog-num{font-family:'Fraunces',serif;font-size:28px;line-height:1}
+.prog-track{background:var(--borda);border-radius:99px;height:8px;overflow:hidden;margin-bottom:10px}
+.prog-fill{height:100%;border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1),background .4s}
+.prog-info{display:flex;justify-content:space-between;font-size:12px;color:var(--texto3)}
 
-							/* SEC */
-							.sec{display:flex;align-items:center;gap:10px;margin:24px 0 14px}
-							.sec-t{font-size:11px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:1.2px;white-space:nowrap}
-							.sec-l{flex:1;height:1px;background:var(--borda)}
+/* SEC */
+.sec{display:flex;align-items:center;gap:10px;margin:24px 0 14px}
+.sec-t{font-size:11px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:1.2px;white-space:nowrap}
+.sec-l{flex:1;height:1px;background:var(--borda)}
 
-							/* CHARTS */
-							.charts-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:8px}
-							@media(min-width:600px){.charts-grid{grid-template-columns:1fr 1fr}}
-							.chart-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:20px}
-							.chart-title{font-size:12px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
-							.chart-wrap{position:relative;height:200px}
+/* CHARTS */
+.charts-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:8px}
+@media(min-width:600px){.charts-grid{grid-template-columns:1fr 1fr}}
+.chart-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:20px}
+.chart-title{font-size:12px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+.chart-wrap{position:relative;height:200px}
 
-							/* LISTA RESUMO */
-							.res-lista{display:flex;flex-direction:column;gap:7px}
-							.res-row{background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:border-color .2s;animation:fadeUp .25s ease both}
-							.res-row:hover{border-color:var(--borda2)}
-							.res-desc{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-							.res-cat{font-size:11px;color:var(--texto3);margin-top:3px}
-							.res-val{font-family:'Fraunces',serif;font-size:17px;color:var(--verm);white-space:nowrap;flex-shrink:0}
-							.tag{display:inline-block;background:var(--card2);border:1px solid var(--borda);border-radius:99px;padding:2px 8px;font-size:10px;color:var(--texto2);font-weight:600;letter-spacing:.3px}
+/* LISTA RESUMO */
+.res-lista{display:flex;flex-direction:column;gap:7px}
+.res-row{background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:border-color .2s;animation:fadeUp .25s ease both}
+.res-row:hover{border-color:var(--borda2)}
+.res-desc{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.res-cat{font-size:11px;color:var(--texto3);margin-top:3px}
+.res-val{font-family:'Fraunces',serif;font-size:17px;color:var(--verm);white-space:nowrap;flex-shrink:0}
+.tag{display:inline-block;background:var(--card2);border:1px solid var(--borda);border-radius:99px;padding:2px 8px;font-size:10px;color:var(--texto2);font-weight:600;letter-spacing:.3px}
 
-							/* CAT GRID */
-							.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:4px}
-							.cat-item{background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:10px 12px;display:flex;align-items:center;gap:8px}
-							.cat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-							.cat-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-							.cat-pct{font-size:11px;color:var(--texto3)}
+/* CAT GRID */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:4px}
+.cat-item{background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:10px 12px;display:flex;align-items:center;gap:8px}
+.cat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.cat-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cat-pct{font-size:11px;color:var(--texto3)}
 
-							/* FORM */
-							.form-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:24px;margin-bottom:18px}
-							.form-t{font-family:'Fraunces',serif;font-size:22px;margin-bottom:4px}
-							.form-s{font-size:13px;color:var(--texto3);margin-bottom:22px;font-weight:400}
-							.grid1{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px}
-							.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-							.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
-							@media(max-width:500px){.grid2,.grid3{grid-template-columns:1fr}}
-							.field label{display:block;font-size:11px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
-							.field input,.field select{width:100%;background:var(--bg2);border:1px solid var(--borda2);border-radius:var(--rs);padding:13px 14px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
-							.field input:focus,.field select:focus{border-color:var(--verde);box-shadow:0 0 0 3px rgba(0,229,160,.1)}
-							.field input::placeholder{color:var(--texto3)}
-							.field select option{background:var(--card2)}
+/* FORM */
+.form-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:24px;margin-bottom:18px}
+.form-t{font-family:'Fraunces',serif;font-size:22px;margin-bottom:4px}
+.form-s{font-size:13px;color:var(--texto3);margin-bottom:22px;font-weight:400}
+.grid1{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:500px){.grid2,.grid3{grid-template-columns:1fr}}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
+.field input,.field select{width:100%;background:var(--bg2);border:1px solid var(--borda2);border-radius:var(--rs);padding:13px 14px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+.field input:focus,.field select:focus{border-color:var(--verde);box-shadow:0 0 0 3px rgba(0,229,160,.1)}
+.field input::placeholder{color:var(--texto3)}
+.field select option{background:var(--card2)}
 
-							/* BTNS */
-							.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 20px;border:none;border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.3px}
-							.btn:active{transform:scale(.98)}
-							.btn:disabled{opacity:.6;cursor:not-allowed}
-							.btn-verde{background:var(--verde);color:#051a11}
-							.btn-verde:hover:not(:disabled){background:var(--verde2)}
-							.btn-verm{background:var(--verm);color:#fff}
-							.btn-verm:hover:not(:disabled){background:var(--verm2)}
-							.btn-ghost{background:var(--card2);border:1px solid var(--borda2);color:var(--texto2)}
-							.btn-ghost:hover{border-color:var(--verde);color:var(--verde)}
-							.btn-sm{padding:10px 16px;font-size:13px;width:auto}
+/* BTNS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 20px;border:none;border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.btn-verde{background:var(--verde);color:#051a11}
+.btn-verde:hover:not(:disabled){background:var(--verde2)}
+.btn-verm{background:var(--verm);color:#fff}
+.btn-verm:hover:not(:disabled){background:var(--verm2)}
+.btn-ghost{background:var(--card2);border:1px solid var(--borda2);color:var(--texto2)}
+.btn-ghost:hover{border-color:var(--verde);color:var(--verde)}
+.btn-sm{padding:10px 16px;font-size:13px;width:auto}
 
-							/* SAL PREVIEW */
-							.sal-preview{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:22px;margin-top:14px;display:flex;justify-content:space-around;align-items:center;gap:12px;flex-wrap:wrap}
-							.sal-item{text-align:center;min-width:100px}
-							.sal-lbl{font-size:10px;color:var(--texto3);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:8px}
-							.sal-val{font-family:'Fraunces',serif;font-size:24px;color:var(--verde)}
-							.sal-div{width:1px;height:44px;background:var(--borda)}
+/* SAL PREVIEW */
+.sal-preview{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:22px;margin-top:14px;display:flex;justify-content:space-around;align-items:center;gap:12px;flex-wrap:wrap}
+.sal-item{text-align:center;min-width:100px}
+.sal-lbl{font-size:10px;color:var(--texto3);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:8px}
+.sal-val{font-family:'Fraunces',serif;font-size:24px;color:var(--verde)}
+.sal-div{width:1px;height:44px;background:var(--borda)}
 
-							/* DESP TABELA */
-							.desp-tabela{display:flex;flex-direction:column;gap:8px}
-							.desp-item{background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:14px 16px;display:flex;align-items:center;gap:12px;transition:border-color .2s;animation:slideIn .22s ease both}
-							.desp-item:hover{border-color:var(--borda2)}
-							@keyframes slideIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
-							.desp-info{flex:1;min-width:0}
-							.desp-desc{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-							.desp-meta{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap}
-							.desp-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
-							.desp-val{font-family:'Fraunces',serif;font-size:17px;color:var(--verm)}
-							.btn-del{width:32px;height:32px;background:none;border:1px solid var(--borda2);border-radius:7px;color:var(--texto3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .2s}
-							.btn-del:hover{background:rgba(255,61,90,.12);border-color:var(--verm);color:var(--verm)}
+/* DESP TABELA */
+.desp-tabela{display:flex;flex-direction:column;gap:8px}
+.desp-item{background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:14px 16px;display:flex;align-items:center;gap:12px;transition:border-color .2s;animation:slideIn .22s ease both}
+.desp-item:hover{border-color:var(--borda2)}
+@keyframes slideIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+.desp-info{flex:1;min-width:0}
+.desp-desc{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.desp-meta{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap}
+.desp-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.desp-val{font-family:'Fraunces',serif;font-size:17px;color:var(--verm)}
+.btn-del{width:32px;height:32px;background:none;border:1px solid var(--borda2);border-radius:7px;color:var(--texto3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .2s}
+.btn-del:hover{background:rgba(255,61,90,.12);border-color:var(--verm);color:var(--verm)}
 
-							/* FILTRO */
-							.filtro{display:flex;gap:8px;margin-bottom:14px;align-items:center}
-							.filtro input{flex:1;background:var(--card);border:1px solid var(--borda2);border-radius:var(--rs);padding:11px 14px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
-							.filtro input:focus{border-color:var(--verde)}
+/* FILTRO */
+.filtro{display:flex;gap:8px;margin-bottom:14px;align-items:center}
+.filtro input{flex:1;background:var(--card);border:1px solid var(--borda2);border-radius:var(--rs);padding:11px 14px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.filtro input:focus{border-color:var(--verde)}
 
-							/* HISTORICO */
-							.hist-lista{display:flex;flex-direction:column;gap:12px}
-							.hist-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);overflow:hidden;transition:border-color .2s;animation:fadeUp .3s ease both}
-							.hist-card:hover{border-color:var(--borda2)}
-							.hist-hdr{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--borda);background:var(--card2)}
-							.hist-mes{font-family:'Fraunces',serif;font-size:17px}
-							.hist-badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px}
-							.hist-badge.ok{background:rgba(0,229,160,.12);color:var(--verde)}
-							.hist-badge.bad{background:rgba(255,61,90,.12);color:var(--verm)}
-							.hist-body{padding:16px 20px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-							@media(min-width:500px){.hist-body{grid-template-columns:repeat(4,1fr)}}
-							.hkv .k{font-size:10px;color:var(--texto3);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:5px}
-							.hkv .v{font-family:'Fraunces',serif;font-size:16px}
-							.hist-bar{padding:0 20px 16px}
-							.hist-bar-track{background:var(--borda);border-radius:99px;height:4px;overflow:hidden}
-							.hist-bar-fill{height:100%;border-radius:99px;transition:width .6s}
+/* HISTORICO */
+.hist-lista{display:flex;flex-direction:column;gap:12px}
+.hist-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);overflow:hidden;transition:border-color .2s;animation:fadeUp .3s ease both}
+.hist-card:hover{border-color:var(--borda2)}
+.hist-hdr{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--borda);background:var(--card2)}
+.hist-mes{font-family:'Fraunces',serif;font-size:17px}
+.hist-badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px}
+.hist-badge.ok{background:rgba(0,229,160,.12);color:var(--verde)}
+.hist-badge.bad{background:rgba(255,61,90,.12);color:var(--verm)}
+.hist-body{padding:16px 20px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:500px){.hist-body{grid-template-columns:repeat(4,1fr)}}
+.hkv .k{font-size:10px;color:var(--texto3);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:5px}
+.hkv .v{font-family:'Fraunces',serif;font-size:16px}
+.hist-bar{padding:0 20px 16px}
+.hist-bar-track{background:var(--borda);border-radius:99px;height:4px;overflow:hidden}
+.hist-bar-fill{height:100%;border-radius:99px;transition:width .6s}
 
-							/* EMPTY */
-							.empty{text-align:center;padding:48px 20px;color:var(--texto3)}
-							.empty-ico{font-size:38px;margin-bottom:12px;opacity:.4}
-							.empty p{font-size:14px}
+/* EMPTY */
+.empty{text-align:center;padding:48px 20px;color:var(--texto3)}
+.empty-ico{font-size:38px;margin-bottom:12px;opacity:.4}
+.empty p{font-size:14px}
 
-							/* TOAST */
-							.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--card2);border-radius:99px;padding:12px 22px;font-size:13px;font-weight:600;white-space:nowrap;transition:all .3s cubic-bezier(.4,0,.2,1);z-index:999;pointer-events:none;box-shadow:var(--sh)}
-							.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-							.toast.ok{border:1px solid var(--verde);color:var(--verde)}
-							.toast.err{border:1px solid var(--verm);color:var(--verm)}
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--card2);border-radius:99px;padding:12px 22px;font-size:13px;font-weight:600;white-space:nowrap;transition:all .3s cubic-bezier(.4,0,.2,1);z-index:999;pointer-events:none;box-shadow:var(--sh)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border:1px solid var(--verde);color:var(--verde)}
+.toast.err{border:1px solid var(--verm);color:var(--verm)}
 
-							/* SPINNER */
-							.spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.25);border-top-color:currentColor;border-radius:50%;animation:rot .6s linear infinite}
-							@keyframes rot{to{transform:rotate(360deg)}}
-						</style>
-					</head>
-	<body>
+/* SPINNER */
+.spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.25);border-top-color:currentColor;border-radius:50%;animation:rot .6s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
 
-		<!-- HEADER -->
-		<header class="hdr">
-			<div class="hdr-brand">
-				<div class="hdr-icon">💰</div>
-				<span class="hdr-title">Finanças Pessoais</span>
-			</div>
-			<div class="hdr-right">
-				<span class="hdr-badge" id="hdr-mes">—</span>
-				<a href="/logout">
-					<button class="hdr-logout">Sair</button>
-				</a>
-			</div>
-		</header>
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-icon">💰</div>
+    <span class="hdr-title">Finanças Pessoais</span>
+  </div>
+  <div class="hdr-right">
+    <span class="hdr-badge" id="hdr-mes">—</span>
+    <a href="/logout"><button class="hdr-logout">Sair</button></a>
+  </div>
+</header>
 
-		<!-- NAV -->
-		<div class="nav-wrap">
-			<nav class="nav">
-				<button class="nav-btn active" onclick="aba('resumo',this)">📊 Resumo</button>
-				<button class="nav-btn" onclick="aba('salarios',this)">💼 Salários</button>
-				<button class="nav-btn" onclick="aba('despesas',this)">🧾 Despesas</button>
-				<button class="nav-btn" onclick="aba('historico',this)">📈 Histórico</button>
-			</nav>
-		</div>
+<!-- NAV -->
+<div class="nav-wrap">
+  <nav class="nav">
+    <button class="nav-btn active" onclick="aba('resumo',this)">📊 Resumo</button>
+    <button class="nav-btn" onclick="aba('salarios',this)">💼 Salários</button>
+    <button class="nav-btn" onclick="aba('despesas',this)">🧾 Despesas</button>
+    <button class="nav-btn" onclick="aba('historico',this)">📈 Histórico</button>
+  </nav>
+</div>
 
-		<main class="page">
+<main class="page">
 
-			<!-- ══ ABA RESUMO ══ -->
-			<div class="tab active" id="tab-resumo">
+<!-- ══ ABA RESUMO ══ -->
+<div class="tab active" id="tab-resumo">
 
-				<div class="stats">
-					<div class="stat" style="--accent:var(--verde)">
-						<div class="stat-lbl">Renda Total</div>
-						<div class="stat-num" id="s-renda">R$ 0,00</div>
-						<div class="stat-sub">mensal combinada</div>
-					</div>
-					<div class="stat" style="--accent:var(--verm)">
-						<div class="stat-lbl">Despesas</div>
-						<div class="stat-num" id="s-desp">R$ 0,00</div>
-						<div class="stat-sub" id="s-desp-qt">0 lançamentos</div>
-					</div>
-					<div class="stat" style="--accent:var(--azul)">
-						<div class="stat-lbl">Saldo do Mês</div>
-						<div class="stat-num" id="s-saldo">R$ 0,00</div>
-						<div class="stat-sub">disponível</div>
-					</div>
-					<div class="stat" style="--accent:var(--amar)">
-						<div class="stat-lbl">Comprometido</div>
-						<div class="stat-num" id="s-pct">0%</div>
-						<div class="stat-sub">do orçamento</div>
-					</div>
-				</div>
+  <div class="stats">
+    <div class="stat" style="--accent:var(--verde)">
+      <div class="stat-lbl">Renda Total</div>
+      <div class="stat-num" id="s-renda">R$ 0,00</div>
+      <div class="stat-sub">mensal combinada</div>
+    </div>
+    <div class="stat" style="--accent:var(--verm)">
+      <div class="stat-lbl">Despesas</div>
+      <div class="stat-num" id="s-desp">R$ 0,00</div>
+      <div class="stat-sub" id="s-desp-qt">0 lançamentos</div>
+    </div>
+    <div class="stat" style="--accent:var(--azul)">
+      <div class="stat-lbl">Saldo do Mês</div>
+      <div class="stat-num" id="s-saldo">R$ 0,00</div>
+      <div class="stat-sub">disponível</div>
+    </div>
+    <div class="stat" style="--accent:var(--amar)">
+      <div class="stat-lbl">Comprometido</div>
+      <div class="stat-num" id="s-pct">0%</div>
+      <div class="stat-sub">do orçamento</div>
+    </div>
+  </div>
 
-				<!-- POUPANÇA -->
-				<div class="poup-card">
-					<div class="poup-left">
-						<div class="poup-titulo">🏦 Saldo Poupança / Reserva</div>
-						<div class="poup-val" id="poup-val">R$ 0,00</div>
-						<div class="poup-sub">Atualizado manualmente</div>
-					</div>
-					<div class="poup-right">
-						<input class="poup-input" type="number" id="poup-input" placeholder="Ex: 5000.00" step="0.01" min="0">
-							<button class="btn-poup" onclick="salvarPoupanca()">💾 Atualizar</button>
-						</div>
-				</div>
+  <!-- POUPANÇA -->
+  <div class="poup-card">
+    <div class="poup-left">
+      <div class="poup-titulo">🏦 Saldo Poupança / Reserva</div>
+      <div class="poup-val" id="poup-val">R$ 0,00</div>
+      <div class="poup-sub">Atualizado manualmente</div>
+    </div>
+    <div class="poup-right">
+      <input class="poup-input" type="number" id="poup-input" placeholder="Ex: 5000.00" step="0.01" min="0">
+      <button class="btn-poup" onclick="salvarPoupanca()">💾 Atualizar</button>
+    </div>
+  </div>
 
-				<!-- PROGRESSO -->
-				<div class="prog-card">
-					<div class="prog-top">
-						<div>
-							<div class="prog-label">Orçamento do mês</div>
-							<div style="font-size:12px;color:var(--texto3);margin-top:3px" id="prog-sub">—</div>
-						</div>
-						<div class="prog-num" id="prog-num">0%</div>
-					</div>
-					<div class="prog-track">
-						<div class="prog-fill" id="prog-fill" style="width:0%"></div>
-					</div>
-					<div class="prog-info">
-						<span id="prog-gasto">R$ 0,00 gasto</span>
-						<span id="prog-resto">R$ 0,00 restante</span>
-					</div>
-				</div>
-
-				<!-- GRAFICOS -->
-				<div class="charts-grid">
-					<div class="chart-card">
-						<div class="chart-title">Gastos por categoria</div>
-						<div class="chart-wrap">
-							<canvas id="chart-donut"></canvas>
-						</div>
-					</div>
-					<div class="chart-card">
-						<div class="chart-title">Evolução mensal</div>
-						<div class="chart-wrap">
-							<canvas id="chart-linha"></canvas>
-						</div>
-					</div>
-				</div>
-
-				<div class="sec">
-					<span class="sec-t">Por categoria</span>
-					<div class="sec-l"></div>
-				</div>
-				<div class="cat-grid" id="cat-grid"></div>
-
-				<div class="sec">
-					<span class="sec-t">Despesas deste mês</span>
-					<div class="sec-l"></div>
-				</div>
-				<div class="res-lista" id="res-lista">
-					<div class="empty">
-						<div class="empty-ico">🌿</div>
-						<p>Nenhuma despesa registrada.</p>
-					</div>
-				</div>
-			</div>
-
-			<!-- ══ ABA SALÁRIOS ══ -->
-			<div class="tab" id="tab-salarios">
-				<div class="form-card">
-					<div class="form-t">Configurar Salários</div>
-					<div class="form-s">Informe a renda mensal de cada pessoa.</div>
-					<div class="grid2">
-						<div class="field">
-							<label>👤 Salário A</label>
-							<input type="number" id="sal-a" placeholder="0,00" step="0.01" min="0" oninput="previewSal()">
+  <!-- PROGRESSO -->
+  <div class="prog-card">
+    <div class="prog-top">
+      <div>
+        <div class="prog-label">Orçamento do mês</div>
+        <div style="font-size:12px;color:var(--texto3);margin-top:3px" id="prog-sub">—</div>
       </div>
-						<div class="field">
-							<label>👤 Salário B</label>
-							<input type="number" id="sal-b" placeholder="0,00" step="0.01" min="0" oninput="previewSal()">
+      <div class="prog-num" id="prog-num">0%</div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="prog-info">
+      <span id="prog-gasto">R$ 0,00 gasto</span>
+      <span id="prog-resto">R$ 0,00 restante</span>
+    </div>
+  </div>
+
+  <!-- GRAFICOS -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">Gastos por categoria</div>
+      <div class="chart-wrap"><canvas id="chart-donut"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Evolução mensal</div>
+      <div class="chart-wrap"><canvas id="chart-linha"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec"><span class="sec-t">Por categoria</span><div class="sec-l"></div></div>
+  <div class="cat-grid" id="cat-grid"></div>
+
+  <div class="sec"><span class="sec-t">Despesas deste mês</span><div class="sec-l"></div></div>
+  <div class="res-lista" id="res-lista">
+    <div class="empty"><div class="empty-ico">🌿</div><p>Nenhuma despesa registrada.</p></div>
+  </div>
+</div>
+
+<!-- ══ ABA SALÁRIOS ══ -->
+<div class="tab" id="tab-salarios">
+  <div class="form-card">
+    <div class="form-t">Configurar Salários</div>
+    <div class="form-s">Informe a renda mensal de cada pessoa.</div>
+    <div class="grid2">
+      <div class="field">
+        <label>👤 Salário A</label>
+        <input type="number" id="sal-a" placeholder="0,00" step="0.01" min="0" oninput="previewSal()">
       </div>
-					</div>
-					<button class="btn btn-verde" id="btn-sal" onclick="salvarSalarios()">💾 Salvar Salários</button>
-				</div>
-				<div class="sal-preview">
-					<div class="sal-item">
-						<div class="sal-lbl">Salário A</div>
-						<div class="sal-val" id="pv-a">R$ 0,00</div>
-					</div>
-					<div class="sal-div"></div>
-					<div class="sal-item">
-						<div class="sal-lbl">Salário B</div>
-						<div class="sal-val" id="pv-b">R$ 0,00</div>
-					</div>
-					<div class="sal-div"></div>
-					<div class="sal-item">
-						<div class="sal-lbl">Total mensal</div>
-						<div class="sal-val" id="pv-tot">R$ 0,00</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- ══ ABA DESPESAS ══ -->
-			<div class="tab" id="tab-despesas">
-				<div class="form-card">
-					<div class="form-t">Nova Despesa</div>
-					<div class="form-s">Preencha e clique em adicionar. Salvo automaticamente.</div>
-					<div class="grid1">
-						<div class="field">
-							<label>Descrição *</label>
-							<input type="text" id="d-desc" placeholder="Ex: Conta de água de março...">
+      <div class="field">
+        <label>👤 Salário B</label>
+        <input type="number" id="sal-b" placeholder="0,00" step="0.01" min="0" oninput="previewSal()">
       </div>
-					</div>
-					<div class="grid2">
-						<div class="field">
-							<label>Valor R$ *</label>
-							<input type="number" id="d-valor" placeholder="0,00" step="0.01" min="0">
+    </div>
+    <button class="btn btn-verde" id="btn-sal" onclick="salvarSalarios()">💾 Salvar Salários</button>
+  </div>
+  <div class="sal-preview">
+    <div class="sal-item"><div class="sal-lbl">Salário A</div><div class="sal-val" id="pv-a">R$ 0,00</div></div>
+    <div class="sal-div"></div>
+    <div class="sal-item"><div class="sal-lbl">Salário B</div><div class="sal-val" id="pv-b">R$ 0,00</div></div>
+    <div class="sal-div"></div>
+    <div class="sal-item"><div class="sal-lbl">Total mensal</div><div class="sal-val" id="pv-tot">R$ 0,00</div></div>
+  </div>
+</div>
+
+<!-- ══ ABA DESPESAS ══ -->
+<div class="tab" id="tab-despesas">
+  <div class="form-card">
+    <div class="form-t">Nova Despesa</div>
+    <div class="form-s">Preencha e clique em adicionar. Salvo automaticamente.</div>
+    <div class="grid1">
+      <div class="field">
+        <label>Descrição *</label>
+        <input type="text" id="d-desc" placeholder="Ex: Conta de água de março...">
       </div>
-						<div class="field">
-							<label>Mês</label>
-							<input type="month" id="d-mes">
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>Valor R$ *</label>
+        <input type="number" id="d-valor" placeholder="0,00" step="0.01" min="0">
       </div>
-					</div>
-					<div class="grid2">
-						<div class="field">
-							<label>Categoria</label>
-							<select id="d-cat">
-								<option value="">Selecione...</option>
-								<optgroup label="💧 Contas Fixas">
-									<option value="💧 Água">💧 Água</option>
-									<option value="💡 Luz">💡 Luz</option>
-									<option value="🌐 Internet">🌐 Internet</option>
-									<option value="🏠 Financiamento Apartamento">🏠 Financiamento Apartamento</option>
-								</optgroup>
-								<optgroup label="💳 Cartões">
-									<option value="💳 Cartão Nubank">💳 Cartão Nubank</option>
-									<option value="💳 Cartão C6">💳 Cartão C6</option>
-									<option value="💳 Cartão Pão de Açúcar">💳 Cartão Pão de Açúcar</option>
-									<option value="💳 Cartão Porto Seguro">💳 Cartão Porto Seguro</option>
-								</optgroup>
-								<optgroup label="💰 Dívidas">
-									<option value="💰 Dívida Claudete">💰 Dívida Claudete</option>
-								</optgroup>
-								<optgroup label="🛒 Outros">
-									<option value="🛒 Alimentação">🛒 Alimentação</option>
-									<option value="🚗 Transporte">🚗 Transporte</option>
-									<option value="❤️ Saúde">❤️ Saúde</option>
-									<option value="📚 Educação">📚 Educação</option>
-									<option value="🎮 Lazer">🎮 Lazer</option>
-									<option value="👗 Vestuário">👗 Vestuário</option>
-									<option value="📱 Assinaturas">📱 Assinaturas</option>
-									<option value="📦 Outros">📦 Outros</option>
-								</optgroup>
-							</select>
-						</div>
-						<div class="field">
-							<label>Ou categoria personalizada</label>
-							<input type="text" id="d-cat2" placeholder="Digite aqui...">
+      <div class="field">
+        <label>Mês</label>
+        <input type="month" id="d-mes">
       </div>
-					</div>
-					<button class="btn btn-verm" id="btn-add" onclick="adicionarDespesa()">➕ Adicionar Despesa</button>
-				</div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>Categoria</label>
+        <select id="d-cat">
+          <option value="">Selecione...</option>
+          <optgroup label="💧 Contas Fixas">
+            <option value="💧 Água">💧 Água</option>
+            <option value="💡 Luz">💡 Luz</option>
+            <option value="🌐 Internet">🌐 Internet</option>
+            <option value="🏠 Financiamento Apartamento">🏠 Financiamento Apartamento</option>
+          </optgroup>
+          <optgroup label="💳 Cartões">
+            <option value="💳 Cartão Nubank">💳 Cartão Nubank</option>
+            <option value="💳 Cartão C6">💳 Cartão C6</option>
+            <option value="💳 Cartão Pão de Açúcar">💳 Cartão Pão de Açúcar</option>
+            <option value="💳 Cartão Porto Seguro">💳 Cartão Porto Seguro</option>
+          </optgroup>
+          <optgroup label="💰 Dívidas">
+            <option value="💰 Dívida Claudete">💰 Dívida Claudete</option>
+          </optgroup>
+          <optgroup label="🛒 Outros">
+            <option value="🛒 Alimentação">🛒 Alimentação</option>
+            <option value="🚗 Transporte">🚗 Transporte</option>
+            <option value="❤️ Saúde">❤️ Saúde</option>
+            <option value="📚 Educação">📚 Educação</option>
+            <option value="🎮 Lazer">🎮 Lazer</option>
+            <option value="👗 Vestuário">👗 Vestuário</option>
+            <option value="📱 Assinaturas">📱 Assinaturas</option>
+            <option value="📦 Outros">📦 Outros</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="field">
+        <label>Ou categoria personalizada</label>
+        <input type="text" id="d-cat2" placeholder="Digite aqui...">
+      </div>
+    </div>
+    <button class="btn btn-verm" id="btn-add" onclick="adicionarDespesa()">➕ Adicionar Despesa</button>
+  </div>
 
-				<div class="sec">
-					<span class="sec-t">Despesas registradas</span>
-					<div class="sec-l"></div>
-				</div>
-				<div class="filtro">
-					<input type="month" id="filtro-mes">
-						<button class="btn btn-ghost btn-sm" onclick="filtrar()">🔍 Filtrar</button>
-					</div>
-				<div id="desp-total-bar" style="display:none;margin-bottom:12px">
-					<div style="background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:12px 18px;display:flex;justify-content:space-between;align-items:center">
-						<span style="font-size:12px;color:var(--texto3)">Total do período</span>
-						<span style="font-family:'Fraunces',serif;font-size:18px;color:var(--verm)" id="desp-total-num">R$ 0,00</span>
-					</div>
-				</div>
-				<div class="desp-tabela" id="desp-lista">
-					<div class="empty">
-						<div class="empty-ico">🧾</div>
-						<p>Nenhuma despesa encontrada.</p>
-					</div>
-				</div>
-			</div>
+  <div class="sec"><span class="sec-t">Despesas registradas</span><div class="sec-l"></div></div>
+  <div class="filtro">
+    <input type="month" id="filtro-mes">
+    <button class="btn btn-ghost btn-sm" onclick="filtrar()">🔍 Filtrar</button>
+  </div>
+  <div id="desp-total-bar" style="display:none;margin-bottom:12px">
+    <div style="background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:12px 18px;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:12px;color:var(--texto3)">Total do período</span>
+      <span style="font-family:'Fraunces',serif;font-size:18px;color:var(--verm)" id="desp-total-num">R$ 0,00</span>
+    </div>
+  </div>
+  <div class="desp-tabela" id="desp-lista">
+    <div class="empty"><div class="empty-ico">🧾</div><p>Nenhuma despesa encontrada.</p></div>
+  </div>
+</div>
 
-			<!-- ══ ABA HISTÓRICO ══ -->
-			<div class="tab" id="tab-historico">
-				<div class="chart-card" style="margin-bottom:20px">
-					<div class="chart-title">Despesas × Renda — últimos 6 meses</div>
-					<div class="chart-wrap" style="height:220px">
-						<canvas id="chart-hist"></canvas>
-					</div>
-				</div>
-				<div class="sec">
-					<span class="sec-t">Histórico mensal</span>
-					<div class="sec-l"></div>
-				</div>
-				<div class="hist-lista" id="hist-lista">
-					<div class="empty">
-						<div class="empty-ico">📈</div>
-						<p>Nenhum histórico disponível.</p>
-					</div>
-				</div>
-			</div>
+<!-- ══ ABA HISTÓRICO ══ -->
+<div class="tab" id="tab-historico">
+  <div class="chart-card" style="margin-bottom:20px">
+    <div class="chart-title">Despesas × Renda — últimos 6 meses</div>
+    <div class="chart-wrap" style="height:220px"><canvas id="chart-hist"></canvas></div>
+  </div>
+  <div class="sec"><span class="sec-t">Histórico mensal</span><div class="sec-l"></div></div>
+  <div class="hist-lista" id="hist-lista">
+    <div class="empty"><div class="empty-ico">📈</div><p>Nenhum histórico disponível.</p></div>
+  </div>
+</div>
 
-		</main>
-		<div class="toast" id="toast"></div>
+</main>
+<div class="toast" id="toast"></div>
 
-		<script>
-			let D = {salarios:{A:0,B:0},despesas:{},poupanca:0};
-			let filtroAtivo = mesAtual();
-			let chartDonut=null, chartLinha=null, chartHist=null;
+<script>
+let D = {salarios:{A:0,B:0},despesas:{},poupanca:0};
+let filtroAtivo = mesAtual();
+let chartDonut=null, chartLinha=null, chartHist=null;
 
-			const CAT_CORES=['#00e5a0','#38b4ff','#ffc247','#ff3d5a','#b197fc','#ff8c42','#06d6a0','#118ab2','#ffd166','#ef476f','#a8dadc','#457b9d','#e9c46a'];
+const CAT_CORES=['#00e5a0','#38b4ff','#ffc247','#ff3d5a','#b197fc','#ff8c42','#06d6a0','#118ab2','#ffd166','#ef476f','#a8dadc','#457b9d','#e9c46a'];
 
-			function mesAtual(){ return new Date().toISOString().slice(0,7) }
-			function brl(v){ return 'R$\u00a0'+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) }
-			function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+function mesAtual(){ return new Date().toISOString().slice(0,7) }
+function brl(v){ return 'R$\u00a0'+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
 
-			document.addEventListener('DOMContentLoaded',()=>{
-			const m=mesAtual();
-			document.getElementById('hdr-mes').textContent=new Date().toLocaleDateString('pt-BR',{month:'short',year:'numeric'}).toUpperCase();
-			document.getElementById('d-mes').value=m;
-			document.getElementById('filtro-mes').value=m;
-			carregarDados();
-			});
+document.addEventListener('DOMContentLoaded',()=>{
+  const m=mesAtual();
+  document.getElementById('hdr-mes').textContent=new Date().toLocaleDateString('pt-BR',{month:'short',year:'numeric'}).toUpperCase();
+  document.getElementById('d-mes').value=m;
+  document.getElementById('filtro-mes').value=m;
+  carregarDados();
+});
 
-			async function carregarDados(){
-			try{ const r=await fetch('/api/dados'); D=await r.json(); renderTudo(); }
-			catch(e){ toast('Erro ao carregar dados','err') }
-			}
+async function carregarDados(){
+  try{ const r=await fetch('/api/dados'); D=await r.json(); renderTudo(); }
+  catch(e){ toast('Erro ao carregar dados','err') }
+}
 
-			function renderTudo(){
-			renderResumo(); renderDespesas(); renderHistorico();
-			document.getElementById('sal-a').value=D.salarios.A||'';
-			document.getElementById('sal-b').value=D.salarios.B||'';
-			previewSal();
-			const p=D.poupanca||0;
-			document.getElementById('poup-val').textContent=brl(p);
-			document.getElementById('poup-input').value=p||'';
-			}
+function renderTudo(){
+  renderResumo(); renderDespesas(); renderHistorico();
+  document.getElementById('sal-a').value=D.salarios.A||'';
+  document.getElementById('sal-b').value=D.salarios.B||'';
+  previewSal();
+  const p=D.poupanca||0;
+  document.getElementById('poup-val').textContent=brl(p);
+  document.getElementById('poup-input').value=p||'';
+}
 
-			function aba(id,btn){
-			document.querySelectorAll('.tab').forEach(p=>p.classList.remove('active'));
-			document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-			document.getElementById('tab-'+id).classList.add('active');
-			btn.classList.add('active');
-			if(id==='resumo'){setTimeout(()=>{renderChartDonut();renderChartLinha();},50)}
-			if(id==='historico'){setTimeout(()=>renderChartHist(),50)}
-			}
+function aba(id,btn){
+  document.querySelectorAll('.tab').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='resumo'){setTimeout(()=>{renderChartDonut();renderChartLinha();},50)}
+  if(id==='historico'){setTimeout(()=>renderChartHist(),50)}
+}
 
-			// RESUMO
-			function renderResumo(){
-			const renda=(D.salarios.A||0)+(D.salarios.B||0);
-			const m=mesAtual();
-			const desps=D.despesas[m]||[];
-			const total=desps.reduce((s,d)=>s+d.valor,0);
-			const saldo=renda-total;
-			const pct=renda>0?Math.min((total/renda)*100,100):0;
+// RESUMO
+function renderResumo(){
+  const renda=(D.salarios.A||0)+(D.salarios.B||0);
+  const m=mesAtual();
+  const desps=D.despesas[m]||[];
+  const total=desps.reduce((s,d)=>s+d.valor,0);
+  const saldo=renda-total;
+  const pct=renda>0?Math.min((total/renda)*100,100):0;
 
-			document.getElementById('s-renda').textContent=brl(renda);
-			document.getElementById('s-desp').textContent=brl(total);
-			document.getElementById('s-desp-qt').textContent=desps.length+' lancamento'+(desps.length!==1?'s':'');
+  document.getElementById('s-renda').textContent=brl(renda);
+  document.getElementById('s-desp').textContent=brl(total);
+  document.getElementById('s-desp-qt').textContent=desps.length+' lancamento'+(desps.length!==1?'s':'');
 
-			const eS=document.getElementById('s-saldo');
-			eS.textContent=brl(saldo);
-			eS.style.color=saldo>=0?'var(--azul)':'var(--verm)';
-			eS.parentElement.style.setProperty('--accent',saldo>=0?'var(--azul)':'var(--verm)');
+  const eS=document.getElementById('s-saldo');
+  eS.textContent=brl(saldo);
+  eS.style.color=saldo>=0?'var(--azul)':'var(--verm)';
+  eS.parentElement.style.setProperty('--accent',saldo>=0?'var(--azul)':'var(--verm)');
 
-			const eP=document.getElementById('s-pct');
-			eP.textContent=pct.toFixed(1)+'%';
-			eP.style.color=pct<70?'var(--amar)':=''
+  const eP=document.getElementById('s-pct');
+  eP.textContent=pct.toFixed(1)+'%';
+  eP.style.color=pct<70?'var(--amar)':'var(--verm)';
 
-  const='' pNum=document.getElementById
-  pNum.textContent=pct.toFixed(1
-  pNum.style.color='pct'<70?'var(--verde)':pct=''<90?'var(--amar)':=''
-  document.getElementById=''('prog-sub').textContent=brl(total)+' de '+brl(renda=''
-  document.getElementById=''('prog-gasto').textContent=brl(total
-  document.getElementById=''('prog-resto').textContent=brl(Math.max(saldo,0
+  const pNum=document.getElementById('prog-num');
+  pNum.textContent=pct.toFixed(1)+'%';
+  pNum.style.color=pct<70?'var(--verde)':pct<90?'var(--amar)':'var(--verm)';
+  document.getElementById('prog-sub').textContent=brl(total)+' de '+brl(renda);
+  document.getElementById('prog-gasto').textContent=brl(total)+' gasto';
+  document.getElementById('prog-resto').textContent=brl(Math.max(saldo,0))+' restante';
 
-  const='' fill=document.getElementById
-  fill.style.width=pct
-  fill.style.background='pct'<70?'linear-gradient(90deg,var(--verde),var(--azul))':pct=''<90?'linear-gradient(90deg,var(--amar),var(--verm))':='''var(--verm)';
+  const fill=document.getElementById('prog-fill');
+  fill.style.width=pct+'%';
+  fill.style.background=pct<70?'linear-gradient(90deg,var(--verde),var(--azul))':pct<90?'linear-gradient(90deg,var(--amar),var(--verm))':'var(--verm)';
 
   // poupanca
-			document.getElementById('poup-val').textContent=brl(D.poupanca||0);
+  document.getElementById('poup-val').textContent=brl(D.poupanca||0);
 
-			// lista
-			const lista=document.getElementById('res-lista');
-			const sorted=[...desps].sort((a,b)=>b.valor-a.valor);
-			lista.innerHTML=!sorted.length
-			?'<div class="empty">
-				<div class="empty-ico"></div>
-				<p>Nenhuma despesa este mes.</p>
-			</div>'
-			:sorted.map((d,i)=>`<div class="res-row" style="animation-delay:${i*.04}s">
-				<div style="min-width:0;flex:1">
-					<div class="res-desc">${esc(d.desc)}</div>
-					<div class="res-cat">
-						<span class="tag">${esc(d.cat)}</span>
-					</div>
-				</div>
-				<div class="res-val">${brl(d.valor)}</div>
-			</div>`).join('');
+  // lista
+  const lista=document.getElementById('res-lista');
+  const sorted=[...desps].sort((a,b)=>b.valor-a.valor);
+  lista.innerHTML=!sorted.length
+    ?'<div class="empty"><div class="empty-ico"></div><p>Nenhuma despesa este mes.</p></div>'
+    :sorted.map((d,i)=>`<div class="res-row" style="animation-delay:${i*.04}s"><div style="min-width:0;flex:1"><div class="res-desc">${esc(d.desc)}</div><div class="res-cat"><span class="tag">${esc(d.cat)}</span></div></div><div class="res-val">${brl(d.valor)}</div></div>`).join('');
 
-			renderCatGrid(desps,total);
-			renderChartDonut();
-			renderChartLinha();
-			}
+  renderCatGrid(desps,total);
+  renderChartDonut();
+  renderChartLinha();
+}
 
-			function renderCatGrid(desps,total){
-			const grid=document.getElementById('cat-grid');
-			if(!desps.length){grid.innerHTML='';return}
-			const map={};
-			desps.forEach(d=>{map[d.cat]=(map[d.cat]||0)+d.valor});
-			grid.innerHTML=Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([cat,val],i)=>`
-			<div class="cat-item">
-				<div class="cat-dot" style="background:${CAT_CORES[i%CAT_CORES.length]}"></div>
-				<div>
-					<div class="cat-name">${esc(cat)}</div>
-					<div class="cat-pct">${brl(val)} - ${total>0?((val/total)*100).toFixed(0):0}%</div>
-				</div>
-			</div>`).join('');
-			}
+function renderCatGrid(desps,total){
+  const grid=document.getElementById('cat-grid');
+  if(!desps.length){grid.innerHTML='';return}
+  const map={};
+  desps.forEach(d=>{map[d.cat]=(map[d.cat]||0)+d.valor});
+  grid.innerHTML=Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([cat,val],i)=>`
+    <div class="cat-item">
+      <div class="cat-dot" style="background:${CAT_CORES[i%CAT_CORES.length]}"></div>
+      <div><div class="cat-name">${esc(cat)}</div><div class="cat-pct">${brl(val)} - ${total>0?((val/total)*100).toFixed(0):0}%</div></div>
+    </div>`).join('');
+}
 
-			// POUPANCA
-			async function salvarPoupanca(){
-			const val=parseFloat(document.getElementById('poup-input').value)||0;
-			const r=await fetch('/api/poupanca',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({valor:val})});
-			const j=await r.json();
-			if(j.ok){ D.poupanca=val; document.getElementById('poup-val').textContent=brl(val); toast('Poupanca atualizada!','ok') }
-			}
+// POUPANCA
+async function salvarPoupanca(){
+  const val=parseFloat(document.getElementById('poup-input').value)||0;
+  const r=await fetch('/api/poupanca',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({valor:val})});
+  const j=await r.json();
+  if(j.ok){ D.poupanca=val; document.getElementById('poup-val').textContent=brl(val); toast('Poupanca atualizada!','ok') }
+}
 
-			// SALARIOS
-			function previewSal(){
-			const a=parseFloat(document.getElementById('sal-a').value)||0;
-			const b=parseFloat(document.getElementById('sal-b').value)||0;
-			document.getElementById('pv-a').textContent=brl(a);
-			document.getElementById('pv-b').textContent=brl(b);
-			document.getElementById('pv-tot').textContent=brl(a+b);
-			}
+// SALARIOS
+function previewSal(){
+  const a=parseFloat(document.getElementById('sal-a').value)||0;
+  const b=parseFloat(document.getElementById('sal-b').value)||0;
+  document.getElementById('pv-a').textContent=brl(a);
+  document.getElementById('pv-b').textContent=brl(b);
+  document.getElementById('pv-tot').textContent=brl(a+b);
+}
 
-			async function salvarSalarios(){
-			const A=parseFloat(document.getElementById('sal-a').value)||0;
-			const B=parseFloat(document.getElementById('sal-b').value)||0;
-			const btn=document.getElementById('btn-sal');
-			btn.innerHTML='<span class="spin"></span> Salvando...';btn.disabled=true;
-			try{
-			const r=await fetch('/api/salarios',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({A,B})});
-			const j=await r.json();
-			if(j.ok){D.salarios={A,B};renderResumo();renderHistorico();toast('Salarios salvos!','ok')}
-			}finally{btn.innerHTML='Salvar Salarios';btn.disabled=false}
-			}
+async function salvarSalarios(){
+  const A=parseFloat(document.getElementById('sal-a').value)||0;
+  const B=parseFloat(document.getElementById('sal-b').value)||0;
+  const btn=document.getElementById('btn-sal');
+  btn.innerHTML='<span class="spin"></span> Salvando...';btn.disabled=true;
+  try{
+    const r=await fetch('/api/salarios',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({A,B})});
+    const j=await r.json();
+    if(j.ok){D.salarios={A,B};renderResumo();renderHistorico();toast('Salarios salvos!','ok')}
+  }finally{btn.innerHTML='Salvar Salarios';btn.disabled=false}
+}
 
-			// DESPESAS
-			async function adicionarDespesa(){
-			const desc=document.getElementById('d-desc').value.trim();
-			const valor=document.getElementById('d-valor').value;
-			const mes=document.getElementById('d-mes').value||mesAtual();
-			const cat=document.getElementById('d-cat2').value.trim()||document.getElementById('d-cat').value||'Outros';
+// DESPESAS
+async function adicionarDespesa(){
+  const desc=document.getElementById('d-desc').value.trim();
+  const valor=document.getElementById('d-valor').value;
+  const mes=document.getElementById('d-mes').value||mesAtual();
+  const cat=document.getElementById('d-cat2').value.trim()||document.getElementById('d-cat').value||'Outros';
 
-			if(!desc){toast('Informe a descricao','err');return}
-			if(!valor||isNaN(parseFloat(valor))){toast('Informe um valor valido','err');return}
+  if(!desc){toast('Informe a descricao','err');return}
+  if(!valor||isNaN(parseFloat(valor))){toast('Informe um valor valido','err');return}
 
-			const btn=document.getElementById('btn-add');
-			btn.innerHTML='<span class="spin"></span> Salvando...';btn.disabled=true;
-			try{
-			const r=await fetch('/api/despesas',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({desc,valor:parseFloat(valor),cat,mes})});
-			const j=await r.json();
-			if(j.ok){
-			await carregarDados();
-			document.getElementById('d-desc').value='';
-			document.getElementById('d-valor').value='';
-			document.getElementById('d-cat2').value='';
-			document.getElementById('d-cat').value='';
-			toast('Despesa adicionada!','ok');
-			}
-			}finally{btn.innerHTML='Adicionar Despesa';btn.disabled=false}
-			}
+  const btn=document.getElementById('btn-add');
+  btn.innerHTML='<span class="spin"></span> Salvando...';btn.disabled=true;
+  try{
+    const r=await fetch('/api/despesas',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({desc,valor:parseFloat(valor),cat,mes})});
+    const j=await r.json();
+    if(j.ok){
+      await carregarDados();
+      document.getElementById('d-desc').value='';
+      document.getElementById('d-valor').value='';
+      document.getElementById('d-cat2').value='';
+      document.getElementById('d-cat').value='';
+      toast('Despesa adicionada!','ok');
+    }
+  }finally{btn.innerHTML='Adicionar Despesa';btn.disabled=false}
+}
 
-			async function removerDespesa(mes,id){
-			if(!confirm('Remover esta despesa?'))return;
-			await fetch(`/api/despesas/${mes}/${encodeURIComponent(id)}`,{method:'DELETE'});
-			await carregarDados();
-			toast('Removida','ok');
-			}
+async function removerDespesa(mes,id){
+  if(!confirm('Remover esta despesa?'))return;
+  await fetch(`/api/despesas/${mes}/${encodeURIComponent(id)}`,{method:'DELETE'});
+  await carregarDados();
+  toast('Removida','ok');
+}
 
-			function filtrar(){
-			filtroAtivo=document.getElementById('filtro-mes').value||mesAtual();
-			renderDespesas();
-			}
+function filtrar(){
+  filtroAtivo=document.getElementById('filtro-mes').value||mesAtual();
+  renderDespesas();
+}
 
-			function renderDespesas(){
-			const lista=document.getElementById('desp-lista');
-			const bar=document.getElementById('desp-total-bar');
-			const desps=D.despesas[filtroAtivo]||[];
-			if(!desps.length){
-			lista.innerHTML=`<div class="empty">
-				<div class="empty-ico"></div>
-				<p>Nenhuma despesa em ${filtroAtivo}.</p>
-			</div>`;
-			bar.style.display='none';return;
-			}
-			document.getElementById('desp-total-num').textContent=brl(desps.reduce((s,d)=>s+d.valor,0));
-			bar.style.display='block';
-			lista.innerHTML=desps.map((d,i)=>`
-			<div class="desp-item" style="animation-delay:${i*.04}s">
-				<div class="desp-info">
-					<div class="desp-desc">${esc(d.desc)}</div>
-					<div class="desp-meta">
-						<span class="tag">${esc(d.cat)}</span>
-						<span class="tag">${d.mes}</span>
-					</div>
-				</div>
-				<div class="desp-right">
-					<div class="desp-val">${brl(d.valor)}</div>
-					<button class="btn-del" onclick="removerDespesa('${d.mes}','${d.id}')">X</button>
-				</div>
-			</div>`).join('');
-			}
+function renderDespesas(){
+  const lista=document.getElementById('desp-lista');
+  const bar=document.getElementById('desp-total-bar');
+  const desps=D.despesas[filtroAtivo]||[];
+  if(!desps.length){
+    lista.innerHTML=`<div class="empty"><div class="empty-ico"></div><p>Nenhuma despesa em ${filtroAtivo}.</p></div>`;
+    bar.style.display='none';return;
+  }
+  document.getElementById('desp-total-num').textContent=brl(desps.reduce((s,d)=>s+d.valor,0));
+  bar.style.display='block';
+  lista.innerHTML=desps.map((d,i)=>`
+    <div class="desp-item" style="animation-delay:${i*.04}s">
+      <div class="desp-info">
+        <div class="desp-desc">${esc(d.desc)}</div>
+        <div class="desp-meta"><span class="tag">${esc(d.cat)}</span><span class="tag">${d.mes}</span></div>
+      </div>
+      <div class="desp-right">
+        <div class="desp-val">${brl(d.valor)}</div>
+        <button class="btn-del" onclick="removerDespesa('${d.mes}','${d.id}')">X</button>
+      </div>
+    </div>`).join('');
+}
 
-			// HISTORICO
-			function renderHistorico(){
-			const renda=(D.salarios.A||0)+(D.salarios.B||0);
-			const meses=Object.keys(D.despesas).sort().reverse();
-			const lista=document.getElementById('hist-lista');
-			if(!meses.length){lista.innerHTML='<div class="empty">
-				<div class="empty-ico"></div>
-				<p>Nenhum historico.</p>
-			</div>';renderChartHist();return}
-			lista.innerHTML=meses.map((m,i)=>{
-			const total=(D.despesas[m]||[]).reduce((s,d)=>s+d.valor,0);
-			const saldo=renda-total;
-			const pct=renda>0?Math.min((total/renda)*100,100):0;
-			const ok=saldo>=0;
-			const cor=pct<70?'var(--verde)':pct=''<90?'var(--amar)':=''
-    const=''[ano='',mo='']=m.split=''
-    const='' nm='new' Date=''(ano='',mo-1='').toLocaleDateString=''('pt-BR',{month:=''
-    return=''
+// HISTORICO
+function renderHistorico(){
+  const renda=(D.salarios.A||0)+(D.salarios.B||0);
+  const meses=Object.keys(D.despesas).sort().reverse();
+  const lista=document.getElementById('hist-lista');
+  if(!meses.length){lista.innerHTML='<div class="empty"><div class="empty-ico"></div><p>Nenhum historico.</p></div>';renderChartHist();return}
+  lista.innerHTML=meses.map((m,i)=>{
+    const total=(D.despesas[m]||[]).reduce((s,d)=>s+d.valor,0);
+    const saldo=renda-total;
+    const pct=renda>0?Math.min((total/renda)*100,100):0;
+    const ok=saldo>=0;
+    const cor=pct<70?'var(--verde)':pct<90?'var(--amar)':'var(--verm)';
+    const[ano,mo]=m.split('-');
+    const nm=new Date(ano,mo-1).toLocaleDateString('pt-BR',{month:'long'});
+    return `<div class="hist-card" style="animation-delay:${i*.06}s">
       <div class="hist-hdr"><span class="hist-mes">${nm.charAt(0).toUpperCase()+nm.slice(1)} ${ano}</span><span class="hist-badge ${ok?'ok':'bad'}">${ok?'Positivo':'Deficit'}</span></div>
       <div class="hist-body">
         <div class="hkv"><div class="k">Renda</div><div class="v" style="color:var(--verde)">${brl(renda)}</div></div>
@@ -692,63 +629,63 @@
       </div>
       <div class="hist-bar"><div class="hist-bar-track"><div class="hist-bar-fill" style="width:${pct}%;background:${cor}"></div></div></div>
     </div>`;
-  }).join=``
-  renderChartHist=''();
+  }).join('');
+  renderChartHist();
 }
 
 // GRAFICOS
-			function renderChartDonut(){
-			const m=mesAtual();const desps=D.despesas[m]||[];const map={};
-			desps.forEach(d=>{map[d.cat]=(map[d.cat]||0)+d.valor});
-			const labels=Object.keys(map);const data=Object.values(map);
-			const ctx=document.getElementById('chart-donut').getContext('2d');
-			if(chartDonut)chartDonut.destroy();
-			if(!labels.length){ctx.clearRect(0,0,300,200);ctx.fillStyle='#4a5270';ctx.font='14px DM Sans';ctx.textAlign='center';ctx.fillText('Sem dados',150,100);return}
-			chartDonut=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:labels.map((_,i)=>CAT_CORES[i%CAT_CORES.length]),borderColor:'#111627',borderWidth:3,hoverOffset:6}]},
-			options:{responsive:true,maintainAspectRatio:false,cutout:'65%',
-			plugins:{legend:{position:'right',labels:{color:'#8b93b5',font:{size:11,family:'DM Sans'},padding:12,boxWidth:10}},
-			tooltip:{backgroundColor:'#161d30',borderColor:'#1c2438',borderWidth:1,titleColor:'#edf0fb',bodyColor:'#8b93b5',callbacks:{label:c=>' '+brl(c.parsed)}}}}});
-			}
+function renderChartDonut(){
+  const m=mesAtual();const desps=D.despesas[m]||[];const map={};
+  desps.forEach(d=>{map[d.cat]=(map[d.cat]||0)+d.valor});
+  const labels=Object.keys(map);const data=Object.values(map);
+  const ctx=document.getElementById('chart-donut').getContext('2d');
+  if(chartDonut)chartDonut.destroy();
+  if(!labels.length){ctx.clearRect(0,0,300,200);ctx.fillStyle='#4a5270';ctx.font='14px DM Sans';ctx.textAlign='center';ctx.fillText('Sem dados',150,100);return}
+  chartDonut=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:labels.map((_,i)=>CAT_CORES[i%CAT_CORES.length]),borderColor:'#111627',borderWidth:3,hoverOffset:6}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'65%',
+      plugins:{legend:{position:'right',labels:{color:'#8b93b5',font:{size:11,family:'DM Sans'},padding:12,boxWidth:10}},
+      tooltip:{backgroundColor:'#161d30',borderColor:'#1c2438',borderWidth:1,titleColor:'#edf0fb',bodyColor:'#8b93b5',callbacks:{label:c=>' '+brl(c.parsed)}}}}});
+}
 
-			function renderChartLinha(){
-			const renda=(D.salarios.A||0)+(D.salarios.B||0);
-			const meses=Object.keys(D.despesas).sort().slice(-6);
-			const totais=meses.map(m=>(D.despesas[m]||[]).reduce((s,d)=>s+d.valor,0));
-			const labels=meses.map(m=>{const[a,mo]=m.split('-');return new Date(a,mo-1).toLocaleDateString('pt-BR',{month:'short'})});
-			const ctx=document.getElementById('chart-linha').getContext('2d');
-			if(chartLinha)chartLinha.destroy();
-			if(!meses.length){ctx.clearRect(0,0,300,200);ctx.fillStyle='#4a5270';ctx.font='14px DM Sans';ctx.textAlign='center';ctx.fillText('Sem dados',150,100);return}
-			chartLinha=new Chart(ctx,{type:'line',data:{labels,datasets:[
-			{label:'Despesas',data:totais,borderColor:'#ff3d5a',backgroundColor:'rgba(255,61,90,.08)',tension:.4,fill:true,pointBackgroundColor:'#ff3d5a',pointRadius:4,borderWidth:2},
-			{label:'Renda',data:meses.map(()=>renda),borderColor:'#00e5a0',backgroundColor:'rgba(0,229,160,.05)',tension:.4,fill:true,pointBackgroundColor:'#00e5a0',pointRadius:4,borderWidth:2,borderDash:[6,4]}
-			]},options:{responsive:true,maintainAspectRatio:false,
-			plugins:{legend:{labels:{color:'#8b93b5',font:{size:11,family:'DM Sans'}}},tooltip:{backgroundColor:'#161d30',borderColor:'#1c2438',borderWidth:1,titleColor:'#edf0fb',bodyColor:'#8b93b5',callbacks:{label:c=>' '+brl(c.parsed.y)}}},
-			scales:{x:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11}}},y:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11},callback:v=>'R$'+v.toLocaleString('pt-BR')}}}}});
-			}
+function renderChartLinha(){
+  const renda=(D.salarios.A||0)+(D.salarios.B||0);
+  const meses=Object.keys(D.despesas).sort().slice(-6);
+  const totais=meses.map(m=>(D.despesas[m]||[]).reduce((s,d)=>s+d.valor,0));
+  const labels=meses.map(m=>{const[a,mo]=m.split('-');return new Date(a,mo-1).toLocaleDateString('pt-BR',{month:'short'})});
+  const ctx=document.getElementById('chart-linha').getContext('2d');
+  if(chartLinha)chartLinha.destroy();
+  if(!meses.length){ctx.clearRect(0,0,300,200);ctx.fillStyle='#4a5270';ctx.font='14px DM Sans';ctx.textAlign='center';ctx.fillText('Sem dados',150,100);return}
+  chartLinha=new Chart(ctx,{type:'line',data:{labels,datasets:[
+    {label:'Despesas',data:totais,borderColor:'#ff3d5a',backgroundColor:'rgba(255,61,90,.08)',tension:.4,fill:true,pointBackgroundColor:'#ff3d5a',pointRadius:4,borderWidth:2},
+    {label:'Renda',data:meses.map(()=>renda),borderColor:'#00e5a0',backgroundColor:'rgba(0,229,160,.05)',tension:.4,fill:true,pointBackgroundColor:'#00e5a0',pointRadius:4,borderWidth:2,borderDash:[6,4]}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#8b93b5',font:{size:11,family:'DM Sans'}}},tooltip:{backgroundColor:'#161d30',borderColor:'#1c2438',borderWidth:1,titleColor:'#edf0fb',bodyColor:'#8b93b5',callbacks:{label:c=>' '+brl(c.parsed.y)}}},
+    scales:{x:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11}}},y:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11},callback:v=>'R$'+v.toLocaleString('pt-BR')}}}}});
+}
 
-			function renderChartHist(){
-			const renda=(D.salarios.A||0)+(D.salarios.B||0);
-			const meses=Object.keys(D.despesas).sort().slice(-6);
-			const totais=meses.map(m=>(D.despesas[m]||[]).reduce((s,d)=>s+d.valor,0));
-			const labels=meses.map(m=>{const[a,mo]=m.split('-');return new Date(a,mo-1).toLocaleDateString('pt-BR',{month:'short',year:'2-digit'})});
-			const ctx=document.getElementById('chart-hist').getContext('2d');
-			if(chartHist)chartHist.destroy();
-			if(!meses.length)return;
-			chartHist=new Chart(ctx,{type:'bar',data:{labels,datasets:[
-			{label:'Despesas',data:totais,backgroundColor:'rgba(255,61,90,.7)',borderColor:'#ff3d5a',borderWidth:1,borderRadius:6},
-			{label:'Renda',data:meses.map(()=>renda),backgroundColor:'rgba(0,229,160,.15)',borderColor:'#00e5a0',borderWidth:1,borderRadius:6,type:'line',tension:.4,fill:false,pointRadius:3}
-			]},options:{responsive:true,maintainAspectRatio:false,
-			plugins:{legend:{labels:{color:'#8b93b5',font:{size:11,family:'DM Sans'}}},tooltip:{backgroundColor:'#161d30',borderColor:'#1c2438',borderWidth:1,titleColor:'#edf0fb',bodyColor:'#8b93b5',callbacks:{label:c=>' '+brl(c.parsed.y)}}},
-			scales:{x:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11}}},y:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11},callback:v=>'R$'+v.toLocaleString('pt-BR')}}}}});
-			}
+function renderChartHist(){
+  const renda=(D.salarios.A||0)+(D.salarios.B||0);
+  const meses=Object.keys(D.despesas).sort().slice(-6);
+  const totais=meses.map(m=>(D.despesas[m]||[]).reduce((s,d)=>s+d.valor,0));
+  const labels=meses.map(m=>{const[a,mo]=m.split('-');return new Date(a,mo-1).toLocaleDateString('pt-BR',{month:'short',year:'2-digit'})});
+  const ctx=document.getElementById('chart-hist').getContext('2d');
+  if(chartHist)chartHist.destroy();
+  if(!meses.length)return;
+  chartHist=new Chart(ctx,{type:'bar',data:{labels,datasets:[
+    {label:'Despesas',data:totais,backgroundColor:'rgba(255,61,90,.7)',borderColor:'#ff3d5a',borderWidth:1,borderRadius:6},
+    {label:'Renda',data:meses.map(()=>renda),backgroundColor:'rgba(0,229,160,.15)',borderColor:'#00e5a0',borderWidth:1,borderRadius:6,type:'line',tension:.4,fill:false,pointRadius:3}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#8b93b5',font:{size:11,family:'DM Sans'}}},tooltip:{backgroundColor:'#161d30',borderColor:'#1c2438',borderWidth:1,titleColor:'#edf0fb',bodyColor:'#8b93b5',callbacks:{label:c=>' '+brl(c.parsed.y)}}},
+    scales:{x:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11}}},y:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11},callback:v=>'R$'+v.toLocaleString('pt-BR')}}}}});
+}
 
-			// TOAST
-			let toastT;
-			function toast(msg,tipo){
-			const t=document.getElementById('toast');
-			clearTimeout(toastT);t.textContent=msg;t.className=`toast ${tipo} show`;
-			toastT=setTimeout(()=>t.classList.remove('show'),2800);
-			}
-		</script>
-	</body>
+// TOAST
+let toastT;
+function toast(msg,tipo){
+  const t=document.getElementById('toast');
+  clearTimeout(toastT);t.textContent=msg;t.className=`toast ${tipo} show`;
+  toastT=setTimeout(()=>t.classList.remove('show'),2800);
+}
+</script>
+</body>
 </html>
