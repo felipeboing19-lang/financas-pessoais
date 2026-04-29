@@ -1118,6 +1118,10 @@ function simularPersonalizado() {
     });
   }
 
+  var economia      = Math.round((juros_base - total_juros)*100)/100;
+  var reducao_meses  = meses_base - meses;
+  var economia = Math.round((juros_base - total_juros)*100)/100;
+  var reducao_meses = meses_base - meses;
   var freq_label = freq===1 ? 'todo mes' : freq===12 ? 'todo ano' : 'a cada 2 anos';
 
   var detalhe_rows = detalhes.map(function(d){
