@@ -1,8 +1,2011 @@
 {
   "salarios": {
-    "A": 0.0,
-    "B": 0.0
+    "A": 5500.0,
+    "B": 5500.0
   },
-  "despesas": {},
-  "poupanca": 0.013333
+  "poupanca": 0.0,
+  "orcamento": {
+    "total": 13100.0,
+    "variaveis": []
+  },
+  "despesas": {
+    "2025-06": [
+      {
+        "id": "2025-06-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2025-06"
+      },
+      {
+        "id": "2025-06-Condomínio-1",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2025-06"
+      },
+      {
+        "id": "2025-06-Energia-2",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2025-06"
+      },
+      {
+        "id": "2025-06-Telefonia e Intenet-3",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2025-06"
+      },
+      {
+        "id": "2025-06-Impostos-4",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2025-06"
+      },
+      {
+        "id": "2025-06-Cartão de Crédito Nu-5",
+        "desc": "Cartão de Crédito Nubank",
+        "valor": 7532.91,
+        "cat": "Cartão de Crédito Nubank",
+        "mes": "2025-06"
+      },
+      {
+        "id": "2025-06-Cartão de Crédito C6-6",
+        "desc": "Cartão de Crédito C6",
+        "valor": 491.7,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2025-06"
+      },
+      {
+        "id": "2025-06-Cartão de Crédito Po-7",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 674.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2025-06"
+      },
+      {
+        "id": "2025-06-Mestrado-8",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2025-06"
+      },
+      {
+        "id": "2025-06-Dívida parcelas 22 a-9",
+        "desc": "Dívida parcelas 22 a 29 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 22 a 29 de 37",
+        "mes": "2025-06"
+      },
+      {
+        "id": "2025-06-Lixo e IPTU-10",
+        "desc": "Lixo e IPTU",
+        "valor": 31.42,
+        "cat": "Lixo e IPTU",
+        "mes": "2025-06"
+      }
+    ],
+    "2025-07": [
+      {
+        "id": "2025-07-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2025-07"
+      },
+      {
+        "id": "2025-07-Amortização imóvel-1",
+        "desc": "Amortização imóvel",
+        "valor": 500.0,
+        "cat": "Amortização imóvel",
+        "mes": "2025-07"
+      },
+      {
+        "id": "2025-07-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2025-07"
+      },
+      {
+        "id": "2025-07-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2025-07"
+      },
+      {
+        "id": "2025-07-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2025-07"
+      },
+      {
+        "id": "2025-07-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2025-07"
+      },
+      {
+        "id": "2025-07-Cartão de Crédito Nu-6",
+        "desc": "Cartão de Crédito Nubank",
+        "valor": 1861.26,
+        "cat": "Cartão de Crédito Nubank",
+        "mes": "2025-07"
+      },
+      {
+        "id": "2025-07-Cartão de Crédito C6-7",
+        "desc": "Cartão de Crédito C6",
+        "valor": 245.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2025-07"
+      },
+      {
+        "id": "2025-07-Cartão de Crédito Po-8",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 637.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2025-07"
+      },
+      {
+        "id": "2025-07-Mestrado-9",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2025-07"
+      },
+      {
+        "id": "2025-07-Dívida parcelas 22 a-10",
+        "desc": "Dívida parcelas 22 a 29 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 22 a 29 de 37",
+        "mes": "2025-07"
+      },
+      {
+        "id": "2025-07-Presentes-11",
+        "desc": "Presentes",
+        "valor": 500.0,
+        "cat": "Presentes",
+        "mes": "2025-07"
+      },
+      {
+        "id": "2025-07-Despesa Médica Cris-12",
+        "desc": "Despesa Médica Cris",
+        "valor": 700.0,
+        "cat": "Despesa Médica Cris",
+        "mes": "2025-07"
+      },
+      {
+        "id": "2025-07-Lixo e IPTU-13",
+        "desc": "Lixo e IPTU",
+        "valor": 31.42,
+        "cat": "Lixo e IPTU",
+        "mes": "2025-07"
+      }
+    ],
+    "2025-08": [
+      {
+        "id": "2025-08-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Amortização imóvel-1",
+        "desc": "Amortização imóvel",
+        "valor": 700.0,
+        "cat": "Amortização imóvel",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Cartão de Crédito Nu-6",
+        "desc": "Cartão de Crédito Nubank",
+        "valor": 1529.1,
+        "cat": "Cartão de Crédito Nubank",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Cartão de Crédito C6-7",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Cartão de Crédito Po-8",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 637.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Mestrado-9",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Dívida parcelas 22 a-10",
+        "desc": "Dívida parcelas 22 a 29 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 22 a 29 de 37",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Despesa Médica Cris-11",
+        "desc": "Despesa Médica Cris",
+        "valor": 700.0,
+        "cat": "Despesa Médica Cris",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Lixo e IPTU-12",
+        "desc": "Lixo e IPTU",
+        "valor": 31.42,
+        "cat": "Lixo e IPTU",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Black-13",
+        "desc": "Black",
+        "valor": 2612.79,
+        "cat": "Cartoes",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Nubank-14",
+        "desc": "Nubank",
+        "valor": 6307.74,
+        "cat": "Cartoes",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-Porto Seguro-15",
+        "desc": "Porto Seguro",
+        "valor": 1104.48,
+        "cat": "Cartoes",
+        "mes": "2025-08"
+      },
+      {
+        "id": "2025-08-C6-16",
+        "desc": "C6",
+        "valor": 1374.62,
+        "cat": "Cartoes",
+        "mes": "2025-08"
+      }
+    ],
+    "2025-09": [
+      {
+        "id": "2025-09-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Amortização imóvel-1",
+        "desc": "Amortização imóvel",
+        "valor": 800.0,
+        "cat": "Amortização imóvel",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Cartão de Crédito Nu-6",
+        "desc": "Cartão de Crédito Nubank",
+        "valor": 1291.51,
+        "cat": "Cartão de Crédito Nubank",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Cartão de Crédito C6-7",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Cartão de Crédito Po-8",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 452.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Mestrado-9",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Dívida parcelas 22 a-10",
+        "desc": "Dívida parcelas 22 a 29 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 22 a 29 de 37",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Presentes-11",
+        "desc": "Presentes",
+        "valor": 300.0,
+        "cat": "Presentes",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Despesa Médica Cris-12",
+        "desc": "Despesa Médica Cris",
+        "valor": 700.0,
+        "cat": "Despesa Médica Cris",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-IPVA e licenciamento-13",
+        "desc": "IPVA e licenciamento",
+        "valor": 298.46,
+        "cat": "IPVA e licenciamento",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Lixo e IPTU-14",
+        "desc": "Lixo e IPTU",
+        "valor": 31.42,
+        "cat": "Lixo e IPTU",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Black-15",
+        "desc": "Black",
+        "valor": 1176.54,
+        "cat": "Cartoes",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Nubank-16",
+        "desc": "Nubank",
+        "valor": 9803.72,
+        "cat": "Cartoes",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Porto Seguro-17",
+        "desc": "Porto Seguro",
+        "valor": 488.14,
+        "cat": "Cartoes",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-C6-18",
+        "desc": "C6",
+        "valor": 1058.28,
+        "cat": "Cartoes",
+        "mes": "2025-09"
+      },
+      {
+        "id": "2025-09-Banco Itau Cris sald-19",
+        "desc": "Banco Itau Cris saldo",
+        "valor": 16483.26,
+        "cat": "Cartoes",
+        "mes": "2025-09"
+      }
+    ],
+    "2025-10": [
+      {
+        "id": "2025-10-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Amortização imóvel-1",
+        "desc": "Amortização imóvel",
+        "valor": 1200.0,
+        "cat": "Amortização imóvel",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Cartão de Crédito Nu-6",
+        "desc": "Cartão de Crédito Nubank",
+        "valor": 722.77,
+        "cat": "Cartão de Crédito Nubank",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Cartão de Crédito C6-7",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Cartão de Crédito Po-8",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 452.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Mestrado-9",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Dívida parcelas 22 a-10",
+        "desc": "Dívida parcelas 22 a 29 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 22 a 29 de 37",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Despesa Médica Cris-11",
+        "desc": "Despesa Médica Cris",
+        "valor": 700.0,
+        "cat": "Despesa Médica Cris",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-IPVA e licenciamento-12",
+        "desc": "IPVA e licenciamento",
+        "valor": 298.46,
+        "cat": "IPVA e licenciamento",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Lixo e IPTU-13",
+        "desc": "Lixo e IPTU",
+        "valor": 31.42,
+        "cat": "Lixo e IPTU",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Black-14",
+        "desc": "Black",
+        "valor": 193.63,
+        "cat": "Cartoes",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Nubank-15",
+        "desc": "Nubank",
+        "valor": 9121.73,
+        "cat": "Cartoes",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-Porto Seguro-16",
+        "desc": "Porto Seguro",
+        "valor": 498.56,
+        "cat": "Cartoes",
+        "mes": "2025-10"
+      },
+      {
+        "id": "2025-10-C6-17",
+        "desc": "C6",
+        "valor": 763.91,
+        "cat": "Cartoes",
+        "mes": "2025-10"
+      }
+    ],
+    "2025-11": [
+      {
+        "id": "2025-11-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Amortização imóvel-1",
+        "desc": "Amortização imóvel",
+        "valor": 1300.0,
+        "cat": "Amortização imóvel",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Energia-3",
+        "desc": "Energia",
+        "valor": 600.0,
+        "cat": "Energia",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Cartão de Crédito Nu-6",
+        "desc": "Cartão de Crédito Nubank",
+        "valor": 244.01,
+        "cat": "Cartão de Crédito Nubank",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Cartão de Crédito C6-7",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Cartão de Crédito Po-8",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 452.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Mestrado-9",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Dívida parcelas 22 a-10",
+        "desc": "Dívida parcelas 22 a 29 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 22 a 29 de 37",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Presentes-11",
+        "desc": "Presentes",
+        "valor": 200.0,
+        "cat": "Presentes",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Despesa Médica Cris-12",
+        "desc": "Despesa Médica Cris",
+        "valor": 700.0,
+        "cat": "Despesa Médica Cris",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-IPVA e licenciamento-13",
+        "desc": "IPVA e licenciamento",
+        "valor": 298.46,
+        "cat": "IPVA e licenciamento",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Lixo e IPTU-14",
+        "desc": "Lixo e IPTU",
+        "valor": 31.42,
+        "cat": "Lixo e IPTU",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Nubank-15",
+        "desc": "Nubank",
+        "valor": 10215.2,
+        "cat": "Cartoes",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Porto Seguro-16",
+        "desc": "Porto Seguro",
+        "valor": 672.85,
+        "cat": "Cartoes",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-C6-17",
+        "desc": "C6",
+        "valor": 268.04,
+        "cat": "Cartoes",
+        "mes": "2025-11"
+      },
+      {
+        "id": "2025-11-Banco Itau Cris sald-18",
+        "desc": "Banco Itau Cris saldo",
+        "valor": 4214.92,
+        "cat": "Cartoes",
+        "mes": "2025-11"
+      }
+    ],
+    "2025-12": [
+      {
+        "id": "2025-12-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Amortização imóvel-1",
+        "desc": "Amortização imóvel",
+        "valor": 1500.0,
+        "cat": "Amortização imóvel",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Energia-3",
+        "desc": "Energia",
+        "valor": 600.0,
+        "cat": "Energia",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Cartão de Crédito Nu-6",
+        "desc": "Cartão de Crédito Nubank",
+        "valor": 244.01,
+        "cat": "Cartão de Crédito Nubank",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Cartão de Crédito C6-7",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Cartão de Crédito Po-8",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 452.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Mestrado-9",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Dívida parcelas 22 a-10",
+        "desc": "Dívida parcelas 22 a 29 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 22 a 29 de 37",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Presentes-11",
+        "desc": "Presentes",
+        "valor": 400.0,
+        "cat": "Presentes",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Despesa Médica Cris-12",
+        "desc": "Despesa Médica Cris",
+        "valor": 700.0,
+        "cat": "Despesa Médica Cris",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-IPVA e licenciamento-13",
+        "desc": "IPVA e licenciamento",
+        "valor": 149.37,
+        "cat": "IPVA e licenciamento",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Lixo e IPTU-14",
+        "desc": "Lixo e IPTU",
+        "valor": 31.42,
+        "cat": "Lixo e IPTU",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Itau Felipe-15",
+        "desc": "Itau Felipe",
+        "valor": 632.42,
+        "cat": "Cartoes",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Nubank-16",
+        "desc": "Nubank",
+        "valor": 9156.24,
+        "cat": "Cartoes",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Porto Seguro-17",
+        "desc": "Porto Seguro",
+        "valor": 1167.25,
+        "cat": "Cartoes",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-C6-18",
+        "desc": "C6",
+        "valor": 1900.05,
+        "cat": "Cartoes",
+        "mes": "2025-12"
+      },
+      {
+        "id": "2025-12-Banco Itau Cris sald-19",
+        "desc": "Banco Itau Cris saldo",
+        "valor": 4789.0,
+        "cat": "Cartoes",
+        "mes": "2025-12"
+      }
+    ],
+    "2026-01": [
+      {
+        "id": "2026-01-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Amortização Imóvel-1",
+        "desc": "Amortização Imóvel",
+        "valor": 2000.0,
+        "cat": "Amortização Imóvel",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Cartão de Crédito Nu-6",
+        "desc": "Cartão de Crédito Nubank",
+        "valor": 187.17,
+        "cat": "Cartão de Crédito Nubank",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Cartão de Crédito C6-7",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Cartão de Crédito Po-8",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 185.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Mestrado-9",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Dívida parcelas 30 a-10",
+        "desc": "Dívida parcelas 30 a 37 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 30 a 37 de 37",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Despesas Médicas-11",
+        "desc": "Despesas Médicas",
+        "valor": 1000.0,
+        "cat": "Despesas Médicas",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Lixo e IPTU-12",
+        "desc": "Lixo e IPTU",
+        "valor": 416.84,
+        "cat": "Lixo e IPTU",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Black-13",
+        "desc": "Black",
+        "valor": 600.0,
+        "cat": "Cartoes",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Itau Felipe-14",
+        "desc": "Itau Felipe",
+        "valor": 632.42,
+        "cat": "Cartoes",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Nubank-15",
+        "desc": "Nubank",
+        "valor": 11000.0,
+        "cat": "Cartoes",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-Porto Seguro-16",
+        "desc": "Porto Seguro",
+        "valor": 601.0,
+        "cat": "Cartoes",
+        "mes": "2026-01"
+      },
+      {
+        "id": "2026-01-C6-17",
+        "desc": "C6",
+        "valor": 104.94,
+        "cat": "Cartoes",
+        "mes": "2026-01"
+      }
+    ],
+    "2026-02": [
+      {
+        "id": "2026-02-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Amortização Imóvel-1",
+        "desc": "Amortização Imóvel",
+        "valor": 2100.0,
+        "cat": "Amortização Imóvel",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Cartão de Crédito Nu-6",
+        "desc": "Cartão de Crédito Nubank",
+        "valor": 187.17,
+        "cat": "Cartão de Crédito Nubank",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Cartão de Crédito C6-7",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Cartão de Crédito Po-8",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 185.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Mestrado-9",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Dívida parcelas 30 a-10",
+        "desc": "Dívida parcelas 30 a 37 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 30 a 37 de 37",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Despesas Médicas-11",
+        "desc": "Despesas Médicas",
+        "valor": 1000.0,
+        "cat": "Despesas Médicas",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Lixo e IPTU-12",
+        "desc": "Lixo e IPTU",
+        "valor": 261.66,
+        "cat": "Lixo e IPTU",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Itau Felipe-13",
+        "desc": "Itau Felipe",
+        "valor": 632.42,
+        "cat": "Cartoes",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Nubank-14",
+        "desc": "Nubank",
+        "valor": 12917.61,
+        "cat": "Cartoes",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-Porto Seguro-15",
+        "desc": "Porto Seguro",
+        "valor": 743.92,
+        "cat": "Cartoes",
+        "mes": "2026-02"
+      },
+      {
+        "id": "2026-02-C6-16",
+        "desc": "C6",
+        "valor": 1411.3,
+        "cat": "Cartoes",
+        "mes": "2026-02"
+      }
+    ],
+    "2026-03": [
+      {
+        "id": "2026-03-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-Amortização Imóvel-1",
+        "desc": "Amortização Imóvel",
+        "valor": 2200.0,
+        "cat": "Amortização Imóvel",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-Cartão de Crédito C6-6",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-Cartão de Crédito Po-7",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 185.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-Mestrado-8",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-Dívida parcelas 30 a-9",
+        "desc": "Dívida parcelas 30 a 37 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 30 a 37 de 37",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-Despesas Médicas-10",
+        "desc": "Despesas Médicas",
+        "valor": 1000.0,
+        "cat": "Despesas Médicas",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-Itau Felipe-11",
+        "desc": "Itau Felipe",
+        "valor": 632.42,
+        "cat": "Cartoes",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-Nubank-12",
+        "desc": "Nubank",
+        "valor": 9777.9,
+        "cat": "Cartoes",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-Porto Seguro-13",
+        "desc": "Porto Seguro",
+        "valor": 601.51,
+        "cat": "Cartoes",
+        "mes": "2026-03"
+      },
+      {
+        "id": "2026-03-C6-14",
+        "desc": "C6",
+        "valor": 817.29,
+        "cat": "Cartoes",
+        "mes": "2026-03"
+      }
+    ],
+    "2026-04": [
+      {
+        "id": "2026-04-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-Amortização Imóvel-1",
+        "desc": "Amortização Imóvel",
+        "valor": 2300.0,
+        "cat": "Amortização Imóvel",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-Cartão de Crédito C6-6",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-Cartão de Crédito Po-7",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 185.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-Mestrado-8",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-Dívida parcelas 30 a-9",
+        "desc": "Dívida parcelas 30 a 37 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 30 a 37 de 37",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-Despesas Médicas-10",
+        "desc": "Despesas Médicas",
+        "valor": 1000.0,
+        "cat": "Despesas Médicas",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-Itau Felipe-11",
+        "desc": "Itau Felipe",
+        "valor": 632.42,
+        "cat": "Cartoes",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-Nubank-12",
+        "desc": "Nubank",
+        "valor": 12500.47,
+        "cat": "Cartoes",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-Porto Seguro-13",
+        "desc": "Porto Seguro",
+        "valor": 648.35,
+        "cat": "Cartoes",
+        "mes": "2026-04"
+      },
+      {
+        "id": "2026-04-C6-14",
+        "desc": "C6",
+        "valor": 961.06,
+        "cat": "Cartoes",
+        "mes": "2026-04"
+      }
+    ],
+    "2026-05": [
+      {
+        "id": "2026-05-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2026-05"
+      },
+      {
+        "id": "2026-05-Amortização Imóvel-1",
+        "desc": "Amortização Imóvel",
+        "valor": 2400.0,
+        "cat": "Amortização Imóvel",
+        "mes": "2026-05"
+      },
+      {
+        "id": "2026-05-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2026-05"
+      },
+      {
+        "id": "2026-05-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2026-05"
+      },
+      {
+        "id": "2026-05-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2026-05"
+      },
+      {
+        "id": "2026-05-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2026-05"
+      },
+      {
+        "id": "2026-05-Cartão de Crédito C6-6",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2026-05"
+      },
+      {
+        "id": "2026-05-Cartão de Crédito Po-7",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 185.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2026-05"
+      },
+      {
+        "id": "2026-05-Mestrado-8",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2026-05"
+      },
+      {
+        "id": "2026-05-Dívida parcelas 30 a-9",
+        "desc": "Dívida parcelas 30 a 37 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 30 a 37 de 37",
+        "mes": "2026-05"
+      },
+      {
+        "id": "2026-05-Despesas Médicas-10",
+        "desc": "Despesas Médicas",
+        "valor": 1000.0,
+        "cat": "Despesas Médicas",
+        "mes": "2026-05"
+      },
+      {
+        "id": "2026-05-Nubank-11",
+        "desc": "Nubank",
+        "valor": 6464.43,
+        "cat": "Cartoes",
+        "mes": "2026-05"
+      },
+      {
+        "id": "2026-05-Porto Seguro-12",
+        "desc": "Porto Seguro",
+        "valor": 601.51,
+        "cat": "Cartoes",
+        "mes": "2026-05"
+      }
+    ],
+    "2026-06": [
+      {
+        "id": "2026-06-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2026-06"
+      },
+      {
+        "id": "2026-06-Amortização Imóvel-1",
+        "desc": "Amortização Imóvel",
+        "valor": 2500.0,
+        "cat": "Amortização Imóvel",
+        "mes": "2026-06"
+      },
+      {
+        "id": "2026-06-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2026-06"
+      },
+      {
+        "id": "2026-06-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2026-06"
+      },
+      {
+        "id": "2026-06-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2026-06"
+      },
+      {
+        "id": "2026-06-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2026-06"
+      },
+      {
+        "id": "2026-06-Cartão de Crédito C6-6",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2026-06"
+      },
+      {
+        "id": "2026-06-Cartão de Crédito Po-7",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 185.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2026-06"
+      },
+      {
+        "id": "2026-06-Mestrado-8",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2026-06"
+      },
+      {
+        "id": "2026-06-Dívida parcelas 30 a-9",
+        "desc": "Dívida parcelas 30 a 37 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 30 a 37 de 37",
+        "mes": "2026-06"
+      },
+      {
+        "id": "2026-06-Despesas Médicas-10",
+        "desc": "Despesas Médicas",
+        "valor": 1000.0,
+        "cat": "Despesas Médicas",
+        "mes": "2026-06"
+      },
+      {
+        "id": "2026-06-Nubank-11",
+        "desc": "Nubank",
+        "valor": 3122.29,
+        "cat": "Cartoes",
+        "mes": "2026-06"
+      },
+      {
+        "id": "2026-06-Porto Seguro-12",
+        "desc": "Porto Seguro",
+        "valor": 601.51,
+        "cat": "Cartoes",
+        "mes": "2026-06"
+      }
+    ],
+    "2026-07": [
+      {
+        "id": "2026-07-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2026-07"
+      },
+      {
+        "id": "2026-07-Amortização Imóvel-1",
+        "desc": "Amortização Imóvel",
+        "valor": 2600.0,
+        "cat": "Amortização Imóvel",
+        "mes": "2026-07"
+      },
+      {
+        "id": "2026-07-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2026-07"
+      },
+      {
+        "id": "2026-07-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2026-07"
+      },
+      {
+        "id": "2026-07-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2026-07"
+      },
+      {
+        "id": "2026-07-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2026-07"
+      },
+      {
+        "id": "2026-07-Cartão de Crédito C6-6",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2026-07"
+      },
+      {
+        "id": "2026-07-Cartão de Crédito Po-7",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 185.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2026-07"
+      },
+      {
+        "id": "2026-07-Mestrado-8",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2026-07"
+      },
+      {
+        "id": "2026-07-Dívida parcelas 30 a-9",
+        "desc": "Dívida parcelas 30 a 37 de 37",
+        "valor": 300.0,
+        "cat": "Dívida parcelas 30 a 37 de 37",
+        "mes": "2026-07"
+      },
+      {
+        "id": "2026-07-Despesas Médicas-10",
+        "desc": "Despesas Médicas",
+        "valor": 1000.0,
+        "cat": "Despesas Médicas",
+        "mes": "2026-07"
+      },
+      {
+        "id": "2026-07-Nubank-11",
+        "desc": "Nubank",
+        "valor": 2141.72,
+        "cat": "Cartoes",
+        "mes": "2026-07"
+      },
+      {
+        "id": "2026-07-Porto Seguro-12",
+        "desc": "Porto Seguro",
+        "valor": 601.51,
+        "cat": "Cartoes",
+        "mes": "2026-07"
+      }
+    ],
+    "2026-08": [
+      {
+        "id": "2026-08-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2026-08"
+      },
+      {
+        "id": "2026-08-Amortização Imóvel-1",
+        "desc": "Amortização Imóvel",
+        "valor": 2700.0,
+        "cat": "Amortização Imóvel",
+        "mes": "2026-08"
+      },
+      {
+        "id": "2026-08-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2026-08"
+      },
+      {
+        "id": "2026-08-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2026-08"
+      },
+      {
+        "id": "2026-08-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2026-08"
+      },
+      {
+        "id": "2026-08-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2026-08"
+      },
+      {
+        "id": "2026-08-Cartão de Crédito C6-6",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2026-08"
+      },
+      {
+        "id": "2026-08-Cartão de Crédito Po-7",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 185.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2026-08"
+      },
+      {
+        "id": "2026-08-Mestrado-8",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2026-08"
+      },
+      {
+        "id": "2026-08-Despesas Médicas-9",
+        "desc": "Despesas Médicas",
+        "valor": 1000.0,
+        "cat": "Despesas Médicas",
+        "mes": "2026-08"
+      },
+      {
+        "id": "2026-08-Nubank-10",
+        "desc": "Nubank",
+        "valor": 1358.58,
+        "cat": "Cartoes",
+        "mes": "2026-08"
+      },
+      {
+        "id": "2026-08-Porto Seguro-11",
+        "desc": "Porto Seguro",
+        "valor": 601.51,
+        "cat": "Cartoes",
+        "mes": "2026-08"
+      }
+    ],
+    "2026-09": [
+      {
+        "id": "2026-09-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2026-09"
+      },
+      {
+        "id": "2026-09-Amortização Imóvel-1",
+        "desc": "Amortização Imóvel",
+        "valor": 2800.0,
+        "cat": "Amortização Imóvel",
+        "mes": "2026-09"
+      },
+      {
+        "id": "2026-09-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2026-09"
+      },
+      {
+        "id": "2026-09-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2026-09"
+      },
+      {
+        "id": "2026-09-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2026-09"
+      },
+      {
+        "id": "2026-09-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2026-09"
+      },
+      {
+        "id": "2026-09-Cartão de Crédito C6-6",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2026-09"
+      },
+      {
+        "id": "2026-09-Cartão de Crédito Po-7",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 185.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2026-09"
+      },
+      {
+        "id": "2026-09-Mestrado-8",
+        "desc": "Mestrado",
+        "valor": 2077.0,
+        "cat": "Mestrado",
+        "mes": "2026-09"
+      },
+      {
+        "id": "2026-09-Despesas Médicas-9",
+        "desc": "Despesas Médicas",
+        "valor": 1000.0,
+        "cat": "Despesas Médicas",
+        "mes": "2026-09"
+      },
+      {
+        "id": "2026-09-IPVA e licenciamento-10",
+        "desc": "IPVA e licenciamento",
+        "valor": 298.46,
+        "cat": "IPVA e licenciamento",
+        "mes": "2026-09"
+      },
+      {
+        "id": "2026-09-Nubank-11",
+        "desc": "Nubank",
+        "valor": 410.44,
+        "cat": "Cartoes",
+        "mes": "2026-09"
+      },
+      {
+        "id": "2026-09-Porto Seguro-12",
+        "desc": "Porto Seguro",
+        "valor": 427.26,
+        "cat": "Cartoes",
+        "mes": "2026-09"
+      }
+    ],
+    "2026-10": [
+      {
+        "id": "2026-10-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2026-10"
+      },
+      {
+        "id": "2026-10-Amortização Imóvel-1",
+        "desc": "Amortização Imóvel",
+        "valor": 2900.0,
+        "cat": "Amortização Imóvel",
+        "mes": "2026-10"
+      },
+      {
+        "id": "2026-10-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2026-10"
+      },
+      {
+        "id": "2026-10-Energia-3",
+        "desc": "Energia",
+        "valor": 406.0,
+        "cat": "Energia",
+        "mes": "2026-10"
+      },
+      {
+        "id": "2026-10-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2026-10"
+      },
+      {
+        "id": "2026-10-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2026-10"
+      },
+      {
+        "id": "2026-10-Cartão de Crédito C6-6",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2026-10"
+      },
+      {
+        "id": "2026-10-Cartão de Crédito Po-7",
+        "desc": "Cartão de Crédito Porto Seguro",
+        "valor": 185.0,
+        "cat": "Cartão de Crédito Porto Seguro",
+        "mes": "2026-10"
+      },
+      {
+        "id": "2026-10-Despesas Médicas-8",
+        "desc": "Despesas Médicas",
+        "valor": 1000.0,
+        "cat": "Despesas Médicas",
+        "mes": "2026-10"
+      },
+      {
+        "id": "2026-10-IPVA e licenciamento-9",
+        "desc": "IPVA e licenciamento",
+        "valor": 298.46,
+        "cat": "IPVA e licenciamento",
+        "mes": "2026-10"
+      },
+      {
+        "id": "2026-10-Nubank-10",
+        "desc": "Nubank",
+        "valor": 410.44,
+        "cat": "Cartoes",
+        "mes": "2026-10"
+      },
+      {
+        "id": "2026-10-Porto Seguro-11",
+        "desc": "Porto Seguro",
+        "valor": 174.25,
+        "cat": "Cartoes",
+        "mes": "2026-10"
+      }
+    ],
+    "2026-11": [
+      {
+        "id": "2026-11-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2026-11"
+      },
+      {
+        "id": "2026-11-Amortização Imóvel-1",
+        "desc": "Amortização Imóvel",
+        "valor": 3000.0,
+        "cat": "Amortização Imóvel",
+        "mes": "2026-11"
+      },
+      {
+        "id": "2026-11-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2026-11"
+      },
+      {
+        "id": "2026-11-Energia-3",
+        "desc": "Energia",
+        "valor": 600.0,
+        "cat": "Energia",
+        "mes": "2026-11"
+      },
+      {
+        "id": "2026-11-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2026-11"
+      },
+      {
+        "id": "2026-11-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2026-11"
+      },
+      {
+        "id": "2026-11-Cartão de Crédito C6-6",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2026-11"
+      },
+      {
+        "id": "2026-11-Despesas Médicas-7",
+        "desc": "Despesas Médicas",
+        "valor": 1000.0,
+        "cat": "Despesas Médicas",
+        "mes": "2026-11"
+      },
+      {
+        "id": "2026-11-IPVA e licenciamento-8",
+        "desc": "IPVA e licenciamento",
+        "valor": 298.46,
+        "cat": "IPVA e licenciamento",
+        "mes": "2026-11"
+      },
+      {
+        "id": "2026-11-Porto Seguro-9",
+        "desc": "Porto Seguro",
+        "valor": 174.25,
+        "cat": "Cartoes",
+        "mes": "2026-11"
+      }
+    ],
+    "2026-12": [
+      {
+        "id": "2026-12-Financiamento Imóvel-0",
+        "desc": "Financiamento Imóvel",
+        "valor": 2405.0,
+        "cat": "Financiamento Imóvel",
+        "mes": "2026-12"
+      },
+      {
+        "id": "2026-12-Amortização Imóvel-1",
+        "desc": "Amortização Imóvel",
+        "valor": 3500.0,
+        "cat": "Amortização Imóvel",
+        "mes": "2026-12"
+      },
+      {
+        "id": "2026-12-Condomínio-2",
+        "desc": "Condomínio",
+        "valor": 452.0,
+        "cat": "Condomínio",
+        "mes": "2026-12"
+      },
+      {
+        "id": "2026-12-Energia-3",
+        "desc": "Energia",
+        "valor": 600.0,
+        "cat": "Energia",
+        "mes": "2026-12"
+      },
+      {
+        "id": "2026-12-Telefonia e Intenet-4",
+        "desc": "Telefonia e Intenet",
+        "valor": 205.0,
+        "cat": "Telefonia e Intenet",
+        "mes": "2026-12"
+      },
+      {
+        "id": "2026-12-Impostos-5",
+        "desc": "Impostos",
+        "valor": 330.0,
+        "cat": "Impostos",
+        "mes": "2026-12"
+      },
+      {
+        "id": "2026-12-Cartão de Crédito C6-6",
+        "desc": "Cartão de Crédito C6",
+        "valor": 120.0,
+        "cat": "Cartão de Crédito C6",
+        "mes": "2026-12"
+      },
+      {
+        "id": "2026-12-Despesas Médicas-7",
+        "desc": "Despesas Médicas",
+        "valor": 1000.0,
+        "cat": "Despesas Médicas",
+        "mes": "2026-12"
+      },
+      {
+        "id": "2026-12-IPVA e licenciamento-8",
+        "desc": "IPVA e licenciamento",
+        "valor": 149.37,
+        "cat": "IPVA e licenciamento",
+        "mes": "2026-12"
+      },
+      {
+        "id": "2026-12-Porto Seguro-9",
+        "desc": "Porto Seguro",
+        "valor": 174.25,
+        "cat": "Cartoes",
+        "mes": "2026-12"
+      }
+    ]
+  }
 }

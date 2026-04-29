@@ -1,9 +1,7 @@
 """
-💰 Finanças Pessoais - Flask App com Login
+Financas Pessoais - Flask App com Login
 Instalar: pip install flask gunicorn
 Rodar:    python app.py
-
-⚙️  ALTERE AS CREDENCIAIS ABAIXO ANTES DE SUBIR:
 """
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 import json, os
@@ -12,27 +10,32 @@ from functools import wraps
 
 app = Flask(__name__)
 
-# ─── CONFIGURAÇÕES ────────────────────────────────────────────────────────────
-USUARIO = os.environ.get("APP_USER",  "felipe.boing")
-SENHA   = os.environ.get("APP_PASS",  "24Hsobvqi@")
+USUARIO = os.environ.get("APP_USER", "felipe.boing")
+SENHA   = os.environ.get("APP_PASS", "24Hsobvqi@")
 app.secret_key = os.environ.get("SECRET_KEY", "chave-super-secreta-mude-isso")
 DATA_FILE = os.environ.get("DATA_PATH", "financas_data.json")
 
-# ─── DADOS ────────────────────────────────────────────────────────────────────
 def carregar():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
-    return {"salarios": {"A": 0.0, "B": 0.0}, "despesas": {}, "poupanca": 0.0}
+    return {
+        "salarios": {"A": 0.0, "B": 0.0},
+        "despesas": {},
+        "poupanca": 0.0,
+        "orcamento": {"total": 0.0, "variaveis": []}
+    }
 
 def salvar(dados):
+    # garantir campos novos em dados antigos
+    if "orcamento" not in dados:
+        dados["orcamento"] = {"total": 0.0, "variaveis": []}
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(dados, f, ensure_ascii=False, indent=2)
 
 def mes_atual():
     return datetime.now().strftime("%Y-%m")
 
-# ─── PROTEÇÃO DE ROTAS ────────────────────────────────────────────────────────
 def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -41,7 +44,6 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated
 
-# ─── AUTENTICAÇÃO ─────────────────────────────────────────────────────────────
 @app.route("/login", methods=["GET", "POST"])
 def login():
     erro = None
@@ -51,7 +53,7 @@ def login():
         if u == USUARIO and s == SENHA:
             session["logado"] = True
             return redirect(url_for("index"))
-        erro = "Usuário ou senha incorretos."
+        erro = "Usuario ou senha incorretos."
     return render_template("login.html", erro=erro)
 
 @app.route("/logout")
@@ -59,7 +61,6 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
-# ─── ROTAS PRINCIPAIS ─────────────────────────────────────────────────────────
 @app.route("/")
 @login_required
 def index():
@@ -95,6 +96,61 @@ def salvar_poupanca():
     except Exception as e:
         return jsonify({"ok": False, "erro": str(e)}), 400
 
+@app.route("/api/orcamento", methods=["POST"])
+@login_required
+def salvar_orcamento():
+    body  = request.json
+    dados = carregar()
+    try:
+        dados["orcamento"]["total"] = float(body.get("total", 0))
+        salvar(dados)
+        return jsonify({"ok": True})
+    except Exception as e:
+        return jsonify({"ok": False, "erro": str(e)}), 400
+
+@app.route("/api/orcamento/variavel", methods=["POST"])
+@login_required
+def adicionar_variavel():
+    body  = request.json
+    dados = carregar()
+    try:
+        item = {
+            "id":    datetime.now().isoformat(),
+            "nome":  body["nome"],
+            "gasto": float(body.get("gasto", 0)),
+        }
+        dados["orcamento"]["variaveis"].append(item)
+        salvar(dados)
+        return jsonify({"ok": True, "item": item})
+    except Exception as e:
+        return jsonify({"ok": False, "erro": str(e)}), 400
+
+@app.route("/api/orcamento/variavel/<id>", methods=["PUT"])
+@login_required
+def atualizar_variavel(id):
+    body  = request.json
+    dados = carregar()
+    try:
+        for v in dados["orcamento"]["variaveis"]:
+            if v["id"] == id:
+                v["gasto"] = float(body.get("gasto", v["gasto"]))
+                v["nome"]  = body.get("nome", v["nome"])
+                break
+        salvar(dados)
+        return jsonify({"ok": True})
+    except Exception as e:
+        return jsonify({"ok": False, "erro": str(e)}), 400
+
+@app.route("/api/orcamento/variavel/<id>", methods=["DELETE"])
+@login_required
+def remover_variavel(id):
+    dados = carregar()
+    dados["orcamento"]["variaveis"] = [
+        v for v in dados["orcamento"]["variaveis"] if v["id"] != id
+    ]
+    salvar(dados)
+    return jsonify({"ok": True})
+
 @app.route("/api/despesas", methods=["POST"])
 @login_required
 def adicionar_despesa():
@@ -128,7 +184,6 @@ def remover_despesa(mes, id):
     salvar(dados)
     return jsonify({"ok": True})
 
-# ─── MAIN ─────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     import socket
     try:
@@ -136,7 +191,7 @@ if __name__ == "__main__":
     except:
         ip = "127.0.0.1"
     print("\n" + "="*52)
-    print("  💰 Finanças Pessoais rodando!")
+    print("  Financas Pessoais rodando!")
     print(f"  PC:      http://localhost:5000")
     print(f"  Celular: http://{ip}:5000")
     print("="*52 + "\n")
