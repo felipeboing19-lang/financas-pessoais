@@ -1064,32 +1064,32 @@ function simularPersonalizado() {
   var entry_sim = FIN_TABELA[prox_sim];
   var s_ini     = entry_sim ? entry_sim.saldo_devedor : 207902.75;
 
-  // Base simulation - no extra
+  // Base simulation - no extra (normal monthly payment only)
   var s_base = s_ini, meses_base = 0, juros_base = 0, mes_b = prox_sim;
   for(var ib=0; ib<700; ib++){
     if(s_base <= 0) break;
-    juros_base += s_base * (FIN_JUROS_MES/100);
+    var jb = s_base * (FIN_JUROS_MES/100);
+    juros_base += jb;
     s_base -= Math.min(FIN_AMORT, s_base);
     meses_base = ib+1;
     mes_b = proximoMesStr(mes_b);
   }
 
   // Simulation with extra payments
+  // Each month: pays normal parcela (amort + juros) PLUS extra when applicable
   var s = s_ini, mes = prox_sim;
   var meses = 0, total_juros = 0, total_extra = 0, ultimo_mes = mes;
-  var detalhes = []; // for chart
+  var detalhes = [];
 
   for(var i=0; i<700; i++){
     if(s <= 0) break;
 
-    // apply extra if frequency matches and mes >= inicio
+    // 1. Apply extra amortization first (reduces principal before calculating juros)
     var extra_aplicado = 0;
     if(mes >= inicio){
       if(freq === 1){
-        // every month
         extra_aplicado = extra;
       } else if(i > 0 && i % freq === 0){
-        // every N months
         extra_aplicado = extra;
       }
     }
@@ -1097,10 +1097,11 @@ function simularPersonalizado() {
     if(extra_aplicado > 0){
       s = Math.max(0, s - extra_aplicado);
       total_extra += extra_aplicado;
-      if(s <= 0) break;
+      if(s <= 0){ meses = i+1; ultimo_mes = mes; break; }
     }
 
-    var j    = s * (FIN_JUROS_MES/100);
+    // 2. Pay normal monthly parcela (amortizacao fixa + juros do saldo atual)
+    var j     = s * (FIN_JUROS_MES/100);
     var amort = Math.min(FIN_AMORT, s);
     total_juros += j;
     s -= amort;
@@ -1108,19 +1109,23 @@ function simularPersonalizado() {
     ultimo_mes = mes;
     mes = proximoMesStr(mes);
 
-    if(i < 36) detalhes.push({mes:ultimo_mes, saldo:Math.round(s*100)/100, extra:extra_aplicado});
+    // Store first 36 months detail
+    if(i < 36) detalhes.push({
+      mes: ultimo_mes,
+      saldo: Math.round(s*100)/100,
+      parcela: Math.round((amort+j)*100)/100,
+      extra: extra_aplicado
+    });
   }
-
-  var economia       = Math.round((juros_base - total_juros)*100)/100;
-  var reducao_meses  = meses_base - meses;
 
   var freq_label = freq===1 ? 'todo mes' : freq===12 ? 'todo ano' : 'a cada 2 anos';
 
   var detalhe_rows = detalhes.map(function(d){
-    return '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:7px 0;border-bottom:1px solid var(--borda);font-size:12px">'
+    return '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;padding:7px 0;border-bottom:1px solid var(--borda);font-size:12px">'
       +'<span>'+formatMes(d.mes)+'</span>'
+      +'<span style="color:var(--amar)">'+brl(d.parcela)+'</span>'
       +'<span style="color:var(--texto2)">'+brl(d.saldo)+'</span>'
-      +(d.extra>0?'<span style="color:var(--verde)">-'+brl(d.extra)+'</span>':'<span style="color:var(--texto3)">--</span>')
+      +(d.extra>0?'<span style="color:var(--verde)">+'+brl(d.extra)+'</span>':'<span style="color:var(--texto3)">--</span>')
       +'</div>';
   }).join('');
 
@@ -1141,10 +1146,11 @@ function simularPersonalizado() {
     +(detalhes.length>0
       ? '<div style="background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:14px">'
         +'<div style="font-size:11px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">Primeiros 36 meses</div>'
-        +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding-bottom:6px;border-bottom:1px solid var(--borda);margin-bottom:4px">'
+        +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;padding-bottom:6px;border-bottom:1px solid var(--borda);margin-bottom:4px">'
         +'<span style="font-size:10px;color:var(--texto3);font-weight:700">MES</span>'
+        +'<span style="font-size:10px;color:var(--texto3);font-weight:700">PARCELA</span>'
         +'<span style="font-size:10px;color:var(--texto3);font-weight:700">SALDO</span>'
-        +'<span style="font-size:10px;color:var(--texto3);font-weight:700">AMORT EXTRA</span>'
+        +'<span style="font-size:10px;color:var(--texto3);font-weight:700">EXTRA</span>'
         +'</div>'
         +detalhe_rows
         +'</div>'
