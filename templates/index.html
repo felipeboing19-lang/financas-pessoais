@@ -520,6 +520,20 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
                 <option value="Outros">Outros</option>
               </optgroup>
             </select>
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap">
+              <div style="flex:1;min-width:120px">
+                <div style="font-size:10px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px">Repetir por</div>
+                <select id="d-repetir" style="width:100%;background:var(--bg2);border:1px solid var(--borda2);border-radius:var(--rs);padding:9px 12px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;-webkit-appearance:none">
+                  <option value="1">Somente este mes</option>
+                  <option value="2">2 meses</option>
+                  <option value="3">3 meses</option>
+                  <option value="6">6 meses</option>
+                  <option value="12">12 meses</option>
+                  <option value="24">24 meses</option>
+                  <option value="0">Indefinidamente</option>
+                </select>
+              </div>
+            </div>
             <button class="btn btn-verm" id="btn-add" onclick="adicionarDespesa()" style="padding:11px">Adicionar</button>
           </div>
         </div>
@@ -659,15 +673,23 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
   <!-- Simulador personalizado -->
   <div class="form-card" style="margin-bottom:20px">
     <div class="form-t" style="font-size:18px">Simulador personalizado</div>
-    <div class="form-s">Simule com seu proprio valor de amortizacao extra a cada 2 anos</div>
-    <div class="grid2">
+    <div class="form-s">Simule diferentes cenarios de amortizacao extra</div>
+    <div class="grid3">
       <div class="field">
-        <label>Amortizacao extra (R$)</label>
-        <input type="number" id="sim-extra" placeholder="Ex: 25000" step="1000" value="15000">
+        <label>Valor extra (R$)</label>
+        <input type="number" id="sim-extra" placeholder="Ex: 5000" step="100" value="5000">
+      </div>
+      <div class="field">
+        <label>Frequencia</label>
+        <select id="sim-freq" style="width:100%;background:var(--bg2);border:1px solid var(--borda2);border-radius:var(--rs);padding:13px 14px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;-webkit-appearance:none">
+          <option value="1">Todo mes</option>
+          <option value="12">Todo ano</option>
+          <option value="24" selected>A cada 2 anos</option>
+        </select>
       </div>
       <div class="field">
         <label>A partir do mes</label>
-        <input type="month" id="sim-inicio" value="2028-05">
+        <input type="month" id="sim-inicio">
       </div>
     </div>
     <button class="btn btn-verde btn-sm" style="max-width:220px" onclick="simularPersonalizado()">Simular</button>
@@ -754,6 +776,8 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('hdr-mes').textContent = new Date(parts[0],parts[1]-1).toLocaleDateString('pt-BR',{month:'short',year:'numeric'}).toUpperCase();
   document.getElementById('d-mes').value = MES_SELECIONADO;
   document.getElementById('filtro-mes').value = MES_SELECIONADO;
+  var simIni = document.getElementById('sim-inicio');
+  if(simIni) simIni.value = MES_SELECIONADO;
   carregarDados();
 });
 
@@ -1030,56 +1054,79 @@ function salvarCorrecaoFinanciamento(){
 }
 
 function simularPersonalizado() {
-  var extra = parseFloat(document.getElementById('sim-extra').value)||0;
+  var extra  = parseFloat(document.getElementById('sim-extra').value)||0;
+  var freq   = parseInt(document.getElementById('sim-freq').value)||24;
   var inicio = document.getElementById('sim-inicio').value;
-  if(!extra || !inicio) { toast('Preencha os campos','err'); return; }
+  if(!extra) { toast('Informe o valor extra','err'); return; }
+  if(!inicio) { toast('Informe o mes inicial','err'); return; }
 
-  // Start from currently selected month
-  var prox_sim = (typeof MES_SELECIONADO !== 'undefined') ? MES_SELECIONADO : proximoMes();
+  var prox_sim  = (typeof MES_SELECIONADO !== 'undefined') ? MES_SELECIONADO : proximoMes();
   var entry_sim = FIN_TABELA[prox_sim];
-  var s = entry_sim ? entry_sim.saldo_devedor : 207902.75;
-  var mes = prox_sim;
-  var meses = 0;
-  var total_juros = 0;
-  var total_extra = 0;
-  var ultimo_mes = mes;
+  var s_ini     = entry_sim ? entry_sim.saldo_devedor : 207902.75;
 
-  // Base simulation (no extra) from same start point
-  var s_base = s;
-  var meses_base = 0;
-  var juros_base = 0;
-  var mes_base = mes;
-  for(var ib=0; ib<600; ib++) {
+  // Base simulation - no extra
+  var s_base = s_ini, meses_base = 0, juros_base = 0, mes_b = prox_sim;
+  for(var ib=0; ib<700; ib++){
     if(s_base <= 0) break;
-    var jb = s_base * (FIN_JUROS_MES/100);
-    juros_base += jb;
+    juros_base += s_base * (FIN_JUROS_MES/100);
     s_base -= Math.min(FIN_AMORT, s_base);
     meses_base = ib+1;
-    mes_base = proximoMesStr(mes_base);
+    mes_b = proximoMesStr(mes_b);
   }
 
-  // Simulation with extra
-  for(var i=0; i<600; i++) {
+  // Simulation with extra payments
+  var s = s_ini, mes = prox_sim;
+  var meses = 0, total_juros = 0, total_extra = 0, ultimo_mes = mes;
+  var detalhes = []; // for chart
+
+  for(var i=0; i<700; i++){
     if(s <= 0) break;
-    if(i > 0 && i % 24 === 0 && mes >= inicio) {
-      s = Math.max(0, s - extra);
-      total_extra += extra;
+
+    // apply extra if frequency matches and mes >= inicio
+    var extra_aplicado = 0;
+    if(mes >= inicio){
+      if(freq === 1){
+        // every month
+        extra_aplicado = extra;
+      } else if(i > 0 && i % freq === 0){
+        // every N months
+        extra_aplicado = extra;
+      }
+    }
+
+    if(extra_aplicado > 0){
+      s = Math.max(0, s - extra_aplicado);
+      total_extra += extra_aplicado;
       if(s <= 0) break;
     }
-    var j = s * (FIN_JUROS_MES/100);
+
+    var j    = s * (FIN_JUROS_MES/100);
     var amort = Math.min(FIN_AMORT, s);
     total_juros += j;
     s -= amort;
     meses = i+1;
     ultimo_mes = mes;
     mes = proximoMesStr(mes);
+
+    if(i < 36) detalhes.push({mes:ultimo_mes, saldo:Math.round(s*100)/100, extra:extra_aplicado});
   }
 
-  var economia = juros_base - total_juros;
-  var reducao_meses = meses_base - meses;
+  var economia       = Math.round((juros_base - total_juros)*100)/100;
+  var reducao_meses  = meses_base - meses;
+
+  var freq_label = freq===1 ? 'todo mes' : freq===12 ? 'todo ano' : 'a cada 2 anos';
+
+  var detalhe_rows = detalhes.map(function(d){
+    return '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:7px 0;border-bottom:1px solid var(--borda);font-size:12px">'
+      +'<span>'+formatMes(d.mes)+'</span>'
+      +'<span style="color:var(--texto2)">'+brl(d.saldo)+'</span>'
+      +(d.extra>0?'<span style="color:var(--verde)">-'+brl(d.extra)+'</span>':'<span style="color:var(--texto3)">--</span>')
+      +'</div>';
+  }).join('');
 
   document.getElementById('sim-resultado').innerHTML =
-    '<div style="background:var(--card2);border:1px solid var(--verde);border-radius:var(--rs);padding:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">'
+    '<div style="background:var(--card2);border:1px solid var(--verde);border-radius:var(--rs);padding:16px;margin-bottom:12px">'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">'
     +'<div><div style="font-size:10px;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Termina em</div>'
     +'<div style="font-family:Fraunces,serif;font-size:18px;color:var(--verde)">'+formatMes(ultimo_mes)+'</div>'
     +'<div style="font-size:11px;color:var(--texto3)">'+meses+' meses ('+( meses/12).toFixed(1)+' anos)</div></div>'
@@ -1088,8 +1135,21 @@ function simularPersonalizado() {
     +'<div style="font-size:11px;color:var(--texto3)">'+reducao_meses+' meses a menos</div></div>'
     +'<div><div style="font-size:10px;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Total amortizado extra</div>'
     +'<div style="font-family:Fraunces,serif;font-size:18px;color:var(--amar)">'+brl(total_extra)+'</div>'
-    +'<div style="font-size:11px;color:var(--texto3)">a cada 2 anos</div></div>'
-    +'</div>';
+    +'<div style="font-size:11px;color:var(--texto3)">'+freq_label+'</div></div>'
+    +'</div>'
+    +'</div>'
+    +(detalhes.length>0
+      ? '<div style="background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:14px">'
+        +'<div style="font-size:11px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">Primeiros 36 meses</div>'
+        +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding-bottom:6px;border-bottom:1px solid var(--borda);margin-bottom:4px">'
+        +'<span style="font-size:10px;color:var(--texto3);font-weight:700">MES</span>'
+        +'<span style="font-size:10px;color:var(--texto3);font-weight:700">SALDO</span>'
+        +'<span style="font-size:10px;color:var(--texto3);font-weight:700">AMORT EXTRA</span>'
+        +'</div>'
+        +detalhe_rows
+        +'</div>'
+      : '')
+    ;
 }
 
 
@@ -1181,24 +1241,57 @@ async function salvarSalarios(){
 }
 
 // DESPESAS FIXAS
+function addMonths(mes, n){
+  var p = mes.split('-');
+  var y = parseInt(p[0]), m = parseInt(p[1]);
+  m += n;
+  while(m > 12){ m -= 12; y++; }
+  return y+'-'+(m<10?'0'+m:''+m);
+}
+
 async function adicionarDespesa(){
-  var desc = document.getElementById('d-desc').value.trim();
-  var valor = document.getElementById('d-valor').value;
-  var mes = document.getElementById('d-mes').value||mesAtual();
-  var cat = document.getElementById('d-cat').value||'Outros';
+  var desc    = document.getElementById('d-desc').value.trim();
+  var valor   = document.getElementById('d-valor').value;
+  var mes     = document.getElementById('d-mes').value||mesAtual();
+  var cat     = document.getElementById('d-cat').value||'Outros';
+  var repetir = parseInt(document.getElementById('d-repetir').value);
+
   if(!desc){toast('Informe a descricao','err');return}
   if(!valor||isNaN(parseFloat(valor))){toast('Informe um valor valido','err');return}
+
   var btn = document.getElementById('btn-add');
   btn.innerHTML='<span class="spin"></span>';btn.disabled=true;
+
   try{
-    var r = await fetch('/api/despesas',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({desc:desc,valor:parseFloat(valor),cat:cat,mes:mes})});
-    var j = await r.json();
-    if(j.ok){
+    // build list of months to add
+    var meses_add = [];
+    if(repetir === 0){
+      // indefinitely = 60 months (5 years)
+      for(var i=0;i<60;i++) meses_add.push(addMonths(mes,i));
+    } else {
+      for(var i=0;i<repetir;i++) meses_add.push(addMonths(mes,i));
+    }
+
+    var ok = true;
+    for(var i=0; i<meses_add.length; i++){
+      var r = await fetch('/api/despesas',{method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({desc:desc,valor:parseFloat(valor),cat:cat,mes:meses_add[i]})
+      });
+      var j = await r.json();
+      if(!j.ok){ ok=false; break; }
+    }
+
+    if(ok){
       await carregarDados();
       document.getElementById('d-desc').value='';
       document.getElementById('d-valor').value='';
       document.getElementById('d-cat').value='';
-      toast('Despesa adicionada!','ok');
+      document.getElementById('d-repetir').value='1';
+      var msg = repetir===1 ? 'Despesa adicionada!' :
+                repetir===0 ? 'Despesa adicionada por 60 meses!' :
+                'Despesa adicionada em '+repetir+' meses!';
+      toast(msg,'ok');
     }
   }finally{btn.innerHTML='Adicionar';btn.disabled=false}
 }
