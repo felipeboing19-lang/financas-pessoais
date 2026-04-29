@@ -208,6 +208,31 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
 .empty{text-align:center;padding:32px 20px;color:var(--texto3);font-size:13px}
 
 
+
+/* FINANCIAMENTO ABA */
+.fin-sim-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:600px){.fin-sim-grid{grid-template-columns:1fr}}
+.fin-sim-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:18px;transition:border-color .2s}
+.fin-sim-card:hover{border-color:var(--borda2)}
+.fin-sim-card.destaque{border-color:var(--verde)}
+.fin-sim-nome{font-size:11px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
+.fin-sim-val{font-family:'Fraunces',serif;font-size:22px;margin-bottom:4px}
+.fin-sim-sub{font-size:12px;color:var(--texto3);margin-bottom:10px}
+.fin-sim-eco{font-size:13px;font-weight:600;color:var(--verde)}
+.fin-sim-bar-track{background:var(--borda);border-radius:99px;height:5px;overflow:hidden;margin-top:10px}
+.fin-sim-bar-fill{height:100%;border-radius:99px}
+.fin-tabela-wrap{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);overflow:hidden;margin-bottom:20px}
+.fin-tabela-hdr{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:0;background:var(--card2);border-bottom:1px solid var(--borda);padding:10px 16px}
+.fin-tabela-hdr span{font-size:10px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px}
+.fin-tabela-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:0;padding:10px 16px;border-bottom:1px solid var(--borda);transition:background .15s}
+.fin-tabela-row:hover{background:var(--card2)}
+.fin-tabela-row:last-child{border-bottom:none}
+.fin-tabela-row span{font-size:13px;color:var(--texto2)}
+.fin-tabela-row span:first-child{font-weight:600;color:var(--texto)}
+.fin-tabela-row.extra-row{background:rgba(0,229,160,.05)}
+.fin-tabela-row.extra-row span{color:var(--verde)}
+.fin-scroll{max-height:400px;overflow-y:auto}
+
 /* FINANCIAMENTO CARD */
 .fin-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:20px 22px;margin-bottom:14px}
 .fin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
@@ -276,6 +301,7 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
     <button class="nav-btn" onclick="aba('salarios',this)">Salarios</button>
     <button class="nav-btn" onclick="aba('despesas',this)">Despesas</button>
     <button class="nav-btn" onclick="aba('historico',this)">Historico</button>
+    <button class="nav-btn" onclick="aba('financiamento_aba',this)">Financiamento</button>
   </nav>
 </div>
 
@@ -556,6 +582,111 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
   <div class="hist-lista" id="hist-lista"><div class="empty">Nenhum historico disponivel.</div></div>
 </div>
 
+
+<!-- ABA FINANCIAMENTO -->
+<div class="tab" id="tab-financiamento_aba">
+
+  <div class="sec"><span class="sec-t">Situacao atual</span><div class="sec-l"></div></div>
+
+  <div class="stats" style="margin-bottom:12px">
+    <div class="stat" style="--accent:var(--verm)">
+      <div class="stat-lbl">Saldo Devedor</div>
+      <div class="stat-num" id="ft-saldo">R$ 0,00</div>
+      <div class="stat-sub" id="ft-mes-ref">maio 2026</div>
+    </div>
+    <div class="stat" style="--accent:var(--amar)">
+      <div class="stat-lbl">Parcela do Mes</div>
+      <div class="stat-num" id="ft-parcela">R$ 0,00</div>
+      <div class="stat-sub">sistema SAC</div>
+    </div>
+    <div class="stat" style="--accent:var(--azul)">
+      <div class="stat-lbl">Meses Restantes</div>
+      <div class="stat-num" id="ft-meses">0</div>
+      <div class="stat-sub" id="ft-anos">0 anos</div>
+    </div>
+    <div class="stat" style="--accent:var(--roxo)">
+      <div class="stat-lbl">Amortizacao Mensal</div>
+      <div class="stat-num" style="color:var(--roxo)">R$ 1.055,62</div>
+      <div class="stat-sub">constante SAC</div>
+    </div>
+  </div>
+
+  <!-- Barra de progresso -->
+  <div class="prog-card" style="margin-bottom:20px">
+    <div class="prog-top">
+      <div>
+        <div class="prog-label">Progresso do financiamento</div>
+        <div style="font-size:12px;color:var(--texto3);margin-top:2px">Caixa Economica Federal - SAC - 7,66% a.a.</div>
+      </div>
+      <div class="prog-num" id="ft-prog-label" style="font-size:18px">0% pago</div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="ft-prog-fill" style="width:0%;background:linear-gradient(90deg,var(--roxo),var(--azul))"></div></div>
+    <div class="prog-info">
+      <span>Valor original: R$ 258.605,00</span>
+      <span id="ft-prog-resto">R$ 0,00 restante</span>
+    </div>
+  </div>
+
+  <!-- Campos editaveis -->
+  <div class="form-card" style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div>
+        <div class="form-t" style="font-size:16px">Corrigir dados manualmente</div>
+        <div class="form-s" style="margin-bottom:0">Use se os valores calculados diferirem do extrato real</div>
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="field">
+        <label>Saldo Devedor Real R$</label>
+        <input type="number" id="ft-edit-saldo" placeholder="207902.75" step="0.01">
+      </div>
+      <div class="field">
+        <label>Parcela Real R$</label>
+        <input type="number" id="ft-edit-parcela" placeholder="2382.73" step="0.01">
+      </div>
+      <div class="field">
+        <label>Meses Restantes</label>
+        <input type="number" id="ft-edit-meses" placeholder="217" step="1">
+      </div>
+    </div>
+    <button class="btn btn-verde btn-sm" style="max-width:220px" onclick="salvarCorrecaoFinanciamento()">Salvar correcao</button>
+  </div>
+
+  <div class="sec"><span class="sec-t">Simulacoes de amortizacao extra</span><div class="sec-l"></div></div>
+
+  <div class="fin-sim-grid" id="fin-sim-cards"></div>
+
+  <!-- Simulador personalizado -->
+  <div class="form-card" style="margin-bottom:20px">
+    <div class="form-t" style="font-size:18px">Simulador personalizado</div>
+    <div class="form-s">Simule com seu proprio valor de amortizacao extra a cada 2 anos</div>
+    <div class="grid2">
+      <div class="field">
+        <label>Amortizacao extra (R$)</label>
+        <input type="number" id="sim-extra" placeholder="Ex: 25000" step="1000" value="15000">
+      </div>
+      <div class="field">
+        <label>A partir do mes</label>
+        <input type="month" id="sim-inicio" value="2028-05">
+      </div>
+    </div>
+    <button class="btn btn-verde btn-sm" style="max-width:220px" onclick="simularPersonalizado()">Simular</button>
+    <div id="sim-resultado" style="margin-top:14px"></div>
+  </div>
+
+  <!-- Tabela projecao proximos 24 meses -->
+  <div class="sec"><span class="sec-t">Projecao proximos 24 meses</span><div class="sec-l"></div></div>
+  <div class="fin-tabela-wrap">
+    <div class="fin-tabela-hdr">
+      <span>Mes</span><span>Parcela</span><span>Juros</span><span>Amortizacao</span><span>Saldo Devedor</span>
+    </div>
+    <div class="fin-scroll">
+      <div id="fin-tabela-body"></div>
+    </div>
+  </div>
+
+</div>
+
 </main>
 
 
@@ -656,9 +787,15 @@ function trocarMes(mes){
   MES_SELECIONADO = mes;
   var parts = mes.split('-');
   document.getElementById('hdr-mes').textContent = new Date(parts[0],parts[1]-1).toLocaleDateString('pt-BR',{month:'short',year:'numeric'}).toUpperCase();
+  renderFinanciamento();
   renderResumo();
   renderDespesasFixas();
   renderTotalGeral();
+  // atualiza aba financiamento se estiver visivel
+  var abaFin = document.getElementById('tab-financiamento_aba');
+  if(abaFin && abaFin.classList.contains('active')){
+    renderFinanciamentoAba();
+  }
 }
 
 function renderTudo(){
@@ -686,6 +823,7 @@ function aba(id,btn){
   btn.classList.add('active');
   if(id==='resumo'){setTimeout(function(){renderChartDonut();renderChartLinha();},50)}
   if(id==='historico'){setTimeout(function(){renderChartHist();},50)}
+  if(id==='financiamento_aba'){setTimeout(function(){renderFinanciamentoAba();},50)}
 }
 
 // RESUMO
@@ -748,6 +886,213 @@ function renderCatGrid(desps,total){
 }
 
 
+
+// FINANCIAMENTO ABA
+var FIN_TABELA = {"2026-05": {"parcela": 2382.73, "amortizacao": 1055.62, "juros": 1327.11, "saldo_devedor": 207902.75, "meses_restantes": 217}, "2026-06": {"parcela": 2375.99, "amortizacao": 1055.62, "juros": 1320.37, "saldo_devedor": 206847.13, "meses_restantes": 216}, "2026-07": {"parcela": 2369.26, "amortizacao": 1055.62, "juros": 1313.64, "saldo_devedor": 205791.51, "meses_restantes": 215}, "2026-08": {"parcela": 2362.52, "amortizacao": 1055.62, "juros": 1306.9, "saldo_devedor": 204735.89, "meses_restantes": 214}, "2026-09": {"parcela": 2355.78, "amortizacao": 1055.62, "juros": 1300.16, "saldo_devedor": 203680.27, "meses_restantes": 213}, "2026-10": {"parcela": 2349.04, "amortizacao": 1055.62, "juros": 1293.42, "saldo_devedor": 202624.65, "meses_restantes": 212}, "2026-11": {"parcela": 2342.3, "amortizacao": 1055.62, "juros": 1286.68, "saldo_devedor": 201569.03, "meses_restantes": 211}, "2026-12": {"parcela": 2335.56, "amortizacao": 1055.62, "juros": 1279.94, "saldo_devedor": 200513.41, "meses_restantes": 210}, "2027-01": {"parcela": 2328.83, "amortizacao": 1055.62, "juros": 1273.21, "saldo_devedor": 199457.79, "meses_restantes": 209}, "2027-02": {"parcela": 2322.09, "amortizacao": 1055.62, "juros": 1266.47, "saldo_devedor": 198402.17, "meses_restantes": 208}, "2027-03": {"parcela": 2315.35, "amortizacao": 1055.62, "juros": 1259.73, "saldo_devedor": 197346.55, "meses_restantes": 207}, "2027-04": {"parcela": 2308.61, "amortizacao": 1055.62, "juros": 1252.99, "saldo_devedor": 196290.93, "meses_restantes": 206}, "2027-05": {"parcela": 2301.87, "amortizacao": 1055.62, "juros": 1246.25, "saldo_devedor": 195235.31, "meses_restantes": 205}, "2027-06": {"parcela": 2295.13, "amortizacao": 1055.62, "juros": 1239.51, "saldo_devedor": 194179.69, "meses_restantes": 204}, "2027-07": {"parcela": 2288.4, "amortizacao": 1055.62, "juros": 1232.78, "saldo_devedor": 193124.07, "meses_restantes": 203}, "2027-08": {"parcela": 2281.66, "amortizacao": 1055.62, "juros": 1226.04, "saldo_devedor": 192068.45, "meses_restantes": 202}, "2027-09": {"parcela": 2274.92, "amortizacao": 1055.62, "juros": 1219.3, "saldo_devedor": 191012.83, "meses_restantes": 201}, "2027-10": {"parcela": 2268.18, "amortizacao": 1055.62, "juros": 1212.56, "saldo_devedor": 189957.21, "meses_restantes": 200}, "2027-11": {"parcela": 2261.44, "amortizacao": 1055.62, "juros": 1205.82, "saldo_devedor": 188901.59, "meses_restantes": 199}, "2027-12": {"parcela": 2254.7, "amortizacao": 1055.62, "juros": 1199.08, "saldo_devedor": 187845.97, "meses_restantes": 198}, "2028-01": {"parcela": 2247.97, "amortizacao": 1055.62, "juros": 1192.35, "saldo_devedor": 186790.35, "meses_restantes": 197}, "2028-02": {"parcela": 2241.23, "amortizacao": 1055.62, "juros": 1185.61, "saldo_devedor": 185734.73, "meses_restantes": 196}, "2028-03": {"parcela": 2234.49, "amortizacao": 1055.62, "juros": 1178.87, "saldo_devedor": 184679.11, "meses_restantes": 195}, "2028-04": {"parcela": 2227.75, "amortizacao": 1055.62, "juros": 1172.13, "saldo_devedor": 183623.49, "meses_restantes": 194}, "2028-05": {"parcela": 2221.01, "amortizacao": 1055.62, "juros": 1165.39, "saldo_devedor": 182567.87, "meses_restantes": 193}, "2028-06": {"parcela": 2214.27, "amortizacao": 1055.62, "juros": 1158.65, "saldo_devedor": 181512.25, "meses_restantes": 192}, "2028-07": {"parcela": 2207.53, "amortizacao": 1055.62, "juros": 1151.91, "saldo_devedor": 180456.63, "meses_restantes": 191}, "2028-08": {"parcela": 2200.8, "amortizacao": 1055.62, "juros": 1145.18, "saldo_devedor": 179401.01, "meses_restantes": 190}, "2028-09": {"parcela": 2194.06, "amortizacao": 1055.62, "juros": 1138.44, "saldo_devedor": 178345.39, "meses_restantes": 189}, "2028-10": {"parcela": 2187.32, "amortizacao": 1055.62, "juros": 1131.7, "saldo_devedor": 177289.77, "meses_restantes": 188}, "2028-11": {"parcela": 2180.58, "amortizacao": 1055.62, "juros": 1124.96, "saldo_devedor": 176234.15, "meses_restantes": 187}, "2028-12": {"parcela": 2173.84, "amortizacao": 1055.62, "juros": 1118.22, "saldo_devedor": 175178.53, "meses_restantes": 186}, "2029-01": {"parcela": 2167.1, "amortizacao": 1055.62, "juros": 1111.48, "saldo_devedor": 174122.91, "meses_restantes": 185}, "2029-02": {"parcela": 2160.37, "amortizacao": 1055.62, "juros": 1104.75, "saldo_devedor": 173067.29, "meses_restantes": 184}, "2029-03": {"parcela": 2153.63, "amortizacao": 1055.62, "juros": 1098.01, "saldo_devedor": 172011.67, "meses_restantes": 183}, "2029-04": {"parcela": 2146.89, "amortizacao": 1055.62, "juros": 1091.27, "saldo_devedor": 170956.05, "meses_restantes": 182}, "2029-05": {"parcela": 2140.15, "amortizacao": 1055.62, "juros": 1084.53, "saldo_devedor": 169900.43, "meses_restantes": 181}, "2029-06": {"parcela": 2133.41, "amortizacao": 1055.62, "juros": 1077.79, "saldo_devedor": 168844.81, "meses_restantes": 180}, "2029-07": {"parcela": 2126.67, "amortizacao": 1055.62, "juros": 1071.05, "saldo_devedor": 167789.19, "meses_restantes": 179}, "2029-08": {"parcela": 2119.94, "amortizacao": 1055.62, "juros": 1064.32, "saldo_devedor": 166733.57, "meses_restantes": 178}, "2029-09": {"parcela": 2113.2, "amortizacao": 1055.62, "juros": 1057.58, "saldo_devedor": 165677.95, "meses_restantes": 177}, "2029-10": {"parcela": 2106.46, "amortizacao": 1055.62, "juros": 1050.84, "saldo_devedor": 164622.33, "meses_restantes": 176}, "2029-11": {"parcela": 2099.72, "amortizacao": 1055.62, "juros": 1044.1, "saldo_devedor": 163566.71, "meses_restantes": 175}, "2029-12": {"parcela": 2092.98, "amortizacao": 1055.62, "juros": 1037.36, "saldo_devedor": 162511.09, "meses_restantes": 174}, "2030-01": {"parcela": 2086.24, "amortizacao": 1055.62, "juros": 1030.62, "saldo_devedor": 161455.47, "meses_restantes": 173}, "2030-02": {"parcela": 2079.51, "amortizacao": 1055.62, "juros": 1023.89, "saldo_devedor": 160399.85, "meses_restantes": 172}, "2030-03": {"parcela": 2072.77, "amortizacao": 1055.62, "juros": 1017.15, "saldo_devedor": 159344.23, "meses_restantes": 171}, "2030-04": {"parcela": 2066.03, "amortizacao": 1055.62, "juros": 1010.41, "saldo_devedor": 158288.61, "meses_restantes": 170}, "2030-05": {"parcela": 2059.29, "amortizacao": 1055.62, "juros": 1003.67, "saldo_devedor": 157232.99, "meses_restantes": 169}, "2030-06": {"parcela": 2052.55, "amortizacao": 1055.62, "juros": 996.93, "saldo_devedor": 156177.37, "meses_restantes": 168}, "2030-07": {"parcela": 2045.81, "amortizacao": 1055.62, "juros": 990.19, "saldo_devedor": 155121.75, "meses_restantes": 167}, "2030-08": {"parcela": 2039.08, "amortizacao": 1055.62, "juros": 983.46, "saldo_devedor": 154066.13, "meses_restantes": 166}, "2030-09": {"parcela": 2032.34, "amortizacao": 1055.62, "juros": 976.72, "saldo_devedor": 153010.51, "meses_restantes": 165}, "2030-10": {"parcela": 2025.6, "amortizacao": 1055.62, "juros": 969.98, "saldo_devedor": 151954.89, "meses_restantes": 164}, "2030-11": {"parcela": 2018.86, "amortizacao": 1055.62, "juros": 963.24, "saldo_devedor": 150899.27, "meses_restantes": 163}, "2030-12": {"parcela": 2012.12, "amortizacao": 1055.62, "juros": 956.5, "saldo_devedor": 149843.65, "meses_restantes": 162}, "2031-01": {"parcela": 2005.38, "amortizacao": 1055.62, "juros": 949.76, "saldo_devedor": 148788.03, "meses_restantes": 161}, "2031-02": {"parcela": 1998.65, "amortizacao": 1055.62, "juros": 943.03, "saldo_devedor": 147732.41, "meses_restantes": 160}, "2031-03": {"parcela": 1991.91, "amortizacao": 1055.62, "juros": 936.29, "saldo_devedor": 146676.79, "meses_restantes": 159}, "2031-04": {"parcela": 1985.17, "amortizacao": 1055.62, "juros": 929.55, "saldo_devedor": 145621.17, "meses_restantes": 158}, "2031-05": {"parcela": 1978.43, "amortizacao": 1055.62, "juros": 922.81, "saldo_devedor": 144565.55, "meses_restantes": 157}, "2031-06": {"parcela": 1971.69, "amortizacao": 1055.62, "juros": 916.07, "saldo_devedor": 143509.93, "meses_restantes": 156}, "2031-07": {"parcela": 1964.95, "amortizacao": 1055.62, "juros": 909.33, "saldo_devedor": 142454.31, "meses_restantes": 155}, "2031-08": {"parcela": 1958.21, "amortizacao": 1055.62, "juros": 902.59, "saldo_devedor": 141398.69, "meses_restantes": 154}, "2031-09": {"parcela": 1951.48, "amortizacao": 1055.62, "juros": 895.86, "saldo_devedor": 140343.07, "meses_restantes": 153}, "2031-10": {"parcela": 1944.74, "amortizacao": 1055.62, "juros": 889.12, "saldo_devedor": 139287.45, "meses_restantes": 152}, "2031-11": {"parcela": 1938.0, "amortizacao": 1055.62, "juros": 882.38, "saldo_devedor": 138231.83, "meses_restantes": 151}, "2031-12": {"parcela": 1931.26, "amortizacao": 1055.62, "juros": 875.64, "saldo_devedor": 137176.21, "meses_restantes": 150}, "2032-01": {"parcela": 1924.52, "amortizacao": 1055.62, "juros": 868.9, "saldo_devedor": 136120.59, "meses_restantes": 149}, "2032-02": {"parcela": 1917.78, "amortizacao": 1055.62, "juros": 862.16, "saldo_devedor": 135064.97, "meses_restantes": 148}, "2032-03": {"parcela": 1911.05, "amortizacao": 1055.62, "juros": 855.43, "saldo_devedor": 134009.35, "meses_restantes": 147}, "2032-04": {"parcela": 1904.31, "amortizacao": 1055.62, "juros": 848.69, "saldo_devedor": 132953.73, "meses_restantes": 146}, "2032-05": {"parcela": 1897.57, "amortizacao": 1055.62, "juros": 841.95, "saldo_devedor": 131898.11, "meses_restantes": 145}, "2032-06": {"parcela": 1890.83, "amortizacao": 1055.62, "juros": 835.21, "saldo_devedor": 130842.49, "meses_restantes": 144}, "2032-07": {"parcela": 1884.09, "amortizacao": 1055.62, "juros": 828.47, "saldo_devedor": 129786.87, "meses_restantes": 143}, "2032-08": {"parcela": 1877.35, "amortizacao": 1055.62, "juros": 821.73, "saldo_devedor": 128731.25, "meses_restantes": 142}, "2032-09": {"parcela": 1870.62, "amortizacao": 1055.62, "juros": 815.0, "saldo_devedor": 127675.63, "meses_restantes": 141}, "2032-10": {"parcela": 1863.88, "amortizacao": 1055.62, "juros": 808.26, "saldo_devedor": 126620.01, "meses_restantes": 140}, "2032-11": {"parcela": 1857.14, "amortizacao": 1055.62, "juros": 801.52, "saldo_devedor": 125564.39, "meses_restantes": 139}, "2032-12": {"parcela": 1850.4, "amortizacao": 1055.62, "juros": 794.78, "saldo_devedor": 124508.77, "meses_restantes": 138}, "2033-01": {"parcela": 1843.66, "amortizacao": 1055.62, "juros": 788.04, "saldo_devedor": 123453.15, "meses_restantes": 137}, "2033-02": {"parcela": 1836.92, "amortizacao": 1055.62, "juros": 781.3, "saldo_devedor": 122397.53, "meses_restantes": 136}, "2033-03": {"parcela": 1830.19, "amortizacao": 1055.62, "juros": 774.57, "saldo_devedor": 121341.91, "meses_restantes": 135}, "2033-04": {"parcela": 1823.45, "amortizacao": 1055.62, "juros": 767.83, "saldo_devedor": 120286.29, "meses_restantes": 134}, "2033-05": {"parcela": 1816.71, "amortizacao": 1055.62, "juros": 761.09, "saldo_devedor": 119230.67, "meses_restantes": 133}, "2033-06": {"parcela": 1809.97, "amortizacao": 1055.62, "juros": 754.35, "saldo_devedor": 118175.05, "meses_restantes": 132}, "2033-07": {"parcela": 1803.23, "amortizacao": 1055.62, "juros": 747.61, "saldo_devedor": 117119.43, "meses_restantes": 131}, "2033-08": {"parcela": 1796.49, "amortizacao": 1055.62, "juros": 740.87, "saldo_devedor": 116063.81, "meses_restantes": 130}, "2033-09": {"parcela": 1789.76, "amortizacao": 1055.62, "juros": 734.14, "saldo_devedor": 115008.19, "meses_restantes": 129}, "2033-10": {"parcela": 1783.02, "amortizacao": 1055.62, "juros": 727.4, "saldo_devedor": 113952.57, "meses_restantes": 128}, "2033-11": {"parcela": 1776.28, "amortizacao": 1055.62, "juros": 720.66, "saldo_devedor": 112896.95, "meses_restantes": 127}, "2033-12": {"parcela": 1769.54, "amortizacao": 1055.62, "juros": 713.92, "saldo_devedor": 111841.33, "meses_restantes": 126}, "2034-01": {"parcela": 1762.8, "amortizacao": 1055.62, "juros": 707.18, "saldo_devedor": 110785.71, "meses_restantes": 125}, "2034-02": {"parcela": 1756.06, "amortizacao": 1055.62, "juros": 700.44, "saldo_devedor": 109730.09, "meses_restantes": 124}, "2034-03": {"parcela": 1749.33, "amortizacao": 1055.62, "juros": 693.71, "saldo_devedor": 108674.47, "meses_restantes": 123}, "2034-04": {"parcela": 1742.59, "amortizacao": 1055.62, "juros": 686.97, "saldo_devedor": 107618.85, "meses_restantes": 122}, "2034-05": {"parcela": 1735.85, "amortizacao": 1055.62, "juros": 680.23, "saldo_devedor": 106563.23, "meses_restantes": 121}, "2034-06": {"parcela": 1729.11, "amortizacao": 1055.62, "juros": 673.49, "saldo_devedor": 105507.61, "meses_restantes": 120}, "2034-07": {"parcela": 1722.37, "amortizacao": 1055.62, "juros": 666.75, "saldo_devedor": 104451.99, "meses_restantes": 119}, "2034-08": {"parcela": 1715.63, "amortizacao": 1055.62, "juros": 660.01, "saldo_devedor": 103396.37, "meses_restantes": 118}, "2034-09": {"parcela": 1708.9, "amortizacao": 1055.62, "juros": 653.28, "saldo_devedor": 102340.75, "meses_restantes": 117}, "2034-10": {"parcela": 1702.16, "amortizacao": 1055.62, "juros": 646.54, "saldo_devedor": 101285.13, "meses_restantes": 116}, "2034-11": {"parcela": 1695.42, "amortizacao": 1055.62, "juros": 639.8, "saldo_devedor": 100229.51, "meses_restantes": 115}, "2034-12": {"parcela": 1688.68, "amortizacao": 1055.62, "juros": 633.06, "saldo_devedor": 99173.89, "meses_restantes": 114}, "2035-01": {"parcela": 1681.94, "amortizacao": 1055.62, "juros": 626.32, "saldo_devedor": 98118.27, "meses_restantes": 113}, "2035-02": {"parcela": 1675.2, "amortizacao": 1055.62, "juros": 619.58, "saldo_devedor": 97062.65, "meses_restantes": 112}, "2035-03": {"parcela": 1668.46, "amortizacao": 1055.62, "juros": 612.84, "saldo_devedor": 96007.03, "meses_restantes": 111}, "2035-04": {"parcela": 1661.73, "amortizacao": 1055.62, "juros": 606.11, "saldo_devedor": 94951.41, "meses_restantes": 110}, "2035-05": {"parcela": 1654.99, "amortizacao": 1055.62, "juros": 599.37, "saldo_devedor": 93895.79, "meses_restantes": 109}, "2035-06": {"parcela": 1648.25, "amortizacao": 1055.62, "juros": 592.63, "saldo_devedor": 92840.17, "meses_restantes": 108}, "2035-07": {"parcela": 1641.51, "amortizacao": 1055.62, "juros": 585.89, "saldo_devedor": 91784.55, "meses_restantes": 107}, "2035-08": {"parcela": 1634.77, "amortizacao": 1055.62, "juros": 579.15, "saldo_devedor": 90728.93, "meses_restantes": 106}, "2035-09": {"parcela": 1628.03, "amortizacao": 1055.62, "juros": 572.41, "saldo_devedor": 89673.31, "meses_restantes": 105}, "2035-10": {"parcela": 1621.3, "amortizacao": 1055.62, "juros": 565.68, "saldo_devedor": 88617.69, "meses_restantes": 104}, "2035-11": {"parcela": 1614.56, "amortizacao": 1055.62, "juros": 558.94, "saldo_devedor": 87562.07, "meses_restantes": 103}, "2035-12": {"parcela": 1607.82, "amortizacao": 1055.62, "juros": 552.2, "saldo_devedor": 86506.45, "meses_restantes": 102}, "2036-01": {"parcela": 1601.08, "amortizacao": 1055.62, "juros": 545.46, "saldo_devedor": 85450.83, "meses_restantes": 101}, "2036-02": {"parcela": 1594.34, "amortizacao": 1055.62, "juros": 538.72, "saldo_devedor": 84395.21, "meses_restantes": 100}, "2036-03": {"parcela": 1587.6, "amortizacao": 1055.62, "juros": 531.98, "saldo_devedor": 83339.59, "meses_restantes": 99}, "2036-04": {"parcela": 1580.87, "amortizacao": 1055.62, "juros": 525.25, "saldo_devedor": 82283.97, "meses_restantes": 98}, "2036-05": {"parcela": 1574.13, "amortizacao": 1055.62, "juros": 518.51, "saldo_devedor": 81228.35, "meses_restantes": 97}, "2036-06": {"parcela": 1567.39, "amortizacao": 1055.62, "juros": 511.77, "saldo_devedor": 80172.73, "meses_restantes": 96}, "2036-07": {"parcela": 1560.65, "amortizacao": 1055.62, "juros": 505.03, "saldo_devedor": 79117.11, "meses_restantes": 95}, "2036-08": {"parcela": 1553.91, "amortizacao": 1055.62, "juros": 498.29, "saldo_devedor": 78061.49, "meses_restantes": 94}, "2036-09": {"parcela": 1547.17, "amortizacao": 1055.62, "juros": 491.55, "saldo_devedor": 77005.87, "meses_restantes": 93}, "2036-10": {"parcela": 1540.44, "amortizacao": 1055.62, "juros": 484.82, "saldo_devedor": 75950.25, "meses_restantes": 92}, "2036-11": {"parcela": 1533.7, "amortizacao": 1055.62, "juros": 478.08, "saldo_devedor": 74894.63, "meses_restantes": 91}, "2036-12": {"parcela": 1526.96, "amortizacao": 1055.62, "juros": 471.34, "saldo_devedor": 73839.01, "meses_restantes": 90}, "2037-01": {"parcela": 1520.22, "amortizacao": 1055.62, "juros": 464.6, "saldo_devedor": 72783.39, "meses_restantes": 89}, "2037-02": {"parcela": 1513.48, "amortizacao": 1055.62, "juros": 457.86, "saldo_devedor": 71727.77, "meses_restantes": 88}, "2037-03": {"parcela": 1506.74, "amortizacao": 1055.62, "juros": 451.12, "saldo_devedor": 70672.15, "meses_restantes": 87}, "2037-04": {"parcela": 1500.01, "amortizacao": 1055.62, "juros": 444.39, "saldo_devedor": 69616.53, "meses_restantes": 86}, "2037-05": {"parcela": 1493.27, "amortizacao": 1055.62, "juros": 437.65, "saldo_devedor": 68560.91, "meses_restantes": 85}, "2037-06": {"parcela": 1486.53, "amortizacao": 1055.62, "juros": 430.91, "saldo_devedor": 67505.29, "meses_restantes": 84}, "2037-07": {"parcela": 1479.79, "amortizacao": 1055.62, "juros": 424.17, "saldo_devedor": 66449.67, "meses_restantes": 83}, "2037-08": {"parcela": 1473.05, "amortizacao": 1055.62, "juros": 417.43, "saldo_devedor": 65394.05, "meses_restantes": 82}, "2037-09": {"parcela": 1466.31, "amortizacao": 1055.62, "juros": 410.69, "saldo_devedor": 64338.43, "meses_restantes": 81}, "2037-10": {"parcela": 1459.58, "amortizacao": 1055.62, "juros": 403.96, "saldo_devedor": 63282.81, "meses_restantes": 80}, "2037-11": {"parcela": 1452.84, "amortizacao": 1055.62, "juros": 397.22, "saldo_devedor": 62227.19, "meses_restantes": 79}, "2037-12": {"parcela": 1446.1, "amortizacao": 1055.62, "juros": 390.48, "saldo_devedor": 61171.57, "meses_restantes": 78}, "2038-01": {"parcela": 1439.36, "amortizacao": 1055.62, "juros": 383.74, "saldo_devedor": 60115.95, "meses_restantes": 77}, "2038-02": {"parcela": 1432.62, "amortizacao": 1055.62, "juros": 377.0, "saldo_devedor": 59060.33, "meses_restantes": 76}, "2038-03": {"parcela": 1425.88, "amortizacao": 1055.62, "juros": 370.26, "saldo_devedor": 58004.71, "meses_restantes": 75}, "2038-04": {"parcela": 1419.15, "amortizacao": 1055.62, "juros": 363.53, "saldo_devedor": 56949.09, "meses_restantes": 74}, "2038-05": {"parcela": 1412.41, "amortizacao": 1055.62, "juros": 356.79, "saldo_devedor": 55893.47, "meses_restantes": 73}, "2038-06": {"parcela": 1405.67, "amortizacao": 1055.62, "juros": 350.05, "saldo_devedor": 54837.85, "meses_restantes": 72}, "2038-07": {"parcela": 1398.93, "amortizacao": 1055.62, "juros": 343.31, "saldo_devedor": 53782.23, "meses_restantes": 71}, "2038-08": {"parcela": 1392.19, "amortizacao": 1055.62, "juros": 336.57, "saldo_devedor": 52726.61, "meses_restantes": 70}, "2038-09": {"parcela": 1385.45, "amortizacao": 1055.62, "juros": 329.83, "saldo_devedor": 51670.99, "meses_restantes": 69}, "2038-10": {"parcela": 1378.71, "amortizacao": 1055.62, "juros": 323.09, "saldo_devedor": 50615.37, "meses_restantes": 68}, "2038-11": {"parcela": 1371.98, "amortizacao": 1055.62, "juros": 316.36, "saldo_devedor": 49559.75, "meses_restantes": 67}, "2038-12": {"parcela": 1365.24, "amortizacao": 1055.62, "juros": 309.62, "saldo_devedor": 48504.13, "meses_restantes": 66}, "2039-01": {"parcela": 1358.5, "amortizacao": 1055.62, "juros": 302.88, "saldo_devedor": 47448.51, "meses_restantes": 65}, "2039-02": {"parcela": 1351.76, "amortizacao": 1055.62, "juros": 296.14, "saldo_devedor": 46392.89, "meses_restantes": 64}, "2039-03": {"parcela": 1345.02, "amortizacao": 1055.62, "juros": 289.4, "saldo_devedor": 45337.27, "meses_restantes": 63}, "2039-04": {"parcela": 1338.28, "amortizacao": 1055.62, "juros": 282.66, "saldo_devedor": 44281.65, "meses_restantes": 62}, "2039-05": {"parcela": 1331.55, "amortizacao": 1055.62, "juros": 275.93, "saldo_devedor": 43226.03, "meses_restantes": 61}, "2039-06": {"parcela": 1324.81, "amortizacao": 1055.62, "juros": 269.19, "saldo_devedor": 42170.41, "meses_restantes": 60}, "2039-07": {"parcela": 1318.07, "amortizacao": 1055.62, "juros": 262.45, "saldo_devedor": 41114.79, "meses_restantes": 59}, "2039-08": {"parcela": 1311.33, "amortizacao": 1055.62, "juros": 255.71, "saldo_devedor": 40059.17, "meses_restantes": 58}, "2039-09": {"parcela": 1304.59, "amortizacao": 1055.62, "juros": 248.97, "saldo_devedor": 39003.55, "meses_restantes": 57}, "2039-10": {"parcela": 1297.85, "amortizacao": 1055.62, "juros": 242.23, "saldo_devedor": 37947.93, "meses_restantes": 56}, "2039-11": {"parcela": 1291.12, "amortizacao": 1055.62, "juros": 235.5, "saldo_devedor": 36892.31, "meses_restantes": 55}, "2039-12": {"parcela": 1284.38, "amortizacao": 1055.62, "juros": 228.76, "saldo_devedor": 35836.69, "meses_restantes": 54}, "2040-01": {"parcela": 1277.64, "amortizacao": 1055.62, "juros": 222.02, "saldo_devedor": 34781.07, "meses_restantes": 53}, "2040-02": {"parcela": 1270.9, "amortizacao": 1055.62, "juros": 215.28, "saldo_devedor": 33725.45, "meses_restantes": 52}, "2040-03": {"parcela": 1264.16, "amortizacao": 1055.62, "juros": 208.54, "saldo_devedor": 32669.83, "meses_restantes": 51}, "2040-04": {"parcela": 1257.42, "amortizacao": 1055.62, "juros": 201.8, "saldo_devedor": 31614.21, "meses_restantes": 50}, "2040-05": {"parcela": 1250.69, "amortizacao": 1055.62, "juros": 195.07, "saldo_devedor": 30558.59, "meses_restantes": 49}, "2040-06": {"parcela": 1243.95, "amortizacao": 1055.62, "juros": 188.33, "saldo_devedor": 29502.97, "meses_restantes": 48}, "2040-07": {"parcela": 1237.21, "amortizacao": 1055.62, "juros": 181.59, "saldo_devedor": 28447.35, "meses_restantes": 47}, "2040-08": {"parcela": 1230.47, "amortizacao": 1055.62, "juros": 174.85, "saldo_devedor": 27391.73, "meses_restantes": 46}, "2040-09": {"parcela": 1223.73, "amortizacao": 1055.62, "juros": 168.11, "saldo_devedor": 26336.11, "meses_restantes": 45}, "2040-10": {"parcela": 1216.99, "amortizacao": 1055.62, "juros": 161.37, "saldo_devedor": 25280.49, "meses_restantes": 44}, "2040-11": {"parcela": 1210.26, "amortizacao": 1055.62, "juros": 154.64, "saldo_devedor": 24224.87, "meses_restantes": 43}, "2040-12": {"parcela": 1203.52, "amortizacao": 1055.62, "juros": 147.9, "saldo_devedor": 23169.25, "meses_restantes": 42}, "2041-01": {"parcela": 1196.78, "amortizacao": 1055.62, "juros": 141.16, "saldo_devedor": 22113.63, "meses_restantes": 41}, "2041-02": {"parcela": 1190.04, "amortizacao": 1055.62, "juros": 134.42, "saldo_devedor": 21058.01, "meses_restantes": 40}, "2041-03": {"parcela": 1183.3, "amortizacao": 1055.62, "juros": 127.68, "saldo_devedor": 20002.39, "meses_restantes": 39}, "2041-04": {"parcela": 1176.56, "amortizacao": 1055.62, "juros": 120.94, "saldo_devedor": 18946.77, "meses_restantes": 38}, "2041-05": {"parcela": 1169.83, "amortizacao": 1055.62, "juros": 114.21, "saldo_devedor": 17891.15, "meses_restantes": 37}, "2041-06": {"parcela": 1163.09, "amortizacao": 1055.62, "juros": 107.47, "saldo_devedor": 16835.53, "meses_restantes": 36}, "2041-07": {"parcela": 1156.35, "amortizacao": 1055.62, "juros": 100.73, "saldo_devedor": 15779.91, "meses_restantes": 35}, "2041-08": {"parcela": 1149.61, "amortizacao": 1055.62, "juros": 93.99, "saldo_devedor": 14724.29, "meses_restantes": 34}, "2041-09": {"parcela": 1142.87, "amortizacao": 1055.62, "juros": 87.25, "saldo_devedor": 13668.67, "meses_restantes": 33}, "2041-10": {"parcela": 1136.13, "amortizacao": 1055.62, "juros": 80.51, "saldo_devedor": 12613.05, "meses_restantes": 32}, "2041-11": {"parcela": 1129.39, "amortizacao": 1055.62, "juros": 73.77, "saldo_devedor": 11557.43, "meses_restantes": 31}, "2041-12": {"parcela": 1122.66, "amortizacao": 1055.62, "juros": 67.04, "saldo_devedor": 10501.81, "meses_restantes": 30}, "2042-01": {"parcela": 1115.92, "amortizacao": 1055.62, "juros": 60.3, "saldo_devedor": 9446.19, "meses_restantes": 29}, "2042-02": {"parcela": 1109.18, "amortizacao": 1055.62, "juros": 53.56, "saldo_devedor": 8390.57, "meses_restantes": 28}, "2042-03": {"parcela": 1102.44, "amortizacao": 1055.62, "juros": 46.82, "saldo_devedor": 7334.95, "meses_restantes": 27}, "2042-04": {"parcela": 1095.7, "amortizacao": 1055.62, "juros": 40.08, "saldo_devedor": 6279.33, "meses_restantes": 26}, "2042-05": {"parcela": 1088.96, "amortizacao": 1055.62, "juros": 33.34, "saldo_devedor": 5223.71, "meses_restantes": 25}, "2042-06": {"parcela": 1082.23, "amortizacao": 1055.62, "juros": 26.61, "saldo_devedor": 4168.09, "meses_restantes": 24}, "2042-07": {"parcela": 1075.49, "amortizacao": 1055.62, "juros": 19.87, "saldo_devedor": 3112.47, "meses_restantes": 23}, "2042-08": {"parcela": 1068.75, "amortizacao": 1055.62, "juros": 13.13, "saldo_devedor": 2056.85, "meses_restantes": 22}, "2042-09": {"parcela": 1062.01, "amortizacao": 1001.23, "juros": 6.39, "saldo_devedor": 1001.23, "meses_restantes": 21}, "2042-10": {"parcela": 1055.27, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 20}, "2042-11": {"parcela": 1048.53, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 19}, "2042-12": {"parcela": 1041.8, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 18}, "2043-01": {"parcela": 1035.06, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 17}, "2043-02": {"parcela": 1028.32, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 16}, "2043-03": {"parcela": 1021.58, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 15}, "2043-04": {"parcela": 1014.84, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 14}, "2043-05": {"parcela": 1008.1, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 13}, "2043-06": {"parcela": 1001.37, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 12}, "2043-07": {"parcela": 994.63, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 11}, "2043-08": {"parcela": 987.89, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 10}, "2043-09": {"parcela": 981.15, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 9}, "2043-10": {"parcela": 974.41, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 8}, "2043-11": {"parcela": 967.67, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 7}, "2043-12": {"parcela": 960.94, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 6}, "2044-01": {"parcela": 954.2, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 5}, "2044-02": {"parcela": 947.46, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 4}, "2044-03": {"parcela": 940.72, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 3}, "2044-04": {"parcela": 933.98, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 2}, "2044-05": {"parcela": 927.24, "amortizacao": 0, "juros": 0, "saldo_devedor": 0, "meses_restantes": 1}};
+var FIN_SIMS = {"sem_extra": {"meses": 197, "anos": 16.4, "total_juros": 131350.12, "total_extra": 0, "termina_em": "2042-09", "nome": "Sem amortizacao extra", "economia_juros": 0}, "15k_2anos": {"meses": 126, "anos": 10.5, "total_juros": 88298.98, "total_extra": 75000, "termina_em": "2036-10", "nome": "R$ 15.000 a cada 2 anos", "economia_juros": 43051.14}, "20k_2anos": {"meses": 120, "anos": 10.0, "total_juros": 80501.51, "total_extra": 100000, "termina_em": "2036-04", "nome": "R$ 20.000 a cada 2 anos", "economia_juros": 50848.61}, "30k_2anos": {"meses": 96, "anos": 8.0, "total_juros": 69099.82, "total_extra": 120000, "termina_em": "2034-04", "nome": "R$ 30.000 a cada 2 anos", "economia_juros": 62250.3}};
+var FIN_AMORT = 1055.62;
+var FIN_JUROS_MES = 0.638333;
+
+function proximoMesStr(mes, n) {
+  n = n || 1;
+  var parts = mes.split('-');
+  var y = parseInt(parts[0]), m = parseInt(parts[1]);
+  m += n;
+  while(m > 12) { m -= 12; y += 1; }
+  return y + '-' + (m < 10 ? '0'+m : ''+m);
+}
+
+function renderFinanciamentoAba() {
+  var prox = (typeof MES_SELECIONADO !== "undefined") ? MES_SELECIONADO : proximoMes();
+  var entry = FIN_TABELA[prox];
+  if(!entry) {
+    var keys = Object.keys(FIN_TABELA).sort();
+    entry = FIN_TABELA[keys[0]];
+    prox = keys[0];
+  }
+  if(entry) {
+    document.getElementById('ft-saldo').textContent   = brl(entry.saldo_devedor);
+    document.getElementById('ft-parcela').textContent = brl(entry.parcela);
+    document.getElementById('ft-meses').textContent   = entry.meses_restantes;
+    document.getElementById('ft-anos').textContent    = (entry.meses_restantes/12).toFixed(1)+' anos';
+    var p = prox.split('-');
+    document.getElementById('ft-mes-ref').textContent = new Date(p[0],p[1]-1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+
+    // update editable fields
+    document.getElementById('ft-edit-saldo').value   = entry.saldo_devedor;
+    document.getElementById('ft-edit-parcela').value = entry.parcela;
+    document.getElementById('ft-edit-meses').value   = entry.meses_restantes;
+
+    // update progress in aba too
+    var valor_original = 258605.00;
+    var pago = Math.min(((valor_original - entry.saldo_devedor) / valor_original)*100, 100);
+    document.getElementById('ft-prog-fill').style.width = pago+'%';
+    document.getElementById('ft-prog-label').textContent = pago.toFixed(1)+'% pago';
+    document.getElementById('ft-prog-resto').textContent = brl(entry.saldo_devedor)+' restante';
+  }
+
+  // Simulation cards - recalculate from current month saldo
+  var saldo_base = entry ? entry.saldo_devedor : FIN_TABELA['2026-05'].saldo_devedor;
+  var cards = document.getElementById('fin-sim-cards');
+
+  function calcSim(saldo_ini, extra_bianual) {
+    var s = saldo_ini;
+    var mes_s = prox;
+    var total_juros = 0;
+    var total_extra = 0;
+    var meses = 0;
+    var ultimo = mes_s;
+    for(var i=0; i<600; i++) {
+      if(s <= 0) break;
+      if(i > 0 && i % 24 === 0 && extra_bianual > 0) {
+        s = Math.max(0, s - extra_bianual);
+        total_extra += extra_bianual;
+        if(s <= 0) break;
+      }
+      var j = s * (FIN_JUROS_MES/100);
+      var amort = Math.min(FIN_AMORT, s);
+      total_juros += j;
+      s -= amort;
+      meses = i+1;
+      ultimo = mes_s;
+      mes_s = proximoMesStr(mes_s);
+    }
+    return {meses:meses, anos:(meses/12).toFixed(1), total_juros:Math.round(total_juros*100)/100,
+            total_extra:total_extra, termina_em:ultimo};
+  }
+
+  var sim0  = calcSim(saldo_base, 0);
+  var sim15 = calcSim(saldo_base, 15000);
+  var sim20 = calcSim(saldo_base, 20000);
+  var sim30 = calcSim(saldo_base, 30000);
+  var base_juros = sim0.total_juros;
+
+  var simCards = [
+    {sim:sim0,  nome:'Sem amortizacao extra',    cor:'var(--texto3)', destaque:false, eco:0},
+    {sim:sim15, nome:'R$ 15k a cada 2 anos',     cor:'var(--azul)',   destaque:false, eco:Math.round((base_juros-sim15.total_juros)*100)/100},
+    {sim:sim20, nome:'R$ 20k a cada 2 anos',     cor:'var(--amar)',   destaque:true,  eco:Math.round((base_juros-sim20.total_juros)*100)/100},
+    {sim:sim30, nome:'R$ 30k a cada 2 anos',     cor:'var(--verde)',  destaque:true,  eco:Math.round((base_juros-sim30.total_juros)*100)/100},
+  ];
+
+  cards.innerHTML = simCards.map(function(s) {
+    var pct = Math.round((s.sim.meses/sim0.meses)*100);
+    return '<div class="fin-sim-card'+(s.destaque?' destaque':'')+'">'
+      +'<div class="fin-sim-nome">'+s.nome+'</div>'
+      +'<div class="fin-sim-val" style="color:'+s.cor+'">'+s.sim.anos+' anos</div>'
+      +'<div class="fin-sim-sub">'+s.sim.meses+' meses - termina em '+formatMes(s.sim.termina_em)+'</div>'
+      +(s.eco>0?'<div class="fin-sim-eco">Economia de '+brl(s.eco)+' em juros</div>':'<div style="font-size:12px;color:var(--texto3)">Base de comparacao</div>')
+      +'<div class="fin-sim-bar-track"><div class="fin-sim-bar-fill" style="width:'+pct+'%;background:'+s.cor+'"></div></div>'
+      +'</div>';
+  }).join('');
+
+// Tabela 24 meses - from selected month
+  var tbody = document.getElementById('fin-tabela-body');
+  var rows = '';
+  var m = prox;
+  for(var i=0; i<24; i++) {
+    var e = FIN_TABELA[m];
+    if(!e) break;
+    rows += '<div class="fin-tabela-row">'
+      +'<span>'+formatMes(m)+'</span>'
+      +'<span>'+brl(e.parcela)+'</span>'
+      +'<span style="color:var(--verm)">'+brl(e.juros)+'</span>'
+      +'<span style="color:var(--roxo)">'+brl(e.amortizacao)+'</span>'
+      +'<span>'+brl(e.saldo_devedor)+'</span>'
+      +'</div>';
+    m = proximoMesStr(m);
+  }
+  tbody.innerHTML = rows;
+
+}
+
+function formatMes(mes) {
+  var p = mes.split('-');
+  return new Date(p[0],p[1]-1).toLocaleDateString('pt-BR',{month:'short',year:'numeric'});
+}
+
+
+function salvarCorrecaoFinanciamento(){
+  var saldo   = parseFloat(document.getElementById('ft-edit-saldo').value)||0;
+  var parcela = parseFloat(document.getElementById('ft-edit-parcela').value)||0;
+  var meses   = parseInt(document.getElementById('ft-edit-meses').value)||0;
+  if(!saldo){toast('Informe o saldo devedor','err');return}
+  // Save via API
+  fetch('/api/financiamento',{method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({saldo_devedor:saldo,parcela:parcela,meses_restantes:meses})
+  }).then(function(r){return r.json()}).then(function(j){
+    if(j.ok){
+      D.financiamento={saldo_devedor:saldo,parcela:parcela,meses_restantes:meses};
+      renderFinanciamento();
+      toast('Correcao salva!','ok');
+    }
+  });
+}
+
+function simularPersonalizado() {
+  var extra = parseFloat(document.getElementById('sim-extra').value)||0;
+  var inicio = document.getElementById('sim-inicio').value;
+  if(!extra || !inicio) { toast('Preencha os campos','err'); return; }
+
+  // Start from currently selected month
+  var prox_sim = (typeof MES_SELECIONADO !== 'undefined') ? MES_SELECIONADO : proximoMes();
+  var entry_sim = FIN_TABELA[prox_sim];
+  var s = entry_sim ? entry_sim.saldo_devedor : 207902.75;
+  var mes = prox_sim;
+  var meses = 0;
+  var total_juros = 0;
+  var total_extra = 0;
+  var ultimo_mes = mes;
+
+  // Base simulation (no extra) from same start point
+  var s_base = s;
+  var meses_base = 0;
+  var juros_base = 0;
+  var mes_base = mes;
+  for(var ib=0; ib<600; ib++) {
+    if(s_base <= 0) break;
+    var jb = s_base * (FIN_JUROS_MES/100);
+    juros_base += jb;
+    s_base -= Math.min(FIN_AMORT, s_base);
+    meses_base = ib+1;
+    mes_base = proximoMesStr(mes_base);
+  }
+
+  // Simulation with extra
+  for(var i=0; i<600; i++) {
+    if(s <= 0) break;
+    if(i > 0 && i % 24 === 0 && mes >= inicio) {
+      s = Math.max(0, s - extra);
+      total_extra += extra;
+      if(s <= 0) break;
+    }
+    var j = s * (FIN_JUROS_MES/100);
+    var amort = Math.min(FIN_AMORT, s);
+    total_juros += j;
+    s -= amort;
+    meses = i+1;
+    ultimo_mes = mes;
+    mes = proximoMesStr(mes);
+  }
+
+  var economia = juros_base - total_juros;
+  var reducao_meses = meses_base - meses;
+
+  document.getElementById('sim-resultado').innerHTML =
+    '<div style="background:var(--card2);border:1px solid var(--verde);border-radius:var(--rs);padding:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">'
+    +'<div><div style="font-size:10px;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Termina em</div>'
+    +'<div style="font-family:Fraunces,serif;font-size:18px;color:var(--verde)">'+formatMes(ultimo_mes)+'</div>'
+    +'<div style="font-size:11px;color:var(--texto3)">'+meses+' meses ('+( meses/12).toFixed(1)+' anos)</div></div>'
+    +'<div><div style="font-size:10px;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Economia em juros</div>'
+    +'<div style="font-family:Fraunces,serif;font-size:18px;color:var(--verde)">'+brl(economia)+'</div>'
+    +'<div style="font-size:11px;color:var(--texto3)">'+reducao_meses+' meses a menos</div></div>'
+    +'<div><div style="font-size:10px;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Total amortizado extra</div>'
+    +'<div style="font-family:Fraunces,serif;font-size:18px;color:var(--amar)">'+brl(total_extra)+'</div>'
+    +'<div style="font-size:11px;color:var(--texto3)">a cada 2 anos</div></div>'
+    +'</div>';
+}
+
+
 // FINANCIAMENTO
 function toggleFinForm(){
   var f = document.getElementById('fin-form');
@@ -761,15 +1106,21 @@ function toggleFinForm(){
 }
 
 function renderFinanciamento(){
+  var prox = (typeof MES_SELECIONADO !== "undefined") ? MES_SELECIONADO : proximoMes();
+  var entry = FIN_TABELA ? FIN_TABELA[prox] : null;
   var fin = D.financiamento||{saldo_devedor:0,parcela:0,meses_restantes:0};
-  document.getElementById('fin-saldo').textContent   = brl(fin.saldo_devedor||0);
-  document.getElementById('fin-parcela').textContent = brl(fin.parcela||0);
-  document.getElementById('fin-meses').textContent   = (fin.meses_restantes||0)+' meses';
+  var saldo   = entry ? entry.saldo_devedor  : fin.saldo_devedor||0;
+  var parcela = entry ? entry.parcela        : fin.parcela||0;
+  var meses   = entry ? entry.meses_restantes: fin.meses_restantes||0;
+  document.getElementById('fin-saldo').textContent   = brl(saldo);
+  document.getElementById('fin-parcela').textContent = brl(parcela);
+  document.getElementById('fin-meses').textContent   = meses+' meses';
 
-  // calcula progresso estimado (assumindo 360 meses = 30 anos como base)
-  var total_estimado = (fin.meses_restantes||0) + 60; // aproximado
-  var pago = total_estimado > 0 ? Math.min(((total_estimado-(fin.meses_restantes||0))/total_estimado)*100,100) : 0;
-  document.getElementById('fin-pct').textContent = pago.toFixed(0)+'% pago';
+  // progresso real: (valor original - saldo atual) / valor original
+  var valor_original = 258605.00;
+  var pago = saldo > 0 ? Math.min(((valor_original - saldo) / valor_original)*100, 100) : 100;
+  var restante = 100 - pago;
+  document.getElementById('fin-pct').textContent = pago.toFixed(1)+'% pago - '+restante.toFixed(1)+'% restante';
   document.getElementById('fin-bar').style.width = pago+'%';
 }
 
