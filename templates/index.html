@@ -260,7 +260,12 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
     <span class="hdr-title">Financas Pessoais</span>
   </div>
   <div class="hdr-right">
+    <div style="display:flex;align-items:center;gap:8px">
+    <select id="mes-seletor" onchange="trocarMes(this.value)"
+      style="background:var(--card);border:1px solid var(--borda);border-radius:99px;padding:5px 12px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.6px;outline:none;cursor:pointer;text-transform:uppercase">
+    </select>
     <span class="hdr-badge" id="hdr-mes">--</span>
+  </div>
     <a href="/logout" class="hdr-logout">Sair</a>
   </div>
 </header>
@@ -596,6 +601,7 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
 
 <script>
 var D = {salarios:{A:0,B:0},despesas:{},poupanca:0,orcamento:{total:0,variaveis:[]},financiamento:{saldo_devedor:0,parcela:0,meses_restantes:0}};
+var MES_SELECIONADO = proximoMes();
 var filtroAtivo = mesAtual();
 var chartDonut = null, chartLinha = null, chartHist = null;
 var editandoId = null;
@@ -603,14 +609,20 @@ var editandoId = null;
 var CAT_CORES = ['#00e5a0','#38b4ff','#ffc247','#ff3d5a','#b197fc','#ff8c42','#06d6a0','#118ab2','#ffd166','#ef476f','#a8dadc','#457b9d','#e9c46a'];
 
 function mesAtual(){return new Date().toISOString().slice(0,7)}
+function proximoMes(){
+  var d = new Date();
+  d.setMonth(d.getMonth()+1);
+  return d.toISOString().slice(0,7);
+}
 function brl(v){return 'R$\u00a0'+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
 document.addEventListener('DOMContentLoaded',function(){
-  var m = mesAtual();
-  document.getElementById('hdr-mes').textContent = new Date().toLocaleDateString('pt-BR',{month:'short',year:'numeric'}).toUpperCase();
-  document.getElementById('d-mes').value = m;
-  document.getElementById('filtro-mes').value = m;
+  MES_SELECIONADO = proximoMes();
+  var parts = MES_SELECIONADO.split('-');
+  document.getElementById('hdr-mes').textContent = new Date(parts[0],parts[1]-1).toLocaleDateString('pt-BR',{month:'short',year:'numeric'}).toUpperCase();
+  document.getElementById('d-mes').value = MES_SELECIONADO;
+  document.getElementById('filtro-mes').value = MES_SELECIONADO;
   carregarDados();
 });
 
@@ -625,7 +637,32 @@ async function carregarDados(){
   }catch(e){toast('Erro ao carregar dados','err')}
 }
 
+function populateMesSeletor(){
+  var sel = document.getElementById('mes-seletor');
+  var meses = Object.keys(D.despesas).sort().reverse();
+  var prox = proximoMes();
+  // ensure proximo mes is always first option
+  var all = [prox];
+  meses.forEach(function(m){ if(m !== prox) all.push(m); });
+  sel.innerHTML = all.map(function(m){
+    var parts = m.split('-');
+    var nome = new Date(parts[0], parts[1]-1).toLocaleDateString('pt-BR',{month:'short',year:'2-digit'}).toUpperCase();
+    var label = m === prox ? nome+' (proximo)' : nome;
+    return '<option value="'+m+'"'+(m===MES_SELECIONADO?' selected':'')+'>'+label+'</option>';
+  }).join('');
+}
+
+function trocarMes(mes){
+  MES_SELECIONADO = mes;
+  var parts = mes.split('-');
+  document.getElementById('hdr-mes').textContent = new Date(parts[0],parts[1]-1).toLocaleDateString('pt-BR',{month:'short',year:'numeric'}).toUpperCase();
+  renderResumo();
+  renderDespesasFixas();
+  renderTotalGeral();
+}
+
 function renderTudo(){
+  populateMesSeletor();
   renderFinanciamento();
   renderResumo();
   renderDespesasFixas();
@@ -654,7 +691,7 @@ function aba(id,btn){
 // RESUMO
 function renderResumo(){
   var renda = (D.salarios.A||0)+(D.salarios.B||0);
-  var m = mesAtual();
+  var m = MES_SELECIONADO;
   var desps = D.despesas[m]||[];
   var total = desps.reduce(function(s,d){return s+d.valor},0);
   var saldo = renda-total;
@@ -855,7 +892,7 @@ function filtrar(){
 
 function renderDespesasFixas(){
   var lista = document.getElementById('desp-lista');
-  var desps = D.despesas[filtroAtivo]||[];
+  var desps = D.despesas[MES_SELECIONADO]||[];
   var total = desps.reduce(function(s,d){return s+d.valor},0);
   document.getElementById('df-total').textContent = brl(total);
   if(!desps.length){
@@ -946,7 +983,7 @@ function renderVariaveis(){
 }
 
 function renderTotalGeral(){
-  var m = filtroAtivo;
+  var m = MES_SELECIONADO;
   var fixas = (D.despesas[m]||[]).reduce(function(s,d){return s+d.valor},0);
   var vars = (D.orcamento.variaveis||[]).reduce(function(s,v){return s+v.gasto},0);
   var total = fixas+vars;
