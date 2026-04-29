@@ -1216,7 +1216,7 @@
       {
         "id": "2026-04-Financiamento Imóvel-0",
         "desc": "Financiamento Imóvel",
-        "valor": 2405.0,
+        "valor": 2401.0,
         "cat": "Financiamento Imóvel",
         "mes": "2026-04"
       },
@@ -2007,5 +2007,10 @@
         "mes": "2026-12"
       }
     ]
+  },
+  "financiamento": {
+    "saldo_devedor": 0.0,
+    "parcela": 0.0,
+    "meses_restantes": 0
   }
 }

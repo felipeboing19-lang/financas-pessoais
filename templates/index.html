@@ -100,11 +100,11 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
 .tag{display:inline-block;background:var(--card2);border:1px solid var(--borda);border-radius:99px;padding:2px 8px;font-size:10px;color:var(--texto2);font-weight:600;letter-spacing:.3px}
 
 /* CAT GRID */
-.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:4px}
-.cat-item{background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:10px 12px;display:flex;align-items:center;gap:8px}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:4px}
+.cat-item{background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;gap:10px}
 .cat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.cat-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cat-pct{font-size:11px;color:var(--texto3)}
+.cat-name{font-size:13px;font-weight:600;white-space:normal;word-break:break-word;line-height:1.3}
+.cat-pct{font-size:11px;color:var(--texto3);margin-top:2px}
 
 /* FORM */
 .form-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:24px;margin-bottom:18px}
@@ -207,6 +207,29 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
 /* EMPTY */
 .empty{text-align:center;padding:32px 20px;color:var(--texto3);font-size:13px}
 
+
+/* FINANCIAMENTO CARD */
+.fin-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:20px 22px;margin-bottom:14px}
+.fin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.fin-title{font-size:11px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:1px}
+.fin-edit-btn{font-size:11px;font-weight:700;padding:5px 12px;border:1px solid var(--borda2);border-radius:99px;background:none;color:var(--texto2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.fin-edit-btn:hover{border-color:var(--verde);color:var(--verde)}
+.fin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:500px){.fin-grid{grid-template-columns:1fr 1fr}}
+.fin-kv .k{font-size:10px;color:var(--texto3);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:5px}
+.fin-kv .v{font-family:'Fraunces',serif;font-size:20px}
+.fin-bar-wrap{margin-top:14px}
+.fin-bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--texto3);margin-bottom:6px}
+.fin-bar-track{background:var(--borda);border-radius:99px;height:6px;overflow:hidden}
+.fin-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--roxo),var(--azul));transition:width .6s}
+.fin-form{display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--borda);display:none}
+.fin-form.open{display:block}
+.fin-form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+@media(max-width:500px){.fin-form-grid{grid-template-columns:1fr}}
+.fin-form input{background:var(--bg2);border:1px solid var(--borda2);border-radius:var(--rs);padding:10px 12px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;width:100%;transition:border-color .2s}
+.fin-form input:focus{border-color:var(--roxo)}
+.fin-form label{display:block;font-size:10px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px}
+
 /* MODAL GASTO */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-bg.open{display:flex}
@@ -287,6 +310,55 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
     <div class="poup-right">
       <input class="poup-input" type="number" id="poup-input" placeholder="Ex: 5000.00" step="0.01" min="0">
       <button class="btn-poup" onclick="salvarPoupanca()">Atualizar</button>
+    </div>
+  </div>
+
+
+  <!-- FINANCIAMENTO -->
+  <div class="fin-card">
+    <div class="fin-header">
+      <span class="fin-title">Financiamento Apartamento</span>
+      <button class="fin-edit-btn" onclick="toggleFinForm()">Editar</button>
+    </div>
+    <div class="fin-grid">
+      <div class="fin-kv">
+        <div class="k">Saldo Devedor</div>
+        <div class="v" id="fin-saldo" style="color:var(--verm)">R$ 0,00</div>
+      </div>
+      <div class="fin-kv">
+        <div class="k">Parcela Atual</div>
+        <div class="v" id="fin-parcela" style="color:var(--amar)">R$ 0,00</div>
+      </div>
+      <div class="fin-kv">
+        <div class="k">Meses Restantes</div>
+        <div class="v" id="fin-meses" style="color:var(--roxo)">0</div>
+      </div>
+    </div>
+    <div class="fin-bar-wrap">
+      <div class="fin-bar-label">
+        <span>Progresso do financiamento</span>
+        <span id="fin-pct">0%</span>
+      </div>
+      <div class="fin-bar-track">
+        <div class="fin-bar-fill" id="fin-bar" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="fin-form" id="fin-form">
+      <div class="fin-form-grid">
+        <div>
+          <label>Saldo Devedor R$</label>
+          <input type="number" id="fin-input-saldo" placeholder="Ex: 214000.00" step="0.01">
+        </div>
+        <div>
+          <label>Parcela Atual R$</label>
+          <input type="number" id="fin-input-parcela" placeholder="Ex: 2405.00" step="0.01">
+        </div>
+        <div>
+          <label>Meses Restantes</label>
+          <input type="number" id="fin-input-meses" placeholder="Ex: 228" step="1">
+        </div>
+      </div>
+      <button class="btn btn-verde" style="max-width:200px;padding:11px" onclick="salvarFinanciamento()">Salvar</button>
     </div>
   </div>
 
@@ -481,6 +553,28 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
 
 </main>
 
+
+<!-- MODAL EDITAR DESPESA -->
+<div class="modal-bg" id="modal-edit-bg">
+  <div class="modal">
+    <div class="modal-title">Editar Despesa</div>
+    <div class="modal-field">
+      <label>Descricao</label>
+      <input type="text" id="edit-desc" placeholder="Descricao">
+      <label>Valor R$</label>
+      <input type="number" id="edit-valor" placeholder="0,00" step="0.01">
+      <label>Categoria</label>
+      <input type="text" id="edit-cat" placeholder="Categoria">
+      <label>Mes (AAAA-MM)</label>
+      <input type="month" id="edit-mes">
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="fecharModalEdit()">Cancelar</button>
+      <button class="btn btn-verde" onclick="confirmarEdicaoDespesa()">Salvar</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL ATUALIZAR GASTO -->
 <div class="modal-bg" id="modal-bg">
   <div class="modal">
@@ -501,7 +595,7 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
 <div class="toast" id="toast"></div>
 
 <script>
-var D = {salarios:{A:0,B:0},despesas:{},poupanca:0,orcamento:{total:0,variaveis:[]}};
+var D = {salarios:{A:0,B:0},despesas:{},poupanca:0,orcamento:{total:0,variaveis:[]},financiamento:{saldo_devedor:0,parcela:0,meses_restantes:0}};
 var filtroAtivo = mesAtual();
 var chartDonut = null, chartLinha = null, chartHist = null;
 var editandoId = null;
@@ -525,12 +619,14 @@ async function carregarDados(){
     var r = await fetch('/api/dados');
     D = await r.json();
     if(!D.orcamento) D.orcamento = {total:0,variaveis:[]};
+    if(!D.financiamento) D.financiamento = {saldo_devedor:0,parcela:0,meses_restantes:0};
     if(!D.orcamento.variaveis) D.orcamento.variaveis = [];
     renderTudo();
   }catch(e){toast('Erro ao carregar dados','err')}
 }
 
 function renderTudo(){
+  renderFinanciamento();
   renderResumo();
   renderDespesasFixas();
   renderVariaveis();
@@ -614,6 +710,51 @@ function renderCatGrid(desps,total){
   }).join('');
 }
 
+
+// FINANCIAMENTO
+function toggleFinForm(){
+  var f = document.getElementById('fin-form');
+  f.classList.toggle('open');
+  if(f.classList.contains('open')){
+    var fin = D.financiamento||{};
+    document.getElementById('fin-input-saldo').value   = fin.saldo_devedor||'';
+    document.getElementById('fin-input-parcela').value = fin.parcela||'';
+    document.getElementById('fin-input-meses').value   = fin.meses_restantes||'';
+  }
+}
+
+function renderFinanciamento(){
+  var fin = D.financiamento||{saldo_devedor:0,parcela:0,meses_restantes:0};
+  document.getElementById('fin-saldo').textContent   = brl(fin.saldo_devedor||0);
+  document.getElementById('fin-parcela').textContent = brl(fin.parcela||0);
+  document.getElementById('fin-meses').textContent   = (fin.meses_restantes||0)+' meses';
+
+  // calcula progresso estimado (assumindo 360 meses = 30 anos como base)
+  var total_estimado = (fin.meses_restantes||0) + 60; // aproximado
+  var pago = total_estimado > 0 ? Math.min(((total_estimado-(fin.meses_restantes||0))/total_estimado)*100,100) : 0;
+  document.getElementById('fin-pct').textContent = pago.toFixed(0)+'% pago';
+  document.getElementById('fin-bar').style.width = pago+'%';
+}
+
+async function salvarFinanciamento(){
+  var saldo   = parseFloat(document.getElementById('fin-input-saldo').value)||0;
+  var parcela = parseFloat(document.getElementById('fin-input-parcela').value)||0;
+  var meses   = parseInt(document.getElementById('fin-input-meses').value)||0;
+  var r = await fetch('/api/financiamento',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({saldo_devedor:saldo,parcela:parcela,meses_restantes:meses})
+  });
+  var j = await r.json();
+  if(j.ok){
+    D.financiamento = {saldo_devedor:saldo,parcela:parcela,meses_restantes:meses};
+    renderFinanciamento();
+    document.getElementById('fin-form').classList.remove('open');
+    toast('Financiamento atualizado!','ok');
+  }
+}
+
+
 // POUPANCA
 async function salvarPoupanca(){
   var val = parseFloat(document.getElementById('poup-input').value)||0;
@@ -674,6 +815,31 @@ async function adicionarDespesa(){
   }finally{btn.innerHTML='Adicionar';btn.disabled=false}
 }
 
+function editarDesp(btn){
+  var mes = btn.getAttribute('data-mes');
+  var id  = btn.getAttribute('data-id');
+  var desps = D.despesas[mes]||[];
+  var d = null;
+  for(var i=0;i<desps.length;i++){if(desps[i].id===id){d=desps[i];break}}
+  if(!d)return;
+  _editMes=mes; _editId=id;
+  document.getElementById('edit-desc').value  = d.desc;
+  document.getElementById('edit-valor').value = d.valor;
+  document.getElementById('edit-cat').value   = d.cat;
+  document.getElementById('edit-mes').value   = d.mes;
+  document.getElementById('modal-edit-bg').classList.add('open');
+}
+
+async function deletarDesp(btn){
+  var mes = btn.getAttribute('data-mes');
+  var id  = btn.getAttribute('data-id');
+  if(!confirm('Remover esta despesa?'))return;
+  await fetch('/api/despesas/'+mes+'/'+encodeURIComponent(id),{method:'DELETE'});
+  await carregarDados();
+  filtrar();
+  toast('Removida','ok');
+}
+
 async function removerDespesa(mes,id){
   if(!confirm('Remover esta despesa?'))return;
   await fetch('/api/despesas/'+mes+'/'+encodeURIComponent(id),{method:'DELETE'});
@@ -696,7 +862,11 @@ function renderDespesasFixas(){
     lista.innerHTML='<div class="empty">Nenhuma despesa.</div>';return;
   }
   lista.innerHTML = desps.map(function(d,i){
-    return '<div class="df-item" style="animation-delay:'+i*.04+'s"><div style="flex:1;min-width:0"><div class="df-desc">'+esc(d.desc)+'</div><div class="df-cat">'+esc(d.cat)+'</div></div><div class="df-val">'+brl(d.valor)+'</div><button class="btn-del-sm" onclick="removerDespesa(\''+d.mes+'\',\''+d.id+'\')">X</button></div>';
+    var safeId=d.id.replace(/"/g,'');
+    return '<div class="df-item" style="animation-delay:'+i*.04+'s"><div style="flex:1;min-width:0"><div class="df-desc">'+esc(d.desc)+'</div><div class="df-cat">'+esc(d.cat)+'</div></div><div class="df-val">'+brl(d.valor)+'</div>'
+      +'<button class="btn-del-sm" style="color:var(--azul);border-color:var(--azul);margin-right:4px" data-mes="'+d.mes+'" data-id="'+safeId+'" onclick="editarDesp(this)">E</button>'
+      +'<button class="btn-del-sm" data-mes="'+d.mes+'" data-id="'+safeId+'" onclick="deletarDesp(this)">X</button>'
+      +'</div>';
   }).join('');
 }
 
@@ -872,6 +1042,73 @@ function renderChartHist(){
   ]},options:{responsive:true,maintainAspectRatio:false,
     plugins:{legend:{labels:{color:'#8b93b5',font:{size:11,family:'DM Sans'}}},tooltip:{backgroundColor:'#161d30',borderColor:'#1c2438',borderWidth:1,titleColor:'#edf0fb',bodyColor:'#8b93b5',callbacks:{label:function(c){return ' '+brl(c.parsed.y)}}}},
     scales:{x:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11}}},y:{grid:{color:'#1c2438'},ticks:{color:'#4a5270',font:{size:11},callback:function(v){return 'R$'+v.toLocaleString('pt-BR')}}}}}});
+}
+
+
+// EDITAR DESPESA
+var editDespesaMes = null;
+var editDespesaId = null;
+
+function abrirModalEdit(mes, id, desc, valor, cat) {
+  editDespesaMes = mes;
+  editDespesaId = id;
+  document.getElementById('edit-desc').value = desc;
+  document.getElementById('edit-valor').value = valor;
+  document.getElementById('edit-cat').value = cat;
+  document.getElementById('edit-mes').value = mes;
+  document.getElementById('modal-edit-bg').classList.add('open');
+}
+
+function fecharModalEdit() {
+  editDespesaMes = null;
+  editDespesaId = null;
+  document.getElementById('modal-edit-bg').classList.remove('open');
+}
+
+async function confirmarEdicaoDespesa() {
+  if(!editDespesaMes || !editDespesaId) return;
+  var desc  = document.getElementById('edit-desc').value.trim();
+  var valor = parseFloat(document.getElementById('edit-valor').value)||0;
+  var cat   = document.getElementById('edit-cat').value.trim()||'Outros';
+  var mes   = document.getElementById('edit-mes').value||editDespesaMes;
+  var r = await fetch('/api/despesas/'+editDespesaMes+'/'+encodeURIComponent(editDespesaId),{
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({desc:desc,valor:valor,cat:cat,mes:mes})
+  });
+  var j = await r.json();
+  if(j.ok){await carregarDados();fecharModalEdit();toast('Despesa atualizada!','ok')}
+}
+
+
+var _editMes=null,_editId=null;
+function abrirModalEditDesp(mes,id,btn){
+  _editMes=mes;_editId=id;
+  var desps=D.despesas[mes]||[];
+  var d=desps.find(function(x){return x.id===id});
+  if(!d)return;
+  document.getElementById('edit-desc').value=d.desc;
+  document.getElementById('edit-valor').value=d.valor;
+  document.getElementById('edit-cat').value=d.cat;
+  document.getElementById('edit-mes').value=d.mes;
+  document.getElementById('modal-edit-bg').classList.add('open');
+}
+function fecharModalEdit(){
+  _editMes=null;_editId=null;
+  document.getElementById('modal-edit-bg').classList.remove('open');
+}
+async function confirmarEdicaoDespesa(){
+  if(!_editMes||!_editId)return;
+  var desc=document.getElementById('edit-desc').value.trim();
+  var valor=parseFloat(document.getElementById('edit-valor').value)||0;
+  var cat=document.getElementById('edit-cat').value.trim()||'Outros';
+  var mes=document.getElementById('edit-mes').value||_editMes;
+  var r=await fetch('/api/despesas/'+_editMes+'/'+encodeURIComponent(_editId),{
+    method:'PUT',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({desc:desc,valor:valor,cat:cat,mes:mes})
+  });
+  var j=await r.json();
+  if(j.ok){await carregarDados();fecharModalEdit();filtrar();toast('Despesa atualizada!','ok')}
 }
 
 // TOAST

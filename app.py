@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 USUARIO = os.environ.get("APP_USER", "felipe.boing")
 SENHA   = os.environ.get("APP_PASS", "24Hsobvqi@")
-app.secret_key = os.environ.get("SECRET_KEY", "chave-super-secreta-mude-isso")
+app.secret_key = os.environ.get("SECRET_KEY", "obvobvobv24Hsobvq24Hsobvq24Hsobvqobvobvob24Hsobvqvobvobvobvobvobvobvobvobvobv")
 DATA_FILE = os.environ.get("DATA_PATH", "financas_data.json")
 
 def carregar():
@@ -23,11 +23,13 @@ def carregar():
         "salarios": {"A": 0.0, "B": 0.0},
         "despesas": {},
         "poupanca": 0.0,
-        "orcamento": {"total": 0.0, "variaveis": []}
+        "orcamento": {"total": 0.0, "variaveis": []}, "financiamento": {"saldo_devedor": 0.0, "parcela": 0.0, "meses_restantes": 0}
     }
 
 def salvar(dados):
     # garantir campos novos em dados antigos
+    if "financiamento" not in dados:
+        dados["financiamento"] = {"saldo_devedor": 0.0, "parcela": 0.0, "meses_restantes": 0}
     if "orcamento" not in dados:
         dados["orcamento"] = {"total": 0.0, "variaveis": []}
     with open(DATA_FILE, "w", encoding="utf-8") as f:
@@ -173,6 +175,34 @@ def adicionar_despesa():
     except Exception as e:
         return jsonify({"ok": False, "erro": str(e)}), 400
 
+
+@app.route("/api/despesas/<mes>/<path:id>", methods=["PUT"])
+@login_required
+def editar_despesa(mes, id):
+    body  = request.json
+    dados = carregar()
+    try:
+        lista = dados.get("despesas", {}).get(mes, [])
+        novo_mes = body.get("mes", mes)
+        for d in lista:
+            if d["id"] == id:
+                d["desc"]  = body.get("desc",  d["desc"])
+                d["valor"] = float(body.get("valor", d["valor"]))
+                d["cat"]   = body.get("cat",   d["cat"])
+                if novo_mes != mes:
+                    dados["despesas"][mes] = [x for x in lista if x["id"] != id]
+                    if not dados["despesas"][mes]:
+                        del dados["despesas"][mes]
+                    if novo_mes not in dados["despesas"]:
+                        dados["despesas"][novo_mes] = []
+                    d["mes"] = novo_mes
+                    dados["despesas"][novo_mes].append(d)
+                break
+        salvar(dados)
+        return jsonify({"ok": True})
+    except Exception as e:
+        return jsonify({"ok": False, "erro": str(e)}), 400
+
 @app.route("/api/despesas/<mes>/<path:id>", methods=["DELETE"])
 @login_required
 def remover_despesa(mes, id):
@@ -183,6 +213,23 @@ def remover_despesa(mes, id):
         del dados["despesas"][mes]
     salvar(dados)
     return jsonify({"ok": True})
+
+
+@app.route("/api/financiamento", methods=["POST"])
+@login_required
+def salvar_financiamento():
+    body  = request.json
+    dados = carregar()
+    try:
+        dados["financiamento"] = {
+            "saldo_devedor":  float(body.get("saldo_devedor", 0)),
+            "parcela":        float(body.get("parcela", 0)),
+            "meses_restantes": int(body.get("meses_restantes", 0)),
+        }
+        salvar(dados)
+        return jsonify({"ok": True})
+    except Exception as e:
+        return jsonify({"ok": False, "erro": str(e)}), 400
 
 if __name__ == "__main__":
     import socket
