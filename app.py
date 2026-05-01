@@ -14,9 +14,12 @@ from pymongo import MongoClient
 app = Flask(__name__)
 
 # ─── CONFIG ──────────────────────────────────────────────────────────────────
-USUARIO    = os.environ.get("APP_USER",   "felipe.boing")
-SENHA      = os.environ.get("APP_PASS",   "24Hsobvqi@")
+USUARIO    = os.environ.get("APP_USER",   "felipe")
+SENHA      = os.environ.get("APP_PASS",   "minhasenha123")
 app.secret_key = os.environ.get("SECRET_KEY", "chave-super-secreta-mude-isso")
+app.config["PERMANENT_SESSION_LIFETIME"] = 60 * 60 * 24 * 30  # 30 dias
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["SESSION_COOKIE_SECURE"] = False
 
 MONGO_URI  = os.environ.get("MONGO_URI",
     "mongodb+srv://felipefinancas:dyB0N3tpgSaB4GF5@cluster0.rfrlqjc.mongodb.net/?appName=Cluster0"
@@ -52,6 +55,9 @@ def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if not session.get("logado"):
+            # Return JSON 401 for API routes, redirect for page routes
+            if request.path.startswith("/api/"):
+                return jsonify({"ok": False, "erro": "nao autenticado"}), 401
             return redirect(url_for("login"))
         return f(*args, **kwargs)
     return decorated
@@ -63,6 +69,7 @@ def login():
         u = request.form.get("usuario", "").strip()
         s = request.form.get("senha",   "").strip()
         if u == USUARIO and s == SENHA:
+            session.permanent = True
             session["logado"] = True
             return redirect(url_for("index"))
         erro = "Usuario ou senha incorretos."
