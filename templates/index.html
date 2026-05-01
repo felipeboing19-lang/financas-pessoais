@@ -408,6 +408,16 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
     </div>
   </div>
 
+  <!-- FATURA PAGA -->
+  <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+    <button class="btn btn-verde" style="flex:1;min-width:160px;padding:12px" onclick="faturaConfirm()" id="btn-fatura">
+      Fatura do Mes Paga
+    </button>
+    <button class="btn btn-ghost" style="flex:1;min-width:160px;padding:12px" onclick="reverterMes()">
+      Reverter Mes
+    </button>
+  </div>
+
   <div class="charts-grid">
     <div class="chart-card">
       <div class="chart-title">Gastos por categoria</div>
@@ -462,6 +472,16 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
         <button class="btn btn-verde btn-sm" onclick="salvarOrcamento()">Definir</button>
       </div>
     </div>
+  </div>
+
+  <!-- FATURA PAGA DESPESAS -->
+  <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+    <button class="btn btn-verde" style="flex:1;min-width:160px;padding:12px" onclick="faturaConfirm()" id="btn-fatura">
+      Fatura do Mes Paga
+    </button>
+    <button class="btn btn-ghost" style="flex:1;min-width:160px;padding:12px" onclick="reverterMes()">
+      Reverter Mes
+    </button>
   </div>
 
   <!-- 2 colunas -->
@@ -723,8 +743,19 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
       <input type="number" id="edit-valor" placeholder="0,00" step="0.01">
       <label>Categoria</label>
       <input type="text" id="edit-cat" placeholder="Categoria">
-      <label>Mes (AAAA-MM)</label>
+      <label>Mes</label>
       <input type="month" id="edit-mes">
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--borda2);border-radius:var(--rs);padding:12px;margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Aplicar alteracao em:</div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--texto2);cursor:pointer;margin-bottom:8px">
+        <input type="radio" name="edit-scope" value="single" checked style="accent-color:var(--verde);width:16px;height:16px">
+        Somente este mes
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--texto2);cursor:pointer">
+        <input type="radio" name="edit-scope" value="future" style="accent-color:var(--verde);width:16px;height:16px">
+        Este mes e todos os proximos
+      </label>
     </div>
     <div class="modal-btns">
       <button class="btn btn-ghost" onclick="fecharModalEdit()">Cancelar</button>
@@ -753,6 +784,14 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
 <div class="toast" id="toast"></div>
 
 <script>
+// Global fetch wrapper - redirect to login on 401
+var _origFetch = window.fetch;
+window.fetch = async function(){
+  var r = await _origFetch.apply(this, arguments);
+  if(r.status === 401){ window.location.href = '/login'; return r; }
+  return r;
+};
+
 var D = {salarios:{A:0,B:0},despesas:{},poupanca:0,orcamento:{total:0,variaveis:[]},financiamento:{saldo_devedor:0,parcela:0,meses_restantes:0}};
 var MES_SELECIONADO = proximoMes();
 var filtroAtivo = mesAtual();
@@ -764,6 +803,11 @@ var CAT_CORES = ['#00e5a0','#38b4ff','#ffc247','#ff3d5a','#b197fc','#ff8c42','#0
 function mesAtual(){return new Date().toISOString().slice(0,7)}
 function proximoMes(){
   var d = new Date();
+  // Before day 10: show current month
+  // From day 10 onwards: show next month (fatura already closed)
+  if(d.getDate() < 10){
+    return d.toISOString().slice(0,7);
+  }
   d.setMonth(d.getMonth()+1);
   return d.toISOString().slice(0,7);
 }
@@ -774,6 +818,7 @@ document.addEventListener('DOMContentLoaded',function(){
   MES_SELECIONADO = proximoMes();
   var parts = MES_SELECIONADO.split('-');
   document.getElementById('hdr-mes').textContent = new Date(parts[0],parts[1]-1).toLocaleDateString('pt-BR',{month:'short',year:'numeric'}).toUpperCase();
+  filtroAtivo = MES_SELECIONADO;
   document.getElementById('d-mes').value = MES_SELECIONADO;
   document.getElementById('filtro-mes').value = MES_SELECIONADO;
   var simIni = document.getElementById('sim-inicio');
@@ -809,6 +854,12 @@ function populateMesSeletor(){
 
 function trocarMes(mes){
   MES_SELECIONADO = mes;
+  filtroAtivo = mes;
+
+  // sync filtro-mes input in despesas tab
+  var filtroEl = document.getElementById('filtro-mes');
+  if(filtroEl) filtroEl.value = mes;
+
   var parts = mes.split('-');
   document.getElementById('hdr-mes').textContent = new Date(parts[0],parts[1]-1).toLocaleDateString('pt-BR',{month:'short',year:'numeric'}).toUpperCase();
   renderFinanciamento();
@@ -822,8 +873,23 @@ function trocarMes(mes){
   }
 }
 
+function atualizarBotaoFatura(){
+  var dia = new Date().getDate();
+  var btns = document.querySelectorAll('#btn-fatura');
+  btns.forEach(function(btn){
+    if(dia < 10){
+      btn.style.opacity = '0.5';
+      btn.title = 'Disponivel a partir do dia 10 (faltam '+(10-dia)+' dia(s))';
+    } else {
+      btn.style.opacity = '1';
+      btn.title = '';
+    }
+  });
+}
+
 function renderTudo(){
   populateMesSeletor();
+  atualizarBotaoFatura();
   renderFinanciamento();
   renderResumo();
   renderDespesasFixas();
@@ -1306,6 +1372,7 @@ async function adicionarDespesa(){
   }finally{btn.innerHTML='Adicionar';btn.disabled=false}
 }
 
+var _editDesc = '', _editCat = '';
 function editarDesp(btn){
   var mes = btn.getAttribute('data-mes');
   var id  = btn.getAttribute('data-id');
@@ -1314,10 +1381,14 @@ function editarDesp(btn){
   for(var i=0;i<desps.length;i++){if(desps[i].id===id){d=desps[i];break}}
   if(!d)return;
   _editMes=mes; _editId=id;
+  _editDesc=d.desc; _editCat=d.cat; // store originals for propagation
   document.getElementById('edit-desc').value  = d.desc;
   document.getElementById('edit-valor').value = d.valor;
   document.getElementById('edit-cat').value   = d.cat;
   document.getElementById('edit-mes').value   = d.mes;
+  // reset radio
+  var radio = document.querySelector('input[name="edit-scope"][value="single"]');
+  if(radio) radio.checked = true;
   document.getElementById('modal-edit-bg').classList.add('open');
 }
 
@@ -1339,7 +1410,17 @@ async function removerDespesa(mes,id){
 }
 
 function filtrar(){
-  filtroAtivo = document.getElementById('filtro-mes').value||mesAtual();
+  var m = document.getElementById('filtro-mes').value||mesAtual();
+  MES_SELECIONADO = m;
+  filtroAtivo = m;
+
+  // sync header dropdown
+  document.getElementById('mes-seletor').value = m;
+  var p = m.split('-');
+  document.getElementById('hdr-mes').textContent = new Date(p[0],p[1]-1).toLocaleDateString('pt-BR',{month:'short',year:'numeric'}).toUpperCase();
+
+  renderFinanciamento();
+  renderResumo();
   renderDespesasFixas();
   renderTotalGeral();
 }
@@ -1536,6 +1617,73 @@ function renderChartHist(){
 }
 
 
+
+// FATURA PAGA
+function faturaConfirm(){
+  var hoje = new Date();
+  var dia  = hoje.getDate();
+
+  if(dia < 10){
+    var faltam = 10 - dia;
+    toast('Disponivel a partir do dia 10. Faltam '+faltam+' dia(s).','err');
+    return;
+  }
+
+  var m = MES_SELECIONADO;
+  var parts = m.split('-');
+  var nome = new Date(parts[0],parts[1]-1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+  if(!confirm('Marcar fatura de '+nome+' como PAGA e avancar para o proximo mes?')) return;
+  
+  // save current mes to history for revert
+  var hist = JSON.parse(localStorage.getItem('mes_history')||'[]');
+  hist.push(MES_SELECIONADO);
+  if(hist.length > 10) hist = hist.slice(-10);
+  localStorage.setItem('mes_history', JSON.stringify(hist));
+
+  // advance to next month
+  var prox = proximoMesStr(MES_SELECIONADO);
+  MES_SELECIONADO = prox;
+
+  // update selector
+  populateMesSeletor();
+  document.getElementById('mes-seletor').value = MES_SELECIONADO;
+
+  // update header
+  var p = prox.split('-');
+  document.getElementById('hdr-mes').textContent = new Date(p[0],p[1]-1).toLocaleDateString('pt-BR',{month:'short',year:'numeric'}).toUpperCase();
+
+  // re-render everything
+  renderFinanciamento();
+  renderResumo();
+  renderDespesasFixas();
+  renderTotalGeral();
+
+  toast('Fatura paga! Mes avancado para '+new Date(p[0],p[1]-1).toLocaleDateString('pt-BR',{month:'long'}),'ok');
+}
+
+function reverterMes(){
+  var hist = JSON.parse(localStorage.getItem('mes_history')||'[]');
+  if(!hist.length){ toast('Nenhum mes para reverter','err'); return; }
+  
+  var anterior = hist.pop();
+  localStorage.setItem('mes_history', JSON.stringify(hist));
+
+  MES_SELECIONADO = anterior;
+  populateMesSeletor();
+  document.getElementById('mes-seletor').value = MES_SELECIONADO;
+
+  var p = anterior.split('-');
+  document.getElementById('hdr-mes').textContent = new Date(p[0],p[1]-1).toLocaleDateString('pt-BR',{month:'short',year:'numeric'}).toUpperCase();
+
+  renderFinanciamento();
+  renderResumo();
+  renderDespesasFixas();
+  renderTotalGeral();
+
+  toast('Revertido para '+new Date(p[0],p[1]-1).toLocaleDateString('pt-BR',{month:'long'}),'ok');
+}
+
+
 // EDITAR DESPESA
 var editDespesaMes = null;
 var editDespesaId = null;
@@ -1590,16 +1738,51 @@ function fecharModalEdit(){
 }
 async function confirmarEdicaoDespesa(){
   if(!_editMes||!_editId)return;
-  var desc=document.getElementById('edit-desc').value.trim();
-  var valor=parseFloat(document.getElementById('edit-valor').value)||0;
-  var cat=document.getElementById('edit-cat').value.trim()||'Outros';
-  var mes=document.getElementById('edit-mes').value||_editMes;
-  var r=await fetch('/api/despesas/'+_editMes+'/'+encodeURIComponent(_editId),{
+  var desc    = document.getElementById('edit-desc').value.trim();
+  var valor   = parseFloat(document.getElementById('edit-valor').value)||0;
+  var cat     = document.getElementById('edit-cat').value.trim()||'Outros';
+  var mes     = document.getElementById('edit-mes').value||_editMes;
+  var scopeEl = document.querySelector('input[name="edit-scope"]:checked');
+  var scope   = scopeEl ? scopeEl.value : 'single';
+
+  // 1. Always edit only the selected month/id
+  var r = await fetch('/api/despesas/'+_editMes+'/'+encodeURIComponent(_editId),{
     method:'PUT',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({desc:desc,valor:valor,cat:cat,mes:mes})
   });
-  var j=await r.json();
-  if(j.ok){await carregarDados();fecharModalEdit();filtrar();toast('Despesa atualizada!','ok')}
+  var j = await r.json();
+  if(!j.ok){ toast('Erro ao salvar','err'); return; }
+
+  // 2. Only propagate if explicitly chosen
+  if(scope === 'future'){
+    var meses = Object.keys(D.despesas).sort();
+    var proximos = meses.filter(function(m){ return m > _editMes; });
+    var count = 0;
+    for(var i=0; i<proximos.length; i++){
+      var m = proximos[i];
+      var lista = D.despesas[m]||[];
+      for(var k=0; k<lista.length; k++){
+        // match by EXACT same desc AND cat AND id different from current
+        if(lista[k].desc === _editDesc
+           && lista[k].cat  === _editCat
+           && lista[k].id   !== _editId){
+          await fetch('/api/despesas/'+m+'/'+encodeURIComponent(lista[k].id),{
+            method:'PUT',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({desc:desc,valor:valor,cat:cat,mes:m})
+          });
+          count++;
+          break;
+        }
+      }
+    }
+    toast('Atualizado em mais '+count+' mes(es) seguintes!','ok');
+  } else {
+    toast('Despesa atualizada!','ok');
+  }
+
+  await carregarDados();
+  fecharModalEdit();
+  filtrar();
 }
 
 // TOAST
