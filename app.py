@@ -14,8 +14,8 @@ from pymongo import MongoClient
 app = Flask(__name__)
 
 # ─── CONFIG ──────────────────────────────────────────────────────────────────
-USUARIO    = os.environ.get("APP_USER",   "felipe")
-SENHA      = os.environ.get("APP_PASS",   "minhasenha123")
+USUARIO    = os.environ.get("APP_USER",   "felipe.boing")
+SENHA      = os.environ.get("APP_PASS",   "24Hsobvqi@")
 app.secret_key = os.environ.get("SECRET_KEY", "chave-super-secreta-mude-isso")
 app.config["PERMANENT_SESSION_LIFETIME"] = 60 * 60 * 24 * 30  # 30 dias
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
