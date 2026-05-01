@@ -1,43 +1,53 @@
 """
-Financas Pessoais - Flask App com Login
-Instalar: pip install flask gunicorn
+Financas Pessoais - Flask App com MongoDB
+Instalar: pip install flask gunicorn pymongo
 Rodar:    python app.py
 """
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
-import json, os
-from datetime import datetime
 from functools import wraps
+from datetime import datetime
+import os
+
+# MongoDB
+from pymongo import MongoClient
 
 app = Flask(__name__)
 
-USUARIO = os.environ.get("APP_USER", "felipe.boing")
-SENHA   = os.environ.get("APP_PASS", "24Hsobvqi@")
-app.secret_key = os.environ.get("SECRET_KEY", "obvobvobv24Hsobvq24Hsobvq24Hsobvqobvobvob24Hsobvqvobvobvobvobvobvobvobvobvobv")
-DATA_FILE = os.environ.get("DATA_PATH", "financas_data.json")
+# ─── CONFIG ──────────────────────────────────────────────────────────────────
+USUARIO    = os.environ.get("APP_USER",   "felipe.boing")
+SENHA      = os.environ.get("APP_PASS",   "24Hsobvqi@")
+app.secret_key = os.environ.get("SECRET_KEY", "chave-super-secreta-mude-isso")
+
+MONGO_URI  = os.environ.get("MONGO_URI",
+    "mongodb+srv://felipefinancas:dyB0N3tpgSaB4GF5@cluster0.rfrlqjc.mongodb.net/?appName=Cluster0"
+)
+
+# ─── MONGODB ─────────────────────────────────────────────────────────────────
+client = MongoClient(MONGO_URI)
+db     = client["financas"]
+col    = db["dados"]
 
 def carregar():
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+    doc = col.find_one({"_id": "principal"})
+    if doc:
+        doc.pop("_id", None)
+        return doc
     return {
-        "salarios": {"A": 0.0, "B": 0.0},
-        "despesas": {},
-        "poupanca": 0.0,
-        "orcamento": {"total": 0.0, "variaveis": []}, "financiamento": {"saldo_devedor": 0.0, "parcela": 0.0, "meses_restantes": 0}
+        "salarios":      {"A": 0.0, "B": 0.0},
+        "despesas":      {},
+        "poupanca":      0.0,
+        "orcamento":     {"total": 0.0, "variaveis": []},
+        "financiamento": {"saldo_devedor": 0.0, "parcela": 0.0, "meses_restantes": 0}
     }
 
 def salvar(dados):
-    # garantir campos novos em dados antigos
-    if "financiamento" not in dados:
-        dados["financiamento"] = {"saldo_devedor": 0.0, "parcela": 0.0, "meses_restantes": 0}
-    if "orcamento" not in dados:
-        dados["orcamento"] = {"total": 0.0, "variaveis": []}
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(dados, f, ensure_ascii=False, indent=2)
+    dados["_id"] = "principal"
+    col.replace_one({"_id": "principal"}, dados, upsert=True)
 
 def mes_atual():
     return datetime.now().strftime("%Y-%m")
 
+# ─── AUTH ─────────────────────────────────────────────────────────────────────
 def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -51,7 +61,7 @@ def login():
     erro = None
     if request.method == "POST":
         u = request.form.get("usuario", "").strip()
-        s = request.form.get("senha", "").strip()
+        s = request.form.get("senha",   "").strip()
         if u == USUARIO and s == SENHA:
             session["logado"] = True
             return redirect(url_for("index"))
@@ -63,6 +73,7 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
+# ─── ROTAS ────────────────────────────────────────────────────────────────────
 @app.route("/")
 @login_required
 def index():
@@ -93,6 +104,22 @@ def salvar_poupanca():
     dados = carregar()
     try:
         dados["poupanca"] = float(body.get("valor", 0))
+        salvar(dados)
+        return jsonify({"ok": True})
+    except Exception as e:
+        return jsonify({"ok": False, "erro": str(e)}), 400
+
+@app.route("/api/financiamento", methods=["POST"])
+@login_required
+def salvar_financiamento():
+    body  = request.json
+    dados = carregar()
+    try:
+        dados["financiamento"] = {
+            "saldo_devedor":   float(body.get("saldo_devedor", 0)),
+            "parcela":         float(body.get("parcela", 0)),
+            "meses_restantes": int(body.get("meses_restantes", 0)),
+        }
         salvar(dados)
         return jsonify({"ok": True})
     except Exception as e:
@@ -175,14 +202,13 @@ def adicionar_despesa():
     except Exception as e:
         return jsonify({"ok": False, "erro": str(e)}), 400
 
-
 @app.route("/api/despesas/<mes>/<path:id>", methods=["PUT"])
 @login_required
 def editar_despesa(mes, id):
     body  = request.json
     dados = carregar()
     try:
-        lista = dados.get("despesas", {}).get(mes, [])
+        lista    = dados.get("despesas", {}).get(mes, [])
         novo_mes = body.get("mes", mes)
         for d in lista:
             if d["id"] == id:
@@ -214,23 +240,7 @@ def remover_despesa(mes, id):
     salvar(dados)
     return jsonify({"ok": True})
 
-
-@app.route("/api/financiamento", methods=["POST"])
-@login_required
-def salvar_financiamento():
-    body  = request.json
-    dados = carregar()
-    try:
-        dados["financiamento"] = {
-            "saldo_devedor":  float(body.get("saldo_devedor", 0)),
-            "parcela":        float(body.get("parcela", 0)),
-            "meses_restantes": int(body.get("meses_restantes", 0)),
-        }
-        salvar(dados)
-        return jsonify({"ok": True})
-    except Exception as e:
-        return jsonify({"ok": False, "erro": str(e)}), 400
-
+# ─── MAIN ─────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     import socket
     try:
