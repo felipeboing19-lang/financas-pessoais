@@ -1,3 +1,6 @@
 flask
 gunicorn
 pymongo
+pyTelegramBotAPI
+SpeechRecognition
+requests
