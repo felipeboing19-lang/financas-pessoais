@@ -406,6 +406,10 @@ body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;mi
       <span id="prog-gasto">R$ 0,00 gasto</span>
       <span id="prog-resto">R$ 0,00 restante</span>
     </div>
+    <div style="display:flex;gap:16px;margin-top:10px;flex-wrap:wrap">
+      <span style="font-size:12px;color:var(--texto3)">Fixas: <span id="prog-fixas" style="color:var(--texto2);font-weight:600">R$ 0,00</span></span>
+      <span style="font-size:12px;color:var(--texto3)">Variaveis: <span id="prog-var" style="color:var(--azul);font-weight:600">R$ 0,00</span></span>
+    </div>
   </div>
 
   <!-- FATURA PAGA -->
@@ -921,7 +925,10 @@ function renderResumo(){
   var renda = (D.salarios.A||0)+(D.salarios.B||0);
   var m = MES_SELECIONADO;
   var desps = D.despesas[m]||[];
-  var total = desps.reduce(function(s,d){return s+d.valor},0);
+  var total_fixas = desps.reduce(function(s,d){return s+d.valor},0);
+  var variaveis = (D.orcamento&&D.orcamento.variaveis)||[];
+  var total_var = variaveis.reduce(function(s,v){return s+v.gasto},0);
+  var total = total_fixas + total_var;
   var saldo = renda-total;
   var pct = renda>0?Math.min((total/renda)*100,100):0;
 
@@ -943,6 +950,8 @@ function renderResumo(){
   document.getElementById('prog-sub').textContent = brl(total)+' de '+brl(renda);
   document.getElementById('prog-gasto').textContent = brl(total)+' gasto';
   document.getElementById('prog-resto').textContent = brl(Math.max(saldo,0))+' restante';
+  document.getElementById('prog-fixas').textContent = brl(total_fixas);
+  document.getElementById('prog-var').textContent   = brl(total_var);
 
   var fill = document.getElementById('prog-fill');
   fill.style.width = pct+'%';
@@ -959,7 +968,21 @@ function renderResumo(){
       return '<div class="res-row" style="animation-delay:'+i*.04+'s"><div style="min-width:0;flex:1"><div class="res-desc">'+esc(d.desc)+'</div><div class="res-cat"><span class="tag">'+esc(d.cat)+'</span></div></div><div class="res-val">'+brl(d.valor)+'</div></div>';
     }).join('');
   }
-  renderCatGrid(desps,total);
+  // Add variaveis to res-lista
+  if(variaveis.length > 0){
+    var vRows = variaveis.map(function(v,i){
+      return '<div class="res-row" style="animation-delay:'+(desps.length+i)*.04+'s;border-left:2px solid var(--azul)">'
+        +'<div style="min-width:0;flex:1">'
+        +'<div class="res-desc">'+esc(v.nome)+'</div>'
+        +'<div class="res-cat"><span class="tag" style="color:var(--azul);border-color:var(--azul)">Variavel</span></div>'
+        +'</div>'
+        +'<div class="res-val" style="color:var(--azul)">'+brl(v.gasto)+'</div>'
+        +'</div>';
+    }).join('');
+    document.getElementById('res-lista').innerHTML += vRows;
+  }
+
+  renderCatGrid(desps,total_fixas);
   renderChartDonut();
   renderChartLinha();
 }
