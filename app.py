@@ -14,8 +14,8 @@ from pymongo import MongoClient
 app = Flask(__name__)
 
 # ─── CONFIG ──────────────────────────────────────────────────────────────────
-USUARIO    = os.environ.get("APP_USER",   "felipe.boing")
-SENHA      = os.environ.get("APP_PASS",   "24Hsobvqi@")
+USUARIO    = os.environ.get("APP_USER",   "felipe")
+SENHA      = os.environ.get("APP_PASS",   "minhasenha123")
 app.secret_key = os.environ.get("SECRET_KEY", "chave-super-secreta-mude-isso")
 app.config["PERMANENT_SESSION_LIFETIME"] = 60 * 60 * 24 * 30  # 30 dias
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
@@ -248,6 +248,14 @@ def remover_despesa(mes, id):
     return jsonify({"ok": True})
 
 # ─── MAIN ─────────────────────────────────────────────────────────────────────
+def iniciar_bot():
+    try:
+        import bot as telegram_bot
+        print("Bot Telegram iniciado!")
+        telegram_bot.bot.infinity_polling()
+    except Exception as e:
+        print(f"Bot nao iniciado: {e}")
+
 if __name__ == "__main__":
     import socket
     try:
@@ -260,3 +268,8 @@ if __name__ == "__main__":
     print(f"  Celular: http://{ip}:5000")
     print("="*52 + "\n")
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=False)
+else:
+    # Quando rodando via gunicorn no Render, inicia o bot em thread separada
+    import threading
+    t = threading.Thread(target=iniciar_bot, daemon=True)
+    t.start()
