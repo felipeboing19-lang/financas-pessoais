@@ -14,8 +14,8 @@ from pymongo import MongoClient
 app = Flask(__name__)
 
 # ─── CONFIG ──────────────────────────────────────────────────────────────────
-USUARIO    = os.environ.get("APP_USER",   "felipe")
-SENHA      = os.environ.get("APP_PASS",   "minhasenha123")
+USUARIO    = os.environ.get("APP_USER",   "1")
+SENHA      = os.environ.get("APP_PASS",   "1")
 app.secret_key = os.environ.get("SECRET_KEY", "chave-super-secreta-mude-isso")
 app.config["PERMANENT_SESSION_LIFETIME"] = 60 * 60 * 24 * 30  # 30 dias
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
@@ -71,7 +71,7 @@ def login():
         if u == USUARIO and s == SENHA:
             session.permanent = True
             session["logado"] = True
-            return redirect(url_for("index"))
+            return redirect(url_for("home"))
         erro = "Usuario ou senha incorretos."
     return render_template("login.html", erro=erro)
 
@@ -83,8 +83,53 @@ def logout():
 # ─── ROTAS ────────────────────────────────────────────────────────────────────
 @app.route("/")
 @login_required
+def home():
+    return render_template("home.html")
+
+@app.route("/financas")
+@login_required
 def index():
     return render_template("index.html")
+
+@app.route("/saude")
+@login_required
+def saude():
+    return render_template("saude.html")
+
+# ── SAUDE API ──────────────────────────────────────────────────────────────────
+@app.route("/api/saude/registros")
+@login_required
+def get_registros():
+    col_saude = client["financas"]["saude"]
+    registros = list(col_saude.find({}, {"_id": 0}).sort("data", -1).limit(90))
+    return jsonify(registros)
+
+@app.route("/api/saude/registro", methods=["POST"])
+@login_required
+def salvar_registro():
+    body = request.json
+    col_saude = client["financas"]["saude"]
+    try:
+        data = body.get("data") or datetime.now().strftime("%Y-%m-%d")
+        # upsert by date
+        col_saude.replace_one({"data": data}, {**body, "data": data}, upsert=True)
+        return jsonify({"ok": True})
+    except Exception as e:
+        return jsonify({"ok": False, "erro": str(e)}), 400
+
+@app.route("/api/saude/registro/<data>")
+@login_required
+def get_registro(data):
+    col_saude = client["financas"]["saude"]
+    reg = col_saude.find_one({"data": data}, {"_id": 0})
+    return jsonify(reg or {})
+
+@app.route("/api/saude/registro/<data>", methods=["DELETE"])
+@login_required
+def del_registro(data):
+    col_saude = client["financas"]["saude"]
+    col_saude.delete_one({"data": data})
+    return jsonify({"ok": True})
 
 @app.route("/api/dados")
 @login_required
@@ -249,12 +294,31 @@ def remover_despesa(mes, id):
 
 # ─── MAIN ─────────────────────────────────────────────────────────────────────
 def iniciar_bot():
+    import time
+    time.sleep(3)  # aguarda app subir
     try:
+        TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
+        if not TOKEN:
+            print("TELEGRAM_TOKEN nao configurado - bot nao iniciado")
+            return
+        import telebot
+        from pymongo import MongoClient
+        # importa o modulo bot
         import bot as telegram_bot
-        print("Bot Telegram iniciado!")
-        telegram_bot.bot.infinity_polling()
+        print("="*40)
+        print("Bot Telegram INICIADO com sucesso!")
+        print("="*40)
+        telegram_bot.bot.infinity_polling(none_stop=True, timeout=60)
     except Exception as e:
-        print(f"Bot nao iniciado: {e}")
+        print(f"ERRO ao iniciar bot: {e}")
+        import traceback
+        traceback.print_exc()
+
+# Inicia bot em thread tanto local quanto no Render
+import threading
+_bot_thread = threading.Thread(target=iniciar_bot, daemon=True)
+_bot_thread.start()
+print("Thread do bot iniciada!")
 
 if __name__ == "__main__":
     import socket
@@ -268,8 +332,3 @@ if __name__ == "__main__":
     print(f"  Celular: http://{ip}:5000")
     print("="*52 + "\n")
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=False)
-else:
-    # Quando rodando via gunicorn no Render, inicia o bot em thread separada
-    import threading
-    t = threading.Thread(target=iniciar_bot, daemon=True)
-    t.start()

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meus Apps</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  min-height:100vh;
+  background:#0a0b14;
+  font-family:'DM Sans',sans-serif;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px;
+  overflow:hidden;
+  position:relative;
+}
+
+/* Animated background */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(139,92,246,.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(236,72,153,.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(59,130,246,.1) 0%, transparent 60%);
+  animation:bgpulse 8s ease-in-out infinite alternate;
+}
+@keyframes bgpulse{
+  from{opacity:.7}
+  to{opacity:1}
+}
+
+/* Stars */
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+.star{
+  position:absolute;border-radius:50%;
+  background:white;animation:twinkle var(--d) ease-in-out infinite alternate;
+}
+@keyframes twinkle{from{opacity:.1}to{opacity:.8}}
+
+.wrap{position:relative;z-index:1;text-align:center;max-width:700px;width:100%}
+
+.logo{
+  font-family:'Fraunces',serif;
+  font-size:clamp(28px,6vw,52px);
+  background:linear-gradient(135deg,#c084fc,#f472b6,#818cf8,#38bdf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:8px;
+  letter-spacing:-.5px;
+}
+.sub{
+  font-size:clamp(13px,2vw,16px);
+  color:#6b7280;
+  margin-bottom:52px;
+  font-weight:300;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+}
+
+.card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:24px;
+  padding:36px 28px;
+  text-decoration:none;
+  display:block;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+}
+.card::before{
+  content:'';position:absolute;inset:0;
+  background:var(--glow);
+  opacity:0;transition:opacity .3s;
+  border-radius:24px;
+}
+.card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(255,255,255,.2);
+  box-shadow:0 24px 60px rgba(0,0,0,.4), var(--shadow);
+}
+.card:hover::before{opacity:1}
+
+.card-fin{
+  --glow:linear-gradient(135deg,rgba(0,229,160,.06),rgba(56,180,255,.06));
+  --shadow:0 0 40px rgba(0,229,160,.15);
+}
+.card-health{
+  --glow:linear-gradient(135deg,rgba(192,132,252,.08),rgba(244,114,182,.08));
+  --shadow:0 0 40px rgba(192,132,252,.2);
+}
+
+.card-icon{
+  font-size:48px;
+  margin-bottom:20px;
+  display:block;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,.3));
+}
+
+.card-title{
+  font-family:'Fraunces',serif;
+  font-size:22px;
+  color:#f1f5f9;
+  margin-bottom:8px;
+}
+
+.card-desc{
+  font-size:13px;
+  color:#6b7280;
+  line-height:1.6;
+  margin-bottom:24px;
+}
+
+.card-tags{
+  display:flex;flex-wrap:wrap;gap:6px;justify-content:center;
+  margin-bottom:24px;
+}
+.tag{
+  font-size:10px;font-weight:600;padding:4px 10px;border-radius:99px;
+  letter-spacing:.5px;
+}
+.tag-green{background:rgba(0,229,160,.12);color:#00e5a0;border:1px solid rgba(0,229,160,.2)}
+.tag-purple{background:rgba(192,132,252,.12);color:#c084fc;border:1px solid rgba(192,132,252,.2)}
+.tag-pink{background:rgba(244,114,182,.12);color:#f472b6;border:1px solid rgba(244,114,182,.2)}
+.tag-blue{background:rgba(56,180,255,.12);color:#38b4ff;border:1px solid rgba(56,180,255,.2)}
+
+.card-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 24px;border-radius:12px;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;
+  transition:all .2s;
+}
+.btn-green{background:linear-gradient(135deg,#00e5a0,#38b4ff);color:#051a11}
+.btn-purple{background:linear-gradient(135deg,#c084fc,#f472b6);color:#fff}
+
+.footer{
+  position:relative;z-index:1;
+  margin-top:40px;font-size:12px;color:#374151;
+}
+
+/* Unicorn emoji floating */
+.unicorn{
+  position:fixed;font-size:40px;
+  animation:float 6s ease-in-out infinite;
+  opacity:.15;z-index:0;
+  pointer-events:none;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0) rotate(-5deg)}
+  50%{transform:translateY(-20px) rotate(5deg)}
+}
+</style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="stars" id="stars"></div>
+
+<!-- Unicorns decorativos -->
+<div class="unicorn" style="top:5%;left:3%;animation-delay:0s">🦄</div>
+<div class="unicorn" style="top:10%;right:5%;animation-delay:2s;font-size:28px">✨</div>
+<div class="unicorn" style="bottom:10%;left:8%;animation-delay:1s;font-size:24px">💫</div>
+<div class="unicorn" style="bottom:5%;right:3%;animation-delay:3s">🌟</div>
+
+<div class="wrap">
+  <div class="logo">✨ Meus Apps</div>
+  <div class="sub">Escolha o app que deseja acessar</div>
+
+  <div class="cards">
+
+    <!-- App Financas -->
+    <a href="/financas" class="card card-fin">
+      <span class="card-icon">💰</span>
+      <div class="card-title">Finanças Pessoais</div>
+      <div class="card-desc">Controle completo de gastos, despesas fixas, orçamento e simulações de financiamento</div>
+      <div class="card-tags">
+        <span class="tag tag-green">Despesas</span>
+        <span class="tag tag-blue">Gráficos</span>
+        <span class="tag tag-green">Financiamento</span>
+        <span class="tag tag-blue">Bot Telegram</span>
+      </div>
+      <div class="card-btn btn-green">Acessar →</div>
+    </a>
+
+    <!-- App Saude -->
+    <a href="/saude" class="card card-health">
+      <span class="card-icon">🦄</span>
+      <div class="card-title">Monitoramento de Saúde</div>
+      <div class="card-desc">Registro diário de sintomas, sono, humor, medicamentos e correlações de saúde</div>
+      <div class="card-tags">
+        <span class="tag tag-purple">Sintomas</span>
+        <span class="tag tag-pink">Ciclo</span>
+        <span class="tag tag-purple">Medicamentos</span>
+        <span class="tag tag-pink">Correlações</span>
+      </div>
+      <div class="card-btn btn-purple">Acessar →</div>
+    </a>
+
+  </div>
+</div>
+
+<div class="footer">Felipe & Cristiane • 2026</div>
+
+<script>
+// Generate stars
+const stars = document.getElementById('stars');
+for(let i=0;i<80;i++){
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random()*2.5+0.5;
+  s.style.cssText = `
+    width:${size}px;height:${size}px;
+    left:${Math.random()*100}%;top:${Math.random()*100}%;
+    --d:${Math.random()*3+2}s;
+    animation-delay:${Math.random()*3}s;
+  `;
+  stars.appendChild(s);
+}
+</script>
+</body>
+</html>

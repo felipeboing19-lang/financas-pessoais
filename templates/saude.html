@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saude</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0b14;--bg2:#0f1020;--card:#131525;--card2:#181a2e;
+  --borda:#1e2040;--borda2:#2a2d55;
+  --p1:#c084fc;--p2:#f472b6;--p3:#818cf8;--p4:#38bdf8;
+  --verde:#00e5a0;--verm:#ff4d6d;--amar:#fbbf24;
+  --texto:#f1f5f9;--texto2:#94a3b8;--texto3:#475569;
+  --r:16px;--rs:10px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--texto);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 10% 10%,rgba(192,132,252,.12) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 90% 80%,rgba(244,114,182,.1) 0%,transparent 60%)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--borda2);border-radius:99px}
+.hdr{position:sticky;top:0;z-index:300;background:rgba(10,11,20,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--borda);height:60px;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.hdr-brand{display:flex;align-items:center;gap:10px}
+.hdr-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--p1),var(--p2));display:flex;align-items:center;justify-content:center;font-size:18px}
+.hdr-title{font-family:'Fraunces',serif;font-size:19px;background:linear-gradient(90deg,var(--p1),var(--p2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.hdr-date{font-size:11px;color:var(--texto3);background:var(--card);border:1px solid var(--borda);padding:5px 12px;border-radius:99px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.hdr-back{font-size:12px;color:var(--texto3);background:none;border:1px solid var(--borda);padding:5px 12px;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.hdr-back:hover{border-color:var(--p1);color:var(--p1)}
+.nav-wrap{background:var(--bg2);border-bottom:1px solid var(--borda);overflow-x:auto;scrollbar-width:none;position:sticky;top:60px;z-index:200}
+.nav-wrap::-webkit-scrollbar{display:none}
+.nav{display:flex;max-width:1000px;margin:0 auto;padding:0 16px}
+.nav-btn{display:flex;align-items:center;gap:5px;padding:0 14px;height:48px;background:none;border:none;border-bottom:2px solid transparent;color:var(--texto3);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s}
+.nav-btn:hover{color:var(--texto2)}
+.nav-btn.active{color:var(--p1);border-bottom-color:var(--p1)}
+.page{max-width:1000px;margin:0 auto;padding:24px 16px 100px}
+.tab{display:none}
+.tab.active{display:block;animation:fadeUp .25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+@media(min-width:600px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+.stat-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:16px;position:relative;overflow:hidden;transition:transform .2s}
+.stat-card:hover{transform:translateY(-2px)}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
+.stat-lbl{font-size:10px;font-weight:600;color:var(--texto3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.stat-num{font-family:'Fraunces',serif;font-size:clamp(14px,3vw,20px);color:var(--accent);line-height:1}
+.stat-sub{font-size:11px;color:var(--texto3);margin-top:4px}
+.gradient-text{background:linear-gradient(135deg,var(--p1),var(--p2),var(--p3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.form-section{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:22px;margin-bottom:16px;position:relative;overflow:hidden}
+.form-section::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--p1),var(--p2),var(--p3),var(--p4))}
+.section-title{font-family:'Fraunces',serif;font-size:17px;margin-bottom:4px}
+.section-sub{font-size:12px;color:var(--texto3);margin-bottom:18px}
+.fg1{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:12px}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+@media(max-width:500px){.fg2,.fg3{grid-template-columns:1fr}}
+.field label{display:block;font-size:10px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;background:var(--bg2);border:1px solid var(--borda2);border-radius:var(--rs);padding:11px 13px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--p1);box-shadow:0 0 0 3px rgba(192,132,252,.12)}
+.field input::placeholder,.field textarea::placeholder{color:var(--texto3)}
+.field select option{background:var(--card2)}
+.scale-wrap{display:flex;gap:4px;flex-wrap:wrap}
+.scale-btn{flex:1;min-width:28px;padding:7px 2px;background:var(--bg2);border:1px solid var(--borda2);border-radius:7px;color:var(--texto2);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center}
+.scale-btn:hover{border-color:var(--p1);color:var(--p1)}
+.scale-btn.active{background:linear-gradient(135deg,var(--p1),var(--p2));border-color:transparent;color:#fff}
+.tags-wrap{display:flex;gap:6px;flex-wrap:wrap}
+.tag-check{padding:6px 12px;background:var(--bg2);border:1px solid var(--borda2);border-radius:99px;font-size:12px;font-weight:600;color:var(--texto2);cursor:pointer;transition:all .2s;user-select:none}
+.tag-check:hover{border-color:var(--p1);color:var(--p1)}
+.tag-check.active{background:rgba(192,132,252,.15);border-color:var(--p1);color:var(--p1)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border:none;border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.btn-uni{background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;box-shadow:0 4px 20px rgba(192,132,252,.3)}
+.btn-uni:hover:not(:disabled){transform:translateY(-1px)}
+.btn-ghost{background:var(--card2);border:1px solid var(--borda2);color:var(--texto2)}
+.btn-ghost:hover{border-color:var(--p1);color:var(--p1)}
+.btn-sm{padding:9px 16px;font-size:12px;width:auto}
+.date-nav{display:flex;align-items:center;gap:10px;margin-bottom:20px;background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:14px 18px}
+.date-nav input[type=date]{flex:1;background:transparent;border:none;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:16px;outline:none;font-weight:600}
+.date-nav-btn{width:36px;height:36px;background:var(--card2);border:1px solid var(--borda2);border-radius:8px;color:var(--texto2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .2s}
+.date-nav-btn:hover{border-color:var(--p1);color:var(--p1)}
+.chart-card{background:var(--card);border:1px solid var(--borda);border-radius:var(--r);padding:20px;margin-bottom:14px}
+.chart-title{font-size:12px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.chart-sub{font-size:11px;color:var(--texto3);margin-bottom:16px}
+.chart-wrap{position:relative;height:180px}
+.hist-list{display:flex;flex-direction:column;gap:8px}
+.hist-item{background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:border-color .2s}
+.hist-item:hover{border-color:var(--borda2)}
+.hist-date{font-family:'Fraunces',serif;font-size:16px;color:var(--p1);min-width:60px}
+.hist-tags{display:flex;gap:5px;flex-wrap:wrap;flex:1}
+.hist-tag{font-size:10px;padding:3px 8px;border-radius:99px;background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.2);color:var(--p1);font-weight:600}
+.btn-icon{width:30px;height:30px;background:none;border:1px solid var(--borda2);border-radius:7px;color:var(--texto3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .2s}
+.btn-icon:hover{border-color:var(--p1);color:var(--p1)}
+.sec{display:flex;align-items:center;gap:10px;margin:20px 0 12px}
+.sec-t{font-size:11px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:1.2px;white-space:nowrap}
+.sec-l{flex:1;height:1px;background:linear-gradient(90deg,var(--borda),transparent)}
+.med-check-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.med-check-item{background:var(--bg2);border:1px solid var(--borda2);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s}
+.med-check-item:hover{border-color:var(--p1)}
+.med-check-item.taken{background:rgba(192,132,252,.08);border-color:var(--p1)}
+.med-check-box{width:22px;height:22px;border-radius:6px;border:2px solid var(--borda2);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;transition:all .2s}
+.med-check-item.taken .med-check-box{background:linear-gradient(135deg,var(--p1),var(--p2));border-color:transparent}
+.med-check-name{font-size:13px;font-weight:500;flex:1}
+.med-check-time{font-size:11px;color:var(--texto3)}
+.empty{text-align:center;padding:40px 20px;color:var(--texto3)}
+.empty-ico{font-size:36px;margin-bottom:10px;opacity:.4}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--card2);border-radius:99px;padding:12px 22px;font-size:13px;font-weight:600;white-space:nowrap;transition:all .3s;z-index:999;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border:1px solid var(--p1);color:var(--p1)}
+.toast.err{border:1px solid var(--verm);color:var(--verm)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.25);border-top-color:currentColor;border-radius:50%;animation:rot .6s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-icon">&#x1F984;</div>
+    <span class="hdr-title">Monitoramento de Saude</span>
+  </div>
+  <div class="hdr-right">
+    <span class="hdr-date" id="hdr-date">--</span>
+    <a href="/" class="hdr-back">&#8592; Inicio</a>
+  </div>
+</header>
+<div class="nav-wrap">
+  <nav class="nav">
+    <button class="nav-btn active" onclick="aba('registro',this)">Registro</button>
+    <button class="nav-btn" onclick="aba('dashboard',this)">Dashboard</button>
+    <button class="nav-btn" onclick="aba('historico',this)">Historico</button>
+    <button class="nav-btn" onclick="aba('correlacoes',this)">Correlacoes</button>
+    <button class="nav-btn" onclick="aba('medicamentos',this)">Medicamentos</button>
+    <button class="nav-btn" onclick="aba('exportar',this)">Exportar</button>
+  </nav>
+</div>
+<main class="page">
+
+<!-- REGISTRO -->
+<div class="tab active" id="tab-registro">
+  <div class="date-nav">
+    <button class="date-nav-btn" onclick="diaAnterior()">&#9664;</button>
+    <input type="date" id="reg-data" onchange="carregarDia()">
+    <button class="date-nav-btn" onclick="diaProximo()">&#9654;</button>
+    <button class="btn btn-ghost btn-sm" onclick="irHoje()" style="margin-left:8px">Hoje</button>
+    <div id="reg-status" style="font-size:11px;color:var(--p1);font-weight:600;margin-left:8px"></div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title gradient-text">Energia e Humor</div>
+    <div class="section-sub">Como voce esta se sentindo hoje?</div>
+    <div class="fg2">
+      <div class="field"><label>Energia (0-10)</label><div class="scale-wrap" id="scale-energia"></div></div>
+      <div class="field"><label>Humor</label>
+        <select id="sel-humor"><option value="">Selecione...</option><option>Muito ruim</option><option>Ruim</option><option>Neutro</option><option>Bom</option><option>Muito bom</option></select>
+      </div>
+    </div>
+    <div class="fg2">
+      <div class="field"><label>Animo ao acordar</label>
+        <select id="sel-animo"><option value="">Selecione...</option><option>Irritada</option><option>Dificuldade de acordar</option><option>Neutra</option><option>Desperta</option><option>Animada</option></select>
+      </div>
+      <div class="field"><label>Sensacao predominante</label>
+        <select id="sel-sensacao"><option value="">Selecione...</option><option>calma, estabilidade, bem-estar emocional</option><option>pequenas oscilacoes, mas funcional</option><option>irritabilidade ou ansiedade discretas</option><option>mente mais cansada e sensivel</option><option>dificuldade maior de relaxar</option><option>oscilacao de humor perceptivel</option><option>sensacao de desgaste constante</option><option>ansiedade, irritabilidade ou tristeza intensas</option><option>dificuldade significativa de lidar com rotina</option><option>sensacao de perda de controle emocional</option><option>sofrimento extremo, sensacao de colapso ou desespero</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title gradient-text">Sono</div>
+    <div class="fg3">
+      <div class="field"><label>Qualidade</label>
+        <select id="sel-sono"><option value="">Selecione...</option><option>Pessimo</option><option>Ruim</option><option>Regular</option><option>Bom</option><option>Excelente</option></select>
+      </div>
+      <div class="field"><label>Horas dormidas</label><input type="number" id="inp-horas-sono" placeholder="Ex: 7.5" step="0.5" min="0" max="24"></div>
+      <div class="field"><label>Paralisia do sono</label>
+        <select id="sel-paralisia"><option value="">Selecione...</option><option>Sim</option><option>Nao</option></select>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:0"><label>Despertares noturnos</label>
+      <select id="sel-despertares"><option value="">Selecione...</option><option>Insonia ao dormir</option><option>Acordar varias vezes a noite</option><option>Acordar cedo e nao conseguir dormir</option><option>Neutro</option><option>Sensacao de apagar da hora que deita ate de manha</option></select>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title gradient-text">Dores</div>
+    <div class="sec"><span class="sec-t">Dor de cabeca</span><div class="sec-l"></div></div>
+    <div class="fg3">
+      <div class="field"><label>Tipo</label>
+        <select id="sel-cabeca-tipo"><option value="">Nenhuma</option><option>pressao</option><option>pulsatil</option><option>peso</option><option>queimacao</option><option>pontada</option></select>
+      </div>
+      <div class="field"><label>Localizacao</label>
+        <select id="sel-cabeca-loc"><option value="">--</option><option>frontal</option><option>nuca</option><option>atras olhos</option><option>unilateral</option><option>total</option></select>
+      </div>
+      <div class="field"><label>Impacto</label>
+        <select id="sel-cabeca-impacto"><option value="">--</option><option>Desconforto</option><option>Incomodo</option><option>Desconcentracao</option><option>Fraqueza/tontura/nausea</option><option>Incapacitante</option></select>
+      </div>
+    </div>
+    <div class="sec"><span class="sec-t">Dores e Colicas</span><div class="sec-l"></div></div>
+    <div class="fg3">
+      <div class="field"><label>Tipo</label>
+        <select id="sel-dor-tipo"><option value="">Nenhuma</option><option>Pontada</option><option>Fisgada/irradia</option><option>Pressao</option></select>
+      </div>
+      <div class="field"><label>Localizacao</label>
+        <select id="sel-dor-loc"><option value="">--</option><option>Pelvica central</option><option>ovario esquerdo</option><option>ovario direito</option></select>
+      </div>
+      <div class="field"><label>Impacto</label>
+        <select id="sel-dor-impacto"><option value="">--</option><option>Desconforto</option><option>Incomodo</option><option>Desconcentracao</option><option>Fraqueza/tontura/nausea</option><option>Incapacitante</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title gradient-text">Ginecologico</div>
+    <div class="fg2">
+      <div class="field"><label>Sangramento</label>
+        <select id="sel-sangramento"><option value="0">Nenhum</option><option value="1">Leve</option><option value="2">Moderado</option><option value="3">Intenso</option><option value="4">Muito intenso</option><option value="5">Extremo</option></select>
+      </div>
+      <div class="field"><label>Relacao sexual</label>
+        <select id="sel-relacao"><option value="">Selecione...</option><option>Nao houve</option><option>Baixa libido</option><option>Alta libido</option><option>Relacao sem desconforto</option><option>Relacao com desconforto</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title gradient-text">Disposicao</div>
+    <div class="fg3">
+      <div class="field"><label>Disposicao fisica</label>
+        <select id="sel-disp-fisica"><option value="">Selecione...</option><option>Cansaco / Fadiga extremos</option><option>Cansaco / Fadiga moderados</option><option>Sonolencia o dia todo</option><option>Sonolencia na manha</option><option>Sonolencia a noite</option><option>Neutra</option><option>Energica</option></select>
+      </div>
+      <div class="field"><label>Capacidade cognitiva</label>
+        <select id="sel-cognitiva"><option value="">Selecione...</option><option>Nao conseguir realizar as tarefas</option><option>Dificuldade de concentracao nas tarefas</option><option>Dificuldade de iniciar tarefas</option><option>Neutro</option><option>Bom foco e concentracao</option><option>Boa produtividade</option></select>
+      </div>
+      <div class="field"><label>Estresse (0-10)</label><div class="scale-wrap" id="scale-estresse"></div></div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title gradient-text">Intestino</div>
+    <div class="fg2">
+      <div class="field"><label>Qualidade intestinal (Bristol)</label>
+        <select id="sel-fezes"><option value="">Selecione...</option><option>Tipo 1 - bolinhas duras separadas</option><option>Tipo 2 - formato de charuto com carocos</option><option>Tipo 3 - charuto com rachaduras</option><option>Tipo 4 - charuto liso e macio</option><option>Tipo 5 - pedacos macios</option><option>Tipo 6 - pastosa/desmanchando</option><option>Tipo 7 - liquida</option><option>Sem evacuar</option></select>
+      </div>
+      <div class="field"><label>Gases / distensao</label>
+        <select id="sel-gases"><option value="">Selecione...</option><option>Gases em excesso e doloridos</option><option>Gases moderados</option><option>Poucos gases</option><option>Nao percebido</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title gradient-text">Alimentacao</div>
+    <div class="fg3">
+      <div class="field"><label>Qualidade geral</label>
+        <select id="sel-alim"><option value="">Selecione...</option><option>Muito anti-inflamatoria</option><option>Boa</option><option>Neutra</option><option>Inflamatoria</option><option>Muito inflamatoria</option></select>
+      </div>
+      <div class="field"><label>Cafeina</label>
+        <select id="sel-cafeina"><option value="0">Nenhuma</option><option value="1">1 dose</option><option value="2">2 doses</option><option value="3">3 doses</option><option value="4">4+ doses</option></select>
+      </div>
+      <div class="field"><label>Acucar/Carboidrato</label>
+        <select id="sel-carboidrato"><option value="">Selecione...</option><option>Exagero</option><option>Moderado</option><option>Levemente acima</option><option>Dentro do plano alimentar</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title gradient-text">Exercicio</div>
+    <div class="fg2">
+      <div class="field"><label>Tipo de atividade</label>
+        <select id="sel-exercicio"><option value="">Nenhuma</option><option>Caminhada</option><option>Corrida</option><option>Musculacao inferiores</option><option>Musculacao superiores</option><option>Musculacao corpo inteiro</option><option>Pilates</option><option>Alongamento</option><option>Bicicleta/spinning</option><option>Beach tennis</option><option>Natacao</option><option>Passeio com cachorro</option><option>Cardio intenso / HIIT</option><option>Faxina / Limpeza pesada</option></select>
+      </div>
+      <div class="field"><label>Intensidade</label>
+        <select id="sel-intensidade"><option value="">--</option><option>Leve</option><option>Moderada</option><option>Intensa</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title gradient-text">Sintomas de Ansiedade</div>
+    <div class="section-sub">Selecione os sintomas presentes hoje</div>
+    <div class="tags-wrap" id="tags-ansiedade">
+      <div class="tag-check" data-val="Dormencia" onclick="toggleTag(this)">Dormencia</div>
+      <div class="tag-check" data-val="Calor" onclick="toggleTag(this)">Calor</div>
+      <div class="tag-check" data-val="Fraqueza nas pernas" onclick="toggleTag(this)">Fraqueza nas pernas</div>
+      <div class="tag-check" data-val="Incapacidade de relaxar" onclick="toggleTag(this)">Incapacidade de relaxar</div>
+      <div class="tag-check" data-val="Medo do pior acontecer" onclick="toggleTag(this)">Medo do pior</div>
+      <div class="tag-check" data-val="Tontura ou vertigem" onclick="toggleTag(this)">Tontura/vertigem</div>
+      <div class="tag-check" data-val="Coracao acelerado" onclick="toggleTag(this)">Coracao acelerado</div>
+      <div class="tag-check" data-val="Falta de firmeza" onclick="toggleTag(this)">Falta de firmeza</div>
+      <div class="tag-check" data-val="Pavor" onclick="toggleTag(this)">Pavor</div>
+      <div class="tag-check" data-val="Maos tremulas" onclick="toggleTag(this)">Maos tremulas</div>
+      <div class="tag-check" data-val="Dificuldade de respirar" onclick="toggleTag(this)">Dif. respirar</div>
+      <div class="tag-check" data-val="Susto" onclick="toggleTag(this)">Susto</div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title gradient-text">Medicamentos de hoje</div>
+    <div class="section-sub">Marque os que foram tomados</div>
+    <div class="med-check-grid">
+      <div class="med-check-item" onclick="toggleMed(this)" data-med="puran"><div class="med-check-box">&#10003;</div><div><div class="med-check-name">Puran T4 50mcg</div><div class="med-check-time">Em jejum</div></div></div>
+      <div class="med-check-item" onclick="toggleMed(this)" data-med="nypran"><div class="med-check-box">&#10003;</div><div><div class="med-check-name">Nypran 20mg</div><div class="med-check-time">1 pela manha</div></div></div>
+      <div class="med-check-item" onclick="toggleMed(this)" data-med="b12"><div class="med-check-box">&#10003;</div><div><div class="med-check-name">B12 1000mcg sublingual</div><div class="med-check-time">Em jejum</div></div></div>
+      <div class="med-check-item" onclick="toggleMed(this)" data-med="manipulado1"><div class="med-check-box">&#10003;</div><div><div class="med-check-name">Manipulado 1 (Gymnema + Glutamina)</div><div class="med-check-time">30min antes de 2 refeicoes</div></div></div>
+      <div class="med-check-item" onclick="toggleMed(this)" data-med="omega3"><div class="med-check-box">&#10003;</div><div><div class="med-check-name">Omega 3</div><div class="med-check-time">1 capsula por refeicao</div></div></div>
+      <div class="med-check-item" onclick="toggleMed(this)" data-med="sinvastatina"><div class="med-check-box">&#10003;</div><div><div class="med-check-name">Sinvastatina 10mg</div><div class="med-check-time">A noite</div></div></div>
+      <div class="med-check-item" onclick="toggleMed(this)" data-med="vitc"><div class="med-check-box">&#10003;</div><div><div class="med-check-name">Vitamina C Lipossomal 1000mg</div><div class="med-check-time">Junto com refeicao</div></div></div>
+      <div class="med-check-item" onclick="toggleMed(this)" data-med="manipulado2"><div class="med-check-box">&#10003;</div><div><div class="med-check-name">Manipulado 2 (L-Teanina + Taurina)</div><div class="med-check-time">1h antes de dormir</div></div></div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title gradient-text">Observacoes do dia</div>
+    <div class="fg1">
+      <div class="field"><label>Contexto / Gatilho de ansiedade</label><textarea id="inp-contexto" rows="2" placeholder="O que aconteceu hoje..."></textarea></div>
+      <div class="field"><label>Pensamentos / preocupacoes frequentes</label><textarea id="inp-pensamentos" rows="2" placeholder="Quais pensamentos passaram mais pela cabeca..."></textarea></div>
+      <div class="field"><label>Observacoes gerais</label><textarea id="inp-obs" rows="2" placeholder="Qualquer outra observacao relevante..."></textarea></div>
+    </div>
+  </div>
+
+  <button class="btn btn-uni" id="btn-salvar" onclick="salvarRegistro()">Salvar Registro do Dia</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="tab" id="tab-dashboard">
+  <div class="stats-grid">
+    <div class="stat-card" style="--accent:var(--p1)"><div class="stat-lbl">Dias registrados</div><div class="stat-num" id="dash-dias">0</div><div class="stat-sub">ultimos 90 dias</div></div>
+    <div class="stat-card" style="--accent:var(--p2)"><div class="stat-lbl">Media energia</div><div class="stat-num" id="dash-energia">--</div><div class="stat-sub">escala 0-10</div></div>
+    <div class="stat-card" style="--accent:var(--p3)"><div class="stat-lbl">Media estresse</div><div class="stat-num" id="dash-estresse">--</div><div class="stat-sub">escala 0-10</div></div>
+    <div class="stat-card" style="--accent:var(--amar)"><div class="stat-lbl">Aderencia meds</div><div class="stat-num" id="dash-meds">--%</div><div class="stat-sub">media dos registros</div></div>
+  </div>
+  <div class="chart-card"><div class="chart-title">Energia x Estresse</div><div class="chart-sub">Ultimos 30 dias</div><div class="chart-wrap"><canvas id="chart-energia"></canvas></div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div class="chart-card"><div class="chart-title">Qualidade do sono</div><div class="chart-wrap"><canvas id="chart-sono"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Humor por dia</div><div class="chart-wrap"><canvas id="chart-humor"></canvas></div></div>
+  </div>
+  <div class="chart-card" style="margin-top:14px"><div class="chart-title">Sangramento</div><div class="chart-wrap"><canvas id="chart-sangramento"></canvas></div></div>
+</div>
+
+<!-- HISTORICO -->
+<div class="tab" id="tab-historico">
+  <div class="hist-list" id="hist-lista"><div class="empty"><div class="empty-ico">&#128197;</div><p>Nenhum registro encontrado.</p></div></div>
+</div>
+
+<!-- CORRELACOES -->
+<div class="tab" id="tab-correlacoes">
+  <div class="form-section" style="margin-bottom:16px">
+    <div class="section-title gradient-text">Insights automaticos</div>
+    <div id="insights-lista"><div class="empty"><div class="empty-ico">&#128269;</div><p>Registre pelo menos 7 dias para ver correlacoes.</p></div></div>
+  </div>
+  <div class="chart-card"><div class="chart-title">Energia x Sono</div><div class="chart-wrap"><canvas id="chart-corr1"></canvas></div></div>
+</div>
+
+<!-- MEDICAMENTOS -->
+<div class="tab" id="tab-medicamentos">
+  <div class="form-section"><div class="section-title gradient-text">Aderencia ao tratamento</div><div class="section-sub">Historico dos registros</div><div id="meds-historico"></div></div>
+</div>
+
+<!-- EXPORTAR -->
+<div class="tab" id="tab-exportar">
+  <div class="form-section">
+    <div class="section-title gradient-text">Exportar Relatorio</div>
+    <div class="section-sub">Gere um relatorio para compartilhar com seu medico</div>
+    <div class="fg2" style="margin-bottom:16px">
+      <div class="field"><label>Data inicial</label><input type="date" id="exp-inicio"></div>
+      <div class="field"><label>Data final</label><input type="date" id="exp-fim"></div>
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;color:var(--texto3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Incluir no relatorio:</div>
+      <div class="tags-wrap">
+        <div class="tag-check active" data-exp="energia" onclick="toggleTag(this)">Energia</div>
+        <div class="tag-check active" data-exp="humor" onclick="toggleTag(this)">Humor</div>
+        <div class="tag-check active" data-exp="sono" onclick="toggleTag(this)">Sono</div>
+        <div class="tag-check active" data-exp="dores" onclick="toggleTag(this)">Dores</div>
+        <div class="tag-check active" data-exp="ginecologico" onclick="toggleTag(this)">Ginecologico</div>
+        <div class="tag-check active" data-exp="estresse" onclick="toggleTag(this)">Estresse</div>
+        <div class="tag-check active" data-exp="alimentacao" onclick="toggleTag(this)">Alimentacao</div>
+        <div class="tag-check active" data-exp="exercicio" onclick="toggleTag(this)">Exercicio</div>
+        <div class="tag-check active" data-exp="meds" onclick="toggleTag(this)">Medicamentos</div>
+        <div class="tag-check active" data-exp="obs" onclick="toggleTag(this)">Observacoes</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-uni" style="flex:1;min-width:160px" onclick="exportarPDF()">Exportar PDF</button>
+      <button class="btn btn-ghost" style="flex:1;min-width:160px" onclick="exportarCSV()">Exportar CSV</button>
+    </div>
+  </div>
+</div>
+
+</main>
+<div class="toast" id="toast"></div>
+<script>
+var REGISTROS = [];
+var DATA_ATUAL = new Date().toISOString().slice(0,10);
+var REG_HOJE = {};
+
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('hdr-date').textContent = new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'numeric',month:'short'}).toUpperCase();
+  document.getElementById('reg-data').value = DATA_ATUAL;
+  var hoje = new Date().toISOString().slice(0,10);
+  var mesAtras = new Date(Date.now()-30*24*60*60*1000).toISOString().slice(0,10);
+  document.getElementById('exp-inicio').value = mesAtras;
+  document.getElementById('exp-fim').value = hoje;
+  gerarScales();
+  carregarTodos();
+});
+
+function gerarScales(){
+  ['scale-energia','scale-estresse'].forEach(function(id){
+    var div = document.getElementById(id);
+    for(var i=0;i<=10;i++){
+      var b = document.createElement('button');
+      b.className='scale-btn';b.textContent=i;b.dataset.val=i;
+      (function(v,d){b.onclick=function(){ativarScale(d,v)}})(i,id);
+      div.appendChild(b);
+    }
+  });
+}
+
+function ativarScale(id,val){
+  document.querySelectorAll('#'+id+' .scale-btn').forEach(function(b){
+    b.classList.toggle('active',parseInt(b.dataset.val)===parseInt(val));
+  });
+}
+
+function getScale(id){
+  var a=document.querySelector('#'+id+' .scale-btn.active');
+  return a?parseInt(a.dataset.val):null;
+}
+
+function toggleTag(el){el.classList.toggle('active')}
+function toggleMed(el){el.classList.toggle('taken')}
+
+function diaAnterior(){
+  var d=new Date(DATA_ATUAL+'T12:00:00');d.setDate(d.getDate()-1);
+  DATA_ATUAL=d.toISOString().slice(0,10);
+  document.getElementById('reg-data').value=DATA_ATUAL;carregarDia();
+}
+function diaProximo(){
+  var d=new Date(DATA_ATUAL+'T12:00:00');d.setDate(d.getDate()+1);
+  DATA_ATUAL=d.toISOString().slice(0,10);
+  document.getElementById('reg-data').value=DATA_ATUAL;carregarDia();
+}
+function irHoje(){
+  DATA_ATUAL=new Date().toISOString().slice(0,10);
+  document.getElementById('reg-data').value=DATA_ATUAL;carregarDia();
+}
+
+async function carregarTodos(){
+  try{
+    var r=await fetch('/api/saude/registros');
+    REGISTROS=await r.json();
+    carregarDia();renderDashboard();renderHistorico();renderCorrelacoes();renderMedicamentos();
+  }catch(e){toast('Erro ao carregar','err')}
+}
+
+async function carregarDia(){
+  DATA_ATUAL=document.getElementById('reg-data').value||DATA_ATUAL;
+  try{
+    var r=await fetch('/api/saude/registro/'+DATA_ATUAL);
+    REG_HOJE=await r.json();
+    preencherFormulario(REG_HOJE);
+    document.getElementById('reg-status').textContent=Object.keys(REG_HOJE).length>0?'Ja registrado':'';
+  }catch(e){}
+}
+
+function preencherFormulario(reg){
+  if(!reg||Object.keys(reg).length===0){limparFormulario();return}
+  if(reg.energia!=null)ativarScale('scale-energia',reg.energia);
+  if(reg.estresse!=null)ativarScale('scale-estresse',reg.estresse);
+  var campos={'sel-humor':'humor','sel-animo':'animo','sel-sensacao':'sensacao','sel-sono':'sono','sel-paralisia':'paralisia','sel-despertares':'despertares','sel-cabeca-tipo':'cabeca_tipo','sel-cabeca-loc':'cabeca_loc','sel-cabeca-impacto':'cabeca_impacto','sel-dor-tipo':'dor_tipo','sel-dor-loc':'dor_loc','sel-dor-impacto':'dor_impacto','sel-sangramento':'sangramento','sel-relacao':'relacao','sel-disp-fisica':'disp_fisica','sel-cognitiva':'cognitiva','sel-fezes':'fezes','sel-gases':'gases','sel-alim':'alimentacao','sel-cafeina':'cafeina','sel-carboidrato':'carboidrato','sel-exercicio':'exercicio','sel-intensidade':'intensidade'};
+  Object.keys(campos).forEach(function(id){var el=document.getElementById(id);if(el&&reg[campos[id]]!=null)el.value=reg[campos[id]]});
+  if(reg.horas_sono)document.getElementById('inp-horas-sono').value=reg.horas_sono;
+  if(reg.contexto)document.getElementById('inp-contexto').value=reg.contexto;
+  if(reg.pensamentos)document.getElementById('inp-pensamentos').value=reg.pensamentos;
+  if(reg.obs)document.getElementById('inp-obs').value=reg.obs;
+  var ans=reg.ansiedade||[];
+  document.querySelectorAll('#tags-ansiedade .tag-check').forEach(function(t){t.classList.toggle('active',ans.indexOf(t.dataset.val)>=0)});
+  var meds=reg.meds||[];
+  document.querySelectorAll('.med-check-item').forEach(function(m){m.classList.toggle('taken',meds.indexOf(m.dataset.med)>=0)});
+}
+
+function limparFormulario(){
+  document.querySelectorAll('.scale-btn').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('select').forEach(function(s){s.selectedIndex=0});
+  document.querySelectorAll('input[type=number],textarea').forEach(function(i){i.value=''});
+  document.querySelectorAll('.tag-check,.med-check-item').forEach(function(t){t.classList.remove('active','taken')});
+}
+
+async function salvarRegistro(){
+  var ans=[];
+  document.querySelectorAll('#tags-ansiedade .tag-check.active').forEach(function(t){ans.push(t.dataset.val)});
+  var meds=[];
+  document.querySelectorAll('.med-check-item.taken').forEach(function(m){meds.push(m.dataset.med)});
+  var payload={data:DATA_ATUAL,energia:getScale('scale-energia'),estresse:getScale('scale-estresse'),humor:document.getElementById('sel-humor').value,animo:document.getElementById('sel-animo').value,sensacao:document.getElementById('sel-sensacao').value,sono:document.getElementById('sel-sono').value,horas_sono:parseFloat(document.getElementById('inp-horas-sono').value)||null,paralisia:document.getElementById('sel-paralisia').value,despertares:document.getElementById('sel-despertares').value,cabeca_tipo:document.getElementById('sel-cabeca-tipo').value,cabeca_loc:document.getElementById('sel-cabeca-loc').value,cabeca_impacto:document.getElementById('sel-cabeca-impacto').value,dor_tipo:document.getElementById('sel-dor-tipo').value,dor_loc:document.getElementById('sel-dor-loc').value,dor_impacto:document.getElementById('sel-dor-impacto').value,sangramento:document.getElementById('sel-sangramento').value,relacao:document.getElementById('sel-relacao').value,disp_fisica:document.getElementById('sel-disp-fisica').value,cognitiva:document.getElementById('sel-cognitiva').value,fezes:document.getElementById('sel-fezes').value,gases:document.getElementById('sel-gases').value,alimentacao:document.getElementById('sel-alim').value,cafeina:document.getElementById('sel-cafeina').value,carboidrato:document.getElementById('sel-carboidrato').value,exercicio:document.getElementById('sel-exercicio').value,intensidade:document.getElementById('sel-intensidade').value,ansiedade:ans,meds:meds,contexto:document.getElementById('inp-contexto').value,pensamentos:document.getElementById('inp-pensamentos').value,obs:document.getElementById('inp-obs').value};
+  var btn=document.getElementById('btn-salvar');
+  btn.innerHTML='<span class="spin"></span> Salvando...';btn.disabled=true;
+  try{
+    var r=await fetch('/api/saude/registro',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    var j=await r.json();
+    if(j.ok){await carregarTodos();document.getElementById('reg-status').textContent='Ja registrado';toast('Registro salvo!','ok')}
+  }finally{btn.innerHTML='Salvar Registro do Dia';btn.disabled=false}
+}
+
+function renderDashboard(){
+  if(!REGISTROS.length)return;
+  document.getElementById('dash-dias').textContent=REGISTROS.length;
+  var energias=REGISTROS.filter(function(r){return r.energia!=null}).map(function(r){return r.energia});
+  var estresses=REGISTROS.filter(function(r){return r.estresse!=null}).map(function(r){return r.estresse});
+  var med=function(a){return a.length?(a.reduce(function(x,y){return x+y},0)/a.length).toFixed(1):'--'};
+  document.getElementById('dash-energia').textContent=med(energias);
+  document.getElementById('dash-estresse').textContent=med(estresses);
+  var totalMeds=REGISTROS.reduce(function(s,r){return s+(r.meds||[]).length},0);
+  var maxMeds=REGISTROS.length*8;
+  document.getElementById('dash-meds').textContent=maxMeds>0?Math.round((totalMeds/maxMeds)*100)+'%':'--';
+  var ult=REGISTROS.slice(0,30).reverse();
+  var labels=ult.map(function(r){return r.data.slice(5)});
+  var opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8',font:{size:10}}},tooltip:{backgroundColor:'#181a2e',borderColor:'#2a2d55',borderWidth:1,titleColor:'#f1f5f9',bodyColor:'#94a3b8'}},scales:{x:{grid:{color:'#1e2040'},ticks:{color:'#475569',font:{size:9},maxTicksLimit:10}},y:{grid:{color:'#1e2040'},ticks:{color:'#475569',font:{size:10}}}}};
+  new Chart(document.getElementById('chart-energia'),{type:'line',data:{labels:labels,datasets:[{label:'Energia',data:ult.map(function(r){return r.energia}),borderColor:'#c084fc',backgroundColor:'rgba(192,132,252,.1)',tension:.4,fill:true},{label:'Estresse',data:ult.map(function(r){return r.estresse}),borderColor:'#f472b6',backgroundColor:'rgba(244,114,182,.1)',tension:.4,fill:true}]},options:opts});
+  var sm={'Pessimo':1,'Ruim':2,'Regular':3,'Bom':4,'Excelente':5};
+  new Chart(document.getElementById('chart-sono'),{type:'line',data:{labels:labels,datasets:[{label:'Sono',data:ult.map(function(r){return sm[r.sono]||null}),borderColor:'#818cf8',backgroundColor:'rgba(129,140,248,.1)',tension:.4,fill:true}]},options:opts});
+  var hm={'Muito ruim':1,'Ruim':2,'Neutro':3,'Bom':4,'Muito bom':5};
+  new Chart(document.getElementById('chart-humor'),{type:'line',data:{labels:labels,datasets:[{label:'Humor',data:ult.map(function(r){return hm[r.humor]||null}),borderColor:'#38bdf8',backgroundColor:'rgba(56,189,248,.1)',tension:.4,fill:true}]},options:opts});
+  new Chart(document.getElementById('chart-sangramento'),{type:'bar',data:{labels:labels,datasets:[{label:'Sangramento',data:ult.map(function(r){return parseInt(r.sangramento)||0}),backgroundColor:'rgba(255,77,109,.5)',borderColor:'#ff4d6d',borderWidth:1,borderRadius:4}]},options:opts});
+}
+
+function renderHistorico(){
+  var lista=document.getElementById('hist-lista');
+  if(!REGISTROS.length){lista.innerHTML='<div class="empty"><div class="empty-ico">&#128197;</div><p>Nenhum registro.</p></div>';return}
+  lista.innerHTML=REGISTROS.map(function(r,i){
+    var tags=[];
+    if(r.energia!=null)tags.push('E:'+r.energia);
+    if(r.humor)tags.push(r.humor);
+    if(r.sono)tags.push(r.sono);
+    if(r.exercicio&&r.exercicio!='')tags.push(r.exercicio.split(' ').slice(0,2).join(' '));
+    var ds=r.data.slice(5).replace('-','/');
+    return '<div class="hist-item" style="animation-delay:'+i*.03+'s"><div class="hist-date">'+ds+'</div><div class="hist-tags">'+tags.map(function(t){return '<span class="hist-tag">'+t+'</span>'}).join('')+'</div><div style="display:flex;gap:6px"><button class="btn-icon" data-d="'+r.data+'" onclick="editarDia(this)">&#9998;</button></div></div>';
+  }).join('');
+}
+
+function editarDia(btn){ var data = typeof btn === "string" ? btn : btn.dataset.d;
+  DATA_ATUAL=data;document.getElementById('reg-data').value=data;
+  carregarDia();aba('registro',document.querySelector('.nav-btn'));
+}
+
+function renderCorrelacoes(){
+  var ins=document.getElementById('insights-lista');
+  if(REGISTROS.length<7){ins.innerHTML='<div class="empty"><div class="empty-ico">&#128269;</div><p>Registre pelo menos 7 dias.</p></div>';return}
+  var textos=[];
+  var comSono=REGISTROS.filter(function(r){return r.sono&&r.energia!=null});
+  if(comSono.length>=5){
+    var boa=comSono.filter(function(r){return ['Bom','Excelente'].indexOf(r.sono)>=0});
+    var ma=comSono.filter(function(r){return ['Pessimo','Ruim'].indexOf(r.sono)>=0});
+    if(boa.length&&ma.length){
+      var mb=boa.reduce(function(s,r){return s+r.energia},0)/boa.length;
+      var mm=ma.reduce(function(s,r){return s+r.energia},0)/ma.length;
+      if(mb>mm+1)textos.push({ico:'&#128564;',txt:'Nos dias com bom sono sua energia e em media '+mb.toFixed(1)+' vs '+mm.toFixed(1)+' nos dias ruins.'});
+    }
+  }
+  if(!textos.length)textos.push({ico:'&#128202;',txt:'Continue registrando para ver padroes. Dados insuficientes ainda.'});
+  ins.innerHTML=textos.map(function(t){return '<div style="display:flex;align-items:flex-start;gap:12px;padding:14px;background:var(--bg2);border:1px solid var(--borda2);border-radius:var(--rs);margin-bottom:8px"><span style="font-size:24px">'+t.ico+'</span><p style="font-size:13px;color:var(--texto2);line-height:1.5">'+t.txt+'</p></div>'}).join('');
+}
+
+function renderMedicamentos(){
+  var div=document.getElementById('meds-historico');
+  if(!REGISTROS.length){div.innerHTML='<div class="empty"><p>Sem registros.</p></div>';return}
+  var mn={puran:'Puran T4',nypran:'Nypran',b12:'B12',manipulado1:'Manipulado 1',omega3:'Omega 3',sinvastatina:'Sinvastatina',vitc:'Vitamina C',manipulado2:'Manipulado 2'};
+  var html='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px">';
+  Object.keys(mn).forEach(function(k){
+    var t=REGISTROS.filter(function(r){return (r.meds||[]).indexOf(k)>=0}).length;
+    var p=REGISTROS.length>0?Math.round((t/REGISTROS.length)*100):0;
+    var c=p>=80?'var(--verde)':p>=50?'var(--amar)':'var(--verm)';
+    html+='<div style="background:var(--card2);border:1px solid var(--borda);border-radius:var(--rs);padding:14px;text-align:center"><div style="font-size:10px;color:var(--texto3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">'+mn[k]+'</div><div style="font-family:Fraunces,serif;font-size:24px;color:'+c+'">'+p+'%</div><div style="font-size:11px;color:var(--texto3);margin-top:4px">'+t+' de '+REGISTROS.length+' dias</div><div style="background:var(--borda);border-radius:99px;height:4px;overflow:hidden;margin-top:8px"><div style="height:100%;border-radius:99px;background:'+c+';width:'+p+'%"></div></div></div>';
+  });
+  html+='</div>';div.innerHTML=html;
+}
+
+function getRegistrosFiltrados(){
+  var i=document.getElementById('exp-inicio').value;
+  var f=document.getElementById('exp-fim').value;
+  return REGISTROS.filter(function(r){return r.data>=i&&r.data<=f}).sort(function(a,b){return a.data.localeCompare(b.data)});
+}
+
+function exportarCSV(){
+  var regs=getRegistrosFiltrados();
+  if(!regs.length){toast('Nenhum registro no periodo','err');return}
+  var h=['Data','Energia','Humor','Animo','Sono','Horas Sono','Estresse','Dor Cabeca','Dor Colica','Sangramento','Disp Fisica','Cognitiva','Fezes','Gases','Alimentacao','Cafeina','Exercicio','Meds Tomados','Observacoes'];
+  var rows=[h.join(';')];
+  regs.forEach(function(r){rows.push([r.data,r.energia||'',r.humor||'',r.animo||'',r.sono||'',r.horas_sono||'',r.estresse||'',r.cabeca_tipo||'',r.dor_tipo||'',r.sangramento||'',r.disp_fisica||'',r.cognitiva||'',r.fezes||'',r.gases||'',r.alimentacao||'',r.cafeina||'',r.exercicio||'',(r.meds||[]).length+'/8',(r.obs||'').replace(/;/g,',')].join(';'))});
+  var blob=new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8'});
+
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download='saude_'+document.getElementById('exp-inicio').value+'_'+document.getElementById('exp-fim').value+'.csv';a.click();URL.revokeObjectURL(url);
+  toast('CSV exportado!','ok');
+}
+
+function exportarPDF(){
+  var regs=getRegistrosFiltrados();
+  if(!regs.length){toast('Nenhum registro no periodo','err');return}
+  var sec={};document.querySelectorAll('[data-exp]').forEach(function(t){sec[t.dataset.exp]=t.classList.contains('active')});
+  var ini=document.getElementById('exp-inicio').value;
+  var fim=document.getElementById('exp-fim').value;
+  var energias=regs.filter(function(r){return r.energia!=null}).map(function(r){return r.energia});
+  var estresses=regs.filter(function(r){return r.estresse!=null}).map(function(r){return r.estresse});
+  var med=function(a){return a.length?(a.reduce(function(x,y){return x+y},0)/a.length).toFixed(1):'--'};
+  var sm={'Pessimo':1,'Ruim':2,'Regular':3,'Bom':4,'Excelente':5};
+  var sv=regs.filter(function(r){return r.sono}).map(function(r){return sm[r.sono]||0});
+  var tm=regs.reduce(function(s,r){return s+(r.meds||[]).length},0);
+  var mm=regs.length*8;
+  var ad=mm>0?Math.round((tm/mm)*100)+'%':'--';
+
+  var linhas=regs.map(function(r){
+    var ec=r.energia>=7?'#065f46':r.energia>=4?'#92400e':'#991b1b';
+    var eb=r.energia>=7?'#d1fae5':r.energia>=4?'#fef3c7':'#fee2e2';
+    return '<tr>'
+      +'<td><strong>'+r.data.slice(5).replace('-','/')+'</strong></td>'
+      +(sec.energia?'<td><span style="padding:2px 6px;border-radius:4px;background:'+eb+';color:'+ec+';font-size:11px;font-weight:600">'+(r.energia!=null?r.energia:'--')+'</span></td>':'')
+      +(sec.humor?'<td>'+(r.humor||'--')+'</td>':'')
+      +(sec.sono?'<td>'+(r.sono||'--')+'</td>':'')
+      +(sec.estresse?'<td>'+(r.estresse!=null?r.estresse:'--')+'</td>':'')
+      +(sec.dores?'<td>'+(r.cabeca_tipo||'--')+'</td><td>'+(r.dor_tipo||'--')+'</td>':'')
+      +(sec.ginecologico?'<td>'+(parseInt(r.sangramento)>0?r.sangramento+'/5':'--')+'</td>':'')
+      +(sec.exercicio?'<td>'+(r.exercicio||'--')+'</td>':'')
+      +(sec.meds?'<td>'+(r.meds||[]).length+'/8</td>':'')
+      +(sec.obs?'<td style="font-size:10px">'+(r.obs||'')+'</td>':'')
+    +'</tr>';
+  }).join('');
+
+  var w=window.open('','_blank');
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Relatorio de Saude</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:12px;color:#1a1a2e;padding:30px}h1{font-size:20px;color:#7c3aed;margin-bottom:4px}.sub{font-size:11px;color:#6b7280;margin-bottom:20px}.stats{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}.stat{flex:1;min-width:100px;background:#faf5ff;border:1px solid #ede9fe;border-radius:8px;padding:12px;text-align:center}.stat .l{font-size:10px;color:#6b7280;text-transform:uppercase;margin-bottom:4px}.stat .v{font-size:20px;font-weight:700;color:#7c3aed}table{width:100%;border-collapse:collapse}th{background:#7c3aed;color:#fff;font-size:10px;padding:6px 8px;text-align:left}td{padding:5px 8px;border-bottom:1px solid #f3f4f6;font-size:11px;vertical-align:top}tr:nth-child(even) td{background:#faf5ff}.footer{margin-top:24px;text-align:center;font-size:10px;color:#9ca3af;border-top:1px solid #f3f4f6;padding-top:10px}@media print{.np{display:none}}</style></head><body>'
+    +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">'
+    +'<div><h1>Relatorio de Saude</h1><div class="sub">Periodo: '+ini+' a '+fim+' | '+regs.length+' dias | Gerado em '+new Date().toLocaleDateString('pt-BR')+'</div></div>'
+    +'<button class="np" onclick="window.print()" style="padding:8px 16px;background:#7c3aed;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:12px">Imprimir / PDF</button>'
+    +'</div>'
+    +'<div class="stats">'
+    +(sec.energia?'<div class="stat"><div class="l">Energia media</div><div class="v">'+med(energias)+'</div></div>':'')
+    +(sec.estresse?'<div class="stat"><div class="l">Estresse medio</div><div class="v">'+med(estresses)+'</div></div>':'')
+    +(sec.sono?'<div class="stat"><div class="l">Sono medio</div><div class="v">'+med(sv)+'</div></div>':'')
+    +(sec.meds?'<div class="stat"><div class="l">Aderencia meds</div><div class="v">'+ad+'</div></div>':'')
+    +'</div>'
+    +'<table><tr><th>Data</th>'
+    +(sec.energia?'<th>Energia</th>':'')
+    +(sec.humor?'<th>Humor</th>':'')
+    +(sec.sono?'<th>Sono</th>':'')
+    +(sec.estresse?'<th>Estresse</th>':'')
+    +(sec.dores?'<th>Dor cab.</th><th>Dor colica</th>':'')
+    +(sec.ginecologico?'<th>Sangr.</th>':'')
+    +(sec.exercicio?'<th>Exercicio</th>':'')
+    +(sec.meds?'<th>Meds</th>':'')
+    +(sec.obs?'<th>Obs</th>':'')
+    +'</tr>'+linhas+'</table>'
+    +'<div class="footer">Relatorio gerado pelo App de Monitoramento de Saude | '+new Date().toLocaleDateString('pt-BR')+'</div>'
+    +'</body></html>');
+  w.document.close();
+  toast('PDF pronto! Clique em Imprimir na nova janela.','ok');
+}
+
+function aba(id,btn){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(id==='dashboard')setTimeout(renderDashboard,50);
+  if(id==='historico')renderHistorico();
+  if(id==='correlacoes')renderCorrelacoes();
+  if(id==='medicamentos')renderMedicamentos();
+}
+
+var toastT;
+function toast(msg,tipo){
+  var t=document.getElementById('toast');
+  clearTimeout(toastT);t.textContent=msg;t.className='toast '+tipo+' show';
+  toastT=setTimeout(function(){t.classList.remove('show')},2800);
+}
+</script>
+</body>
+</html>
