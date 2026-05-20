@@ -132,6 +132,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
     <button class="nav-btn" onclick="aba('correlacoes',this)">Correlacoes</button>
     <button class="nav-btn" onclick="aba('medicamentos',this)">Medicamentos</button>
     <button class="nav-btn" onclick="aba('exportar',this)">Exportar</button>
+    <button class="nav-btn" onclick="aba('ia',this)">&#x1F916; Analise IA</button>
   </nav>
 </div>
 <main class="page">
@@ -385,6 +386,73 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   </div>
 </div>
 
+
+<!-- IA -->
+<div class="tab" id="tab-ia">
+
+  <div class="form-section" style="margin-bottom:16px">
+    <div class="section-title gradient-text">&#x1F916; Analise com Inteligencia Artificial</div>
+    <div class="section-sub">A IA analisa seus registros e gera insights personalizados sobre sua saude</div>
+
+    <div class="fg2" style="margin-bottom:16px">
+      <div class="field">
+        <label>Periodo de analise</label>
+        <select id="ia-periodo">
+          <option value="7">Ultimos 7 dias</option>
+          <option value="14">Ultimos 14 dias</option>
+          <option value="30" selected>Ultimos 30 dias</option>
+          <option value="60">Ultimos 60 dias</option>
+          <option value="90">Ultimos 90 dias</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Tipo de analise</label>
+        <select id="ia-tipo">
+          <option value="geral">Analise geral completa</option>
+          <option value="sono">Foco em sono e energia</option>
+          <option value="dores">Foco em dores e sintomas</option>
+          <option value="meds">Foco em medicamentos</option>
+          <option value="humor">Foco em humor e ansiedade</option>
+          <option value="alimentacao">Foco em alimentacao</option>
+          <option value="medico">Relatorio para medico</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field" style="margin-bottom:16px">
+      <label>Pergunta personalizada (opcional)</label>
+      <textarea id="ia-pergunta" rows="2" placeholder="Ex: Existe relacao entre meu estresse e as dores de cabeca? / Quais dias foram melhores e por que?"></textarea>
+    </div>
+
+    <button class="btn btn-uni" id="btn-ia" onclick="analisarIA()">
+      &#x2728; Analisar com IA
+    </button>
+  </div>
+
+  <!-- Resultado -->
+  <div id="ia-resultado" style="display:none">
+    <div class="form-section" style="background:linear-gradient(135deg,rgba(192,132,252,.05),rgba(244,114,182,.05));border-color:rgba(192,132,252,.3)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div class="section-title gradient-text">&#x1F4CB; Resultado da Analise</div>
+        <div id="ia-periodo-label" style="font-size:11px;color:var(--texto3)"></div>
+      </div>
+      <div id="ia-conteudo" style="font-size:14px;color:var(--texto2);line-height:1.8;white-space:pre-wrap"></div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-ghost btn-sm" onclick="copiarAnalise()">Copiar</button>
+      <button class="btn btn-ghost btn-sm" onclick="novaAnalise()">Nova analise</button>
+    </div>
+  </div>
+
+  <!-- Historico de analises -->
+  <div id="ia-historico-wrap" style="margin-top:16px;display:none">
+    <div class="sec"><span class="sec-t">Analises anteriores</span><div class="sec-l"></div></div>
+    <div id="ia-historico"></div>
+  </div>
+
+</div>
+
 </main>
 <div class="toast" id="toast"></div>
 <script>
@@ -500,6 +568,10 @@ async function salvarRegistro(){
   }finally{btn.innerHTML='Salvar Registro do Dia';btn.disabled=false}
 }
 
+var _charts = {};
+function destroyChart(id){
+  if(_charts[id]){ _charts[id].destroy(); delete _charts[id]; }
+}
 function renderDashboard(){
   if(!REGISTROS.length)return;
   document.getElementById('dash-dias').textContent=REGISTROS.length;
@@ -514,12 +586,12 @@ function renderDashboard(){
   var ult=REGISTROS.slice(0,30).reverse();
   var labels=ult.map(function(r){return r.data.slice(5)});
   var opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8',font:{size:10}}},tooltip:{backgroundColor:'#181a2e',borderColor:'#2a2d55',borderWidth:1,titleColor:'#f1f5f9',bodyColor:'#94a3b8'}},scales:{x:{grid:{color:'#1e2040'},ticks:{color:'#475569',font:{size:9},maxTicksLimit:10}},y:{grid:{color:'#1e2040'},ticks:{color:'#475569',font:{size:10}}}}};
-  new Chart(document.getElementById('chart-energia'),{type:'line',data:{labels:labels,datasets:[{label:'Energia',data:ult.map(function(r){return r.energia}),borderColor:'#c084fc',backgroundColor:'rgba(192,132,252,.1)',tension:.4,fill:true},{label:'Estresse',data:ult.map(function(r){return r.estresse}),borderColor:'#f472b6',backgroundColor:'rgba(244,114,182,.1)',tension:.4,fill:true}]},options:opts});
+  destroyChart('energia'); _charts['energia'] = new Chart(document.getElementById('chart-energia'),{type:'line',data:{labels:labels,datasets:[{label:'Energia',data:ult.map(function(r){return r.energia}),borderColor:'#c084fc',backgroundColor:'rgba(192,132,252,.1)',tension:.4,fill:true},{label:'Estresse',data:ult.map(function(r){return r.estresse}),borderColor:'#f472b6',backgroundColor:'rgba(244,114,182,.1)',tension:.4,fill:true}]},options:opts});
   var sm={'Pessimo':1,'Ruim':2,'Regular':3,'Bom':4,'Excelente':5};
-  new Chart(document.getElementById('chart-sono'),{type:'line',data:{labels:labels,datasets:[{label:'Sono',data:ult.map(function(r){return sm[r.sono]||null}),borderColor:'#818cf8',backgroundColor:'rgba(129,140,248,.1)',tension:.4,fill:true}]},options:opts});
+  destroyChart('sono'); _charts['sono'] = new Chart(document.getElementById('chart-sono'),{type:'line',data:{labels:labels,datasets:[{label:'Sono',data:ult.map(function(r){return sm[r.sono]||null}),borderColor:'#818cf8',backgroundColor:'rgba(129,140,248,.1)',tension:.4,fill:true}]},options:opts});
   var hm={'Muito ruim':1,'Ruim':2,'Neutro':3,'Bom':4,'Muito bom':5};
-  new Chart(document.getElementById('chart-humor'),{type:'line',data:{labels:labels,datasets:[{label:'Humor',data:ult.map(function(r){return hm[r.humor]||null}),borderColor:'#38bdf8',backgroundColor:'rgba(56,189,248,.1)',tension:.4,fill:true}]},options:opts});
-  new Chart(document.getElementById('chart-sangramento'),{type:'bar',data:{labels:labels,datasets:[{label:'Sangramento',data:ult.map(function(r){return parseInt(r.sangramento)||0}),backgroundColor:'rgba(255,77,109,.5)',borderColor:'#ff4d6d',borderWidth:1,borderRadius:4}]},options:opts});
+  destroyChart('humor'); _charts['humor'] = new Chart(document.getElementById('chart-humor'),{type:'line',data:{labels:labels,datasets:[{label:'Humor',data:ult.map(function(r){return hm[r.humor]||null}),borderColor:'#38bdf8',backgroundColor:'rgba(56,189,248,.1)',tension:.4,fill:true}]},options:opts});
+  destroyChart('sangramento'); _charts['sangramento'] = new Chart(document.getElementById('chart-sangramento'),{type:'bar',data:{labels:labels,datasets:[{label:'Sangramento',data:ult.map(function(r){return parseInt(r.sangramento)||0}),backgroundColor:'rgba(255,77,109,.5)',borderColor:'#ff4d6d',borderWidth:1,borderRadius:4}]},options:opts});
 }
 
 function renderHistorico(){
@@ -532,8 +604,17 @@ function renderHistorico(){
     if(r.sono)tags.push(r.sono);
     if(r.exercicio&&r.exercicio!='')tags.push(r.exercicio.split(' ').slice(0,2).join(' '));
     var ds=r.data.slice(5).replace('-','/');
-    return '<div class="hist-item" style="animation-delay:'+i*.03+'s"><div class="hist-date">'+ds+'</div><div class="hist-tags">'+tags.map(function(t){return '<span class="hist-tag">'+t+'</span>'}).join('')+'</div><div style="display:flex;gap:6px"><button class="btn-icon" data-d="'+r.data+'" onclick="editarDia(this)">&#9998;</button></div></div>';
+    var ds=r.data.slice(5).replace('-','/');
+    return '<div class="hist-item" style="animation-delay:'+i*.03+'s"><div class="hist-date">'+ds+'</div><div class="hist-tags">'+tags.map(function(t){return '<span class="hist-tag">'+t+'</span>'}).join('')+'</div><div style="display:flex;gap:6px"><button class="btn-icon" data-d="'+r.data+'" onclick="editarDia(this)">&#9998;</button><button class="btn-icon" data-d="'+r.data+'" onclick="excluirDia(this)" style="color:var(--verm);border-color:var(--verm)" title="Excluir">&#10005;</button></div></div>';
   }).join('');
+}
+
+async function excluirDia(btn){
+  var data=btn.dataset.d;
+  if(!confirm("Excluir registro de "+data+"?"))return;
+  await fetch("/api/saude/registro/"+data,{method:"DELETE"});
+  await carregarTodos();
+  toast("Registro excluido!","ok");
 }
 
 function editarDia(btn){ var data = typeof btn === "string" ? btn : btn.dataset.d;
@@ -662,6 +743,184 @@ function aba(id,btn){
   if(id==='historico')renderHistorico();
   if(id==='correlacoes')renderCorrelacoes();
   if(id==='medicamentos')renderMedicamentos();
+}
+
+
+// IA GEMINI
+var IA_HISTORICO = [];
+
+async function analisarIA(){
+  var periodo = parseInt(document.getElementById('ia-periodo').value);
+  var tipo    = document.getElementById('ia-tipo').value;
+  var pergunta = document.getElementById('ia-pergunta').value.trim();
+
+  // Get records from period
+  var corte = new Date(Date.now() - periodo*24*60*60*1000).toISOString().slice(0,10);
+  var regs  = REGISTROS.filter(function(r){return r.data >= corte}).sort(function(a,b){return a.data.localeCompare(b.data)});
+
+  if(!regs.length){ toast('Nenhum registro no periodo selecionado','err'); return; }
+
+  var btn = document.getElementById('btn-ia');
+  btn.innerHTML = '<span class="spin"></span> Analisando...';
+  btn.disabled = true;
+  document.getElementById('ia-resultado').style.display = 'none';
+
+  // Build summary for IA
+  var med = function(arr){ return arr.length ? (arr.reduce(function(a,b){return a+b},0)/arr.length).toFixed(1) : 'sem dados'; };
+  var energias  = regs.filter(function(r){return r.energia!=null}).map(function(r){return r.energia});
+  var estresses = regs.filter(function(r){return r.estresse!=null}).map(function(r){return r.estresse});
+  var sm = {'Pessimo':1,'Ruim':2,'Regular':3,'Bom':4,'Excelente':5};
+  var sonos = regs.filter(function(r){return r.sono}).map(function(r){return sm[r.sono]||0});
+
+  var totalMeds = regs.reduce(function(s,r){return s+(r.meds||[]).length},0);
+  var aderencia = regs.length>0 ? Math.round((totalMeds/(regs.length*8))*100) : 0;
+
+  // Count symptoms
+  var contarValor = function(campo, val){ return regs.filter(function(r){return r[campo]===val}).length; };
+  var humores = {};
+  regs.forEach(function(r){ if(r.humor){ humores[r.humor]=(humores[r.humor]||0)+1; } });
+  var exercicios = regs.filter(function(r){return r.exercicio&&r.exercicio!==''}).length;
+  var diasDorCabeca = regs.filter(function(r){return r.cabeca_tipo&&r.cabeca_tipo!==''}).length;
+  var diasDorColica = regs.filter(function(r){return r.dor_tipo&&r.dor_tipo!==''}).length;
+  var diasSangramento = regs.filter(function(r){return parseInt(r.sangramento)>0}).length;
+  var ansiedadeFreq = {};
+  regs.forEach(function(r){(r.ansiedade||[]).forEach(function(a){ansiedadeFreq[a]=(ansiedadeFreq[a]||0)+1})});
+  var top3ansiedade = Object.entries(ansiedadeFreq).sort(function(a,b){return b[1]-a[1]}).slice(0,3).map(function(e){return e[0]+' ('+e[1]+'x)'}).join(', ');
+
+  // Dias por qualidade de sono
+  var diasBomSono = regs.filter(function(r){return ['Bom','Excelente'].indexOf(r.sono)>=0}).length;
+  var diasMauSono = regs.filter(function(r){return ['Pessimo','Ruim'].indexOf(r.sono)>=0}).length;
+
+  // Correlation data
+  var corrSonoEnergia = regs.filter(function(r){return r.sono&&r.energia!=null});
+  var energiaBoaSono = corrSonoEnergia.filter(function(r){return ['Bom','Excelente'].indexOf(r.sono)>=0});
+  var energiaMauSono = corrSonoEnergia.filter(function(r){return ['Pessimo','Ruim'].indexOf(r.sono)>=0});
+  var mediaEnergiaBoa = energiaBoaSono.length ? med(energiaBoaSono.map(function(r){return r.energia})) : 'sem dados';
+  var mediaEnergiaMau = energiaMauSono.length ? med(energiaMauSono.map(function(r){return r.energia})) : 'sem dados';
+
+  var resumo = 'DADOS DE SAUDE - ULTIMOS '+periodo+' DIAS ('+regs.length+' registros de '+corte+' ate hoje)\n\n'
+    + 'MEDIAS GERAIS:\n'
+    + '- Energia media: '+med(energias)+'/10\n'
+    + '- Estresse medio: '+med(estresses)+'/10\n'
+    + '- Sono medio: '+med(sonos)+'/5\n'
+    + '- Aderencia medicamentos: '+aderencia+'%\n'
+    + '- Dias com exercicio: '+exercicios+' de '+regs.length+'\n\n'
+    + 'SONO:\n'
+    + '- Dias com bom/excelente sono: '+diasBomSono+'\n'
+    + '- Dias com pessimo/ruim sono: '+diasMauSono+'\n'
+    + '- Energia media em dias de bom sono: '+mediaEnergiaBoa+'\n'
+    + '- Energia media em dias de mau sono: '+mediaEnergiaMau+'\n\n'
+    + 'SINTOMAS:\n'
+    + '- Dias com dor de cabeca: '+diasDorCabeca+'\n'
+    + '- Dias com dores/colicas: '+diasDorColica+'\n'
+    + '- Dias com sangramento: '+diasSangramento+'\n'
+    + '- Sintomas de ansiedade mais frequentes: '+(top3ansiedade||'nenhum')+'\n\n'
+    + 'HUMOR: '+JSON.stringify(humores)+'\n\n'
+    + 'MEDICAMENTOS: Aderencia de '+aderencia+'% ('+totalMeds+' doses tomadas de '+(regs.length*8)+' possiveis)\n\n'
+    + 'OBSERVACOES RECENTES:\n';
+  regs.slice(-5).forEach(function(r){
+    if(r.obs||r.contexto){
+      resumo += '- '+r.data+': '+(r.obs||r.contexto||'')+'\n';
+
+    }
+  });
+
+  var prompts = {
+    geral: 'Voce e um assistente de saude. Analise e forneca: 1.Resumo 2.Padroes 3.Correlacoes 4.Pontos de atencao 5.Sugestoes. Seja especifico e use os numeros.',
+
+
+
+
+
+
+
+    dores: 'Voce e um especialista em dor. Analise os dados focando em dores de cabeca, colicas e sintomas. Identifique possiveis gatilhos e padroes.',
+    meds: 'Voce e um especialista em adesao ao tratamento. Analise a aderencia aos medicamentos e correlacione com a evolucao dos sintomas e bem-estar.',
+    humor: 'Voce e um psicologo. Analise os dados de humor, ansiedade, estresse e sensacoes predominantes. Identifique padroes e sugira estrategias.',
+    alimentacao: 'Voce e um nutricionista. Analise os dados de alimentacao, intestino e correlacione com energia e sintomas.',
+    medico: 'Crie um resumo clinico objetivo para apresentar ao medico, destacando: sintomas principais, frequencia, medicamentos e aderencia, padroes identificados e pontos de atencao.'
+  };
+
+  var prompt = prompts[tipo] + '\n\n' + resumo;
+
+
+  if(pergunta) prompt += '\n\nPERGUNTA ESPECIFICA: ' + pergunta;
+
+
+
+  prompt += '\n\nResponda em portugues de forma clara e organizada. Use topicos e seja objetivo.';
+
+
+  try{
+    var resp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyCZApN5G4KZb98vU7dDrWurKsVJDE-Q4mA', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        contents: [{parts: [{text: prompt}]}],
+        generationConfig: {temperature: 0.7, maxOutputTokens: 1500}
+      })
+    });
+
+    var data = await resp.json();
+    var texto = data.candidates[0].content.parts[0].text;
+
+    // Show result
+    document.getElementById('ia-resultado').style.display = 'block';
+    document.getElementById('ia-conteudo').textContent = texto;
+    document.getElementById('ia-periodo-label').textContent = regs.length+' registros analisados';
+
+    // Save to history
+    IA_HISTORICO.unshift({
+      data: new Date().toLocaleDateString('pt-BR'),
+      tipo: tipo,
+      periodo: periodo,
+      texto: texto
+    });
+    if(IA_HISTORICO.length > 5) IA_HISTORICO.pop();
+    renderHistoricoIA();
+
+    toast('Analise concluida!','ok');
+  }catch(e){
+    console.error(e);
+    toast('Erro ao conectar com a IA. Tente novamente.','err');
+  }finally{
+    btn.innerHTML = '&#x2728; Analisar com IA';
+    btn.disabled = false;
+  }
+}
+
+function copiarAnalise(){
+  var texto = document.getElementById('ia-conteudo').textContent;
+  navigator.clipboard.writeText(texto).then(function(){toast('Copiado!','ok')});
+}
+
+function novaAnalise(){
+  document.getElementById('ia-resultado').style.display = 'none';
+  document.getElementById('ia-pergunta').value = '';
+}
+
+function renderHistoricoIA(){
+  if(!IA_HISTORICO.length) return;
+  var wrap = document.getElementById('ia-historico-wrap');
+  var hist = document.getElementById('ia-historico');
+  wrap.style.display = 'block';
+  hist.innerHTML = IA_HISTORICO.map(function(h,i){
+    var div = document.createElement('div');
+    div.style.cssText = 'background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:14px;margin-bottom:8px;cursor:pointer';
+    div.innerHTML = '<div style="display:flex;justify-content:space-between"><span style="font-size:13px;font-weight:600;color:var(--p1)">'+h.data+' - '+h.tipo+'</span><span style="font-size:11px;color:var(--texto3)">clique</span></div><div class="ia-body" style="display:none;margin-top:12px;font-size:12px;color:var(--texto2);line-height:1.6">'+h.texto+'</div>';
+    div.onclick = function(){ var b=this.querySelector('.ia-body'); b.style.display=b.style.display==='none'?'block':'none'; };
+    return div.outerHTML;
+  }).join('');
+
+
+
+
+
+
+
+
+
+
 }
 
 var toastT;
