@@ -730,184 +730,177 @@ function exportarPDF(){
     +'</tr>'+linhas+'</table>'
     +'<div class="footer">Relatorio gerado pelo App de Monitoramento de Saude | '+new Date().toLocaleDateString('pt-BR')+'</div>'
     +'</body></html>');
-  w.document.close();
-  toast('PDF pronto! Clique em Imprimir na nova janela.','ok');
-}
+	  w.document.close();
+	  toast('PDF pronto! Clique em Imprimir na nova janela.','ok');
+	  }
 
-function aba(id,btn){
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
-  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});
-  document.getElementById('tab-'+id).classList.add('active');
-  if(btn)btn.classList.add('active');
-  if(id==='dashboard')setTimeout(renderDashboard,50);
-  if(id==='historico')renderHistorico();
-  if(id==='correlacoes')renderCorrelacoes();
-  if(id==='medicamentos')renderMedicamentos();
-}
-
-
-// IA GEMINI
-var IA_HISTORICO = [];
-
-async function analisarIA(){
-  var periodo = parseInt(document.getElementById('ia-periodo').value);
-  var tipo    = document.getElementById('ia-tipo').value;
-  var pergunta = document.getElementById('ia-pergunta').value.trim();
-
-  // Get records from period
-  var corte = new Date(Date.now() - periodo*24*60*60*1000).toISOString().slice(0,10);
-  var regs  = REGISTROS.filter(function(r){return r.data >= corte}).sort(function(a,b){return a.data.localeCompare(b.data)});
-
-  if(!regs.length){ toast('Nenhum registro no periodo selecionado','err'); return; }
-
-  var btn = document.getElementById('btn-ia');
-  btn.innerHTML = '<span class="spin"></span> Analisando...';
-  btn.disabled = true;
-  document.getElementById('ia-resultado').style.display = 'none';
-
-  // Build summary for IA
-  var med = function(arr){ return arr.length ? (arr.reduce(function(a,b){return a+b},0)/arr.length).toFixed(1) : 'sem dados'; };
-  var energias  = regs.filter(function(r){return r.energia!=null}).map(function(r){return r.energia});
-  var estresses = regs.filter(function(r){return r.estresse!=null}).map(function(r){return r.estresse});
-  var sm = {'Pessimo':1,'Ruim':2,'Regular':3,'Bom':4,'Excelente':5};
-  var sonos = regs.filter(function(r){return r.sono}).map(function(r){return sm[r.sono]||0});
-
-  var totalMeds = regs.reduce(function(s,r){return s+(r.meds||[]).length},0);
-  var aderencia = regs.length>0 ? Math.round((totalMeds/(regs.length*8))*100) : 0;
-
-  // Count symptoms
-  var contarValor = function(campo, val){ return regs.filter(function(r){return r[campo]===val}).length; };
-  var humores = {};
-  regs.forEach(function(r){ if(r.humor){ humores[r.humor]=(humores[r.humor]||0)+1; } });
-  var exercicios = regs.filter(function(r){return r.exercicio&&r.exercicio!==''}).length;
-  var diasDorCabeca = regs.filter(function(r){return r.cabeca_tipo&&r.cabeca_tipo!==''}).length;
-  var diasDorColica = regs.filter(function(r){return r.dor_tipo&&r.dor_tipo!==''}).length;
-  var diasSangramento = regs.filter(function(r){return parseInt(r.sangramento)>0}).length;
-  var ansiedadeFreq = {};
-  regs.forEach(function(r){(r.ansiedade||[]).forEach(function(a){ansiedadeFreq[a]=(ansiedadeFreq[a]||0)+1})});
-  var top3ansiedade = Object.entries(ansiedadeFreq).sort(function(a,b){return b[1]-a[1]}).slice(0,3).map(function(e){return e[0]+' ('+e[1]+'x)'}).join(', ');
-
-  // Dias por qualidade de sono
-  var diasBomSono = regs.filter(function(r){return ['Bom','Excelente'].indexOf(r.sono)>=0}).length;
-  var diasMauSono = regs.filter(function(r){return ['Pessimo','Ruim'].indexOf(r.sono)>=0}).length;
-
-  // Correlation data
-  var corrSonoEnergia = regs.filter(function(r){return r.sono&&r.energia!=null});
-  var energiaBoaSono = corrSonoEnergia.filter(function(r){return ['Bom','Excelente'].indexOf(r.sono)>=0});
-  var energiaMauSono = corrSonoEnergia.filter(function(r){return ['Pessimo','Ruim'].indexOf(r.sono)>=0});
-  var mediaEnergiaBoa = energiaBoaSono.length ? med(energiaBoaSono.map(function(r){return r.energia})) : 'sem dados';
-  var mediaEnergiaMau = energiaMauSono.length ? med(energiaMauSono.map(function(r){return r.energia})) : 'sem dados';
-
-  var resumo = 'DADOS DE SAUDE - ULTIMOS '+periodo+' DIAS ('+regs.length+' registros de '+corte+' ate hoje)\n\n'
-    + 'MEDIAS GERAIS:\n'
-    + '- Energia media: '+med(energias)+'/10\n'
-    + '- Estresse medio: '+med(estresses)+'/10\n'
-    + '- Sono medio: '+med(sonos)+'/5\n'
-    + '- Aderencia medicamentos: '+aderencia+'%\n'
-    + '- Dias com exercicio: '+exercicios+' de '+regs.length+'\n\n'
-    + 'SONO:\n'
-    + '- Dias com bom/excelente sono: '+diasBomSono+'\n'
-    + '- Dias com pessimo/ruim sono: '+diasMauSono+'\n'
-    + '- Energia media em dias de bom sono: '+mediaEnergiaBoa+'\n'
-    + '- Energia media em dias de mau sono: '+mediaEnergiaMau+'\n\n'
-    + 'SINTOMAS:\n'
-    + '- Dias com dor de cabeca: '+diasDorCabeca+'\n'
-    + '- Dias com dores/colicas: '+diasDorColica+'\n'
-    + '- Dias com sangramento: '+diasSangramento+'\n'
-    + '- Sintomas de ansiedade mais frequentes: '+(top3ansiedade||'nenhum')+'\n\n'
-    + 'HUMOR: '+JSON.stringify(humores)+'\n\n'
-    + 'MEDICAMENTOS: Aderencia de '+aderencia+'% ('+totalMeds+' doses tomadas de '+(regs.length*8)+' possiveis)\n\n'
-    + 'OBSERVACOES RECENTES:\n';
-  regs.slice(-5).forEach(function(r){
-    if(r.obs||r.contexto){
-      resumo += '- '+r.data+': '+(r.obs||r.contexto||'')+'\n';
-
-    }
-  });
-
-  var prompts = {
-    geral: 'Voce e um assistente de saude. Analise e forneca: 1.Resumo 2.Padroes 3.Correlacoes 4.Pontos de atencao 5.Sugestoes. Seja especifico e use os numeros.',
+	  function aba(id,btn){
+	  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+	  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});
+	  document.getElementById('tab-'+id).classList.add('active');
+	  if(btn)btn.classList.add('active');
+	  if(id==='dashboard')setTimeout(renderDashboard,50);
+	  if(id==='historico')renderHistorico();
+	  if(id==='correlacoes')renderCorrelacoes();
+	  if(id==='medicamentos')renderMedicamentos();
+	  }
 
 
+	  // IA GEMINI
+	  var IA_HISTORICO = [];
 
+	  async function analisarIA() {
+	  var promptElement = document.getElementById('ia-pergunta');
+	  var promptUser = promptElement ? promptElement.value.trim() : '';
 
+	  var btn = document.getElementById('btn-ia');
+	  if(btn) {
+	  btn.disabled = true;
+	  btn.innerHTML = '<span class="spin"></span> Analisando...';
+	  }
 
+	  // 1. Captura as configurações de filtros da sua aba de IA
+	  var periodo = document.getElementById('ia-periodo') ? document.getElementById('ia-periodo').value : '30';
+	  var tipoAnalise = document.getElementById('ia-tipo') ? document.getElementById('ia-tipo').value : 'geral';
 
+	  // Filtra os últimos registros com base na seleção
+	  var ultimosRegistros = REGISTROS.slice(-parseInt(periodo));
 
-    dores: 'Voce e um especialista em dor. Analise os dados focando em dores de cabeca, colicas e sintomas. Identifique possiveis gatilhos e padroes.',
-    meds: 'Voce e um especialista em adesao ao tratamento. Analise a aderencia aos medicamentos e correlacione com a evolucao dos sintomas e bem-estar.',
-    humor: 'Voce e um psicologo. Analise os dados de humor, ansiedade, estresse e sensacoes predominantes. Identifique padroes e sugira estrategias.',
-    alimentacao: 'Voce e um nutricionista. Analise os dados de alimentacao, intestino e correlacione com energia e sintomas.',
-    medico: 'Crie um resumo clinico objetivo para apresentar ao medico, destacando: sintomas principais, frequencia, medicamentos e aderencia, padroes identificados e pontos de atencao.'
-  };
+	  // 2. Mapeia TODOS os dados de saúde coletados na aplicação para estruturar o prompt
+	  var dadosTexto = ultimosRegistros.map(function(r) {
+	  var sintomasText = "";
+	  if (r.sintomas_ansiedade && r.sintomas_ansiedade.length > 0) {
+	  sintomasText = r.sintomas_ansiedade.join(", ");
+	  } else {
+	  sintomasText = "Nenhum";
+	  }
 
-  var prompt = prompts[tipo] + '\n\n' + resumo;
+	  var medsText = "";
+	  if (r.medicamentos && r.medicamentos.length > 0) {
+	  medsText = r.medicamentos.join(", ");
+	  } else {
+	  medsText = "Nenhum registrado";
+	  }
 
+	  return "- Data: " + (r.data || '--') +
+	  " | Energia: " + (r.energia !== undefined ? r.energia : '--') + "/10" +
+	  " | Estresse: " + (r.estresse !== undefined ? r.estresse : '--') + "/10" +
+	  " | Humor: " + (r.humor || 'Não informado') +
+	  " | Ânimo: " + (r.animo_acordar || '--') +
+	  " | Sensação: " + (r.sensacao_predominante || '--') +
+	  " | Sono: " + (r.horas_sono || '--') + "h (Qualidade: " + (r.sono_qualidade || '--') + ", Paralisia: " + (r.paralisia_sono || 'Não') + ", Despertares: " + (r.despertares_noturnos || '--') + ")" +
+	  " | Dor de Cabeça: " + (r.dor_cabeca_tipo || 'Nenhuma') + " (Local: " + (r.dor_cabeca_loc || '--') + ", Impacto: " + (r.dor_cabeca_impacto || '--') + ")" +
+	  " | Outras Dores: " + (r.dor_tipo || 'Nenhuma') + " (Local: " + (r.dor_loc || '--') + ", Impacto: " + (r.dor_impacto || '--') + ")" +
+	  " | Ginecológico: Sangramento nível " + (r.sangramento || '0') + ", Libido/Relação: " + (r.relacao_sexual || '--') +
+	  " | Disposição Física: " + (r.disposicao_fisica || '--') + " | Cognitivo: " + (r.capacidade_cognitiva || '--') +
+	  " | Intestino: Bristol " + (r.fezes_qualidade || '--') + ", Gases: " + (r.gases_distensao || '--') +
+	  " | Alimentação: " + (r.alimentacao_qualidade || '--') + " (Café: " + (r.cafeina || '0') + " doses, Açúcar: " + (r.carboidrato || '--') + ")" +
+	  " | Exercício: " + (r.exercicio_tipo || 'Nenhum') + " (Intensidade: " + (r.exercicio_intensidade || '--') + ")" +
+	  " | Sintomas de Ansiedade: " + sintomasText +
+	  " | Medicamentos Tomados: " + medsText +
+	  " | Contexto/Gatilhos: " + (r.contexto_ansiedade || 'Nenhum') +
+	  " | Preocupações: " + (r.pensamentos_frequentes || 'Nenhuma') +
+	  " | Obs: " + (r.obs || 'Nenhuma');
+	  }).join("\n");
 
-  if(pergunta) prompt += '\n\nPERGUNTA ESPECIFICA: ' + pergunta;
+	  // Instancia as diretrizes de contexto clínico para o prompt do sistema
+	  var promptSistema = "Você é um assistente médico de IA especializado em bem-estar e saúde. Analise os dados históricos fornecidos e retorne um panorama claro, empático, profissional e direto estruturado em tópicos markdown claros. Foco analítico solicitado pelo usuário: " + tipoAnalise + ".\n\nHistórico recente capturado:\n" + dadosTexto;
+	  var perguntaFinal = promptSistema + "\n\nPergunta adicional do Usuário: " + (promptUser || "Faça uma análise clínica geral detalhada com base nas métricas enviadas e me dê insights ou correlações acionáveis.");
 
+	  // 3. Credenciais da requisição direta (com correção da rota /models/)
+	  var apiKey = "AIzaSyAVW95GZO1Z3t1a1qwUo-Ud4ovXS8bET_w";
+	  var url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey;
 
+	  // 4. Criação do Objeto JSON nativo padrão da Google Generative Language API
+	  var corpoRequisicao = {
+	  contents: [{
+	  parts: [{
+	  text: perguntaFinal
+	  }]
+	  }]
+	  };
 
-  prompt += '\n\nResponda em portugues de forma clara e organizada. Use topicos e seja objetivo.';
+	  try {
+	  var response = await fetch(url, {
+	  method: "POST",
+	  headers: {
+	  "Content-Type": "application/json"
+	  },
+	  body: JSON.stringify(corpoRequisicao)
+	  });
 
+	  // Se falhar com 403, captura e exibe o motivo real retornado pelo Google no console
+	  if(!response.ok) {
+	  var erroDetalhado = "";
+	  try {
+	  var errJson = await response.json();
+	  erroDetalhado = errJson.error ? ": " + errJson.error.message : "";
+	  } catch(e) {}
+	  throw new Error("Erro na API (Status: " + response.status + ")" + erroDetalhado);
+	  }
 
-  try{
-    var resp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyCZApN5G4KZb98vU7dDrWurKsVJDE-Q4mA', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        contents: [{parts: [{text: prompt}]}],
-        generationConfig: {temperature: 0.7, maxOutputTokens: 1500}
-      })
-    });
+	  var json = await response.json();
 
-    var data = await resp.json();
-    var texto = data.candidates[0].content.parts[0].text;
+	  // 5. Extração da árvore de nós da resposta padrão Gemini
+	  var textoResposta = "";
+	  if (json.candidates && json.candidates[0] && json.candidates[0].content && json.candidates[0].content.parts && json.candidates[0].content.parts[0]) {
+	  textoResposta = json.candidates[0].content.parts[0].text;
+	  } else {
+	  throw new Error("Formato de resposta inesperado da API.");
+	  }
 
-    // Show result
-    document.getElementById('ia-resultado').style.display = 'block';
-    document.getElementById('ia-conteudo').textContent = texto;
-    document.getElementById('ia-periodo-label').textContent = regs.length+' registros analisados';
+	  // 6. Atualização dinâmica dos elementos visuais na interface do usuário
+	  var labelPeriodo = document.getElementById('ia-periodo-label');
+	  if(labelPeriodo) {
+	  labelPeriodo.textContent = "Período avaliado: " + periodo + " dias | Foco ativo: " + tipoAnalise;
+	  }
 
-    // Save to history
-    IA_HISTORICO.unshift({
-      data: new Date().toLocaleDateString('pt-BR'),
-      tipo: tipo,
-      periodo: periodo,
-      texto: texto
-    });
-    if(IA_HISTORICO.length > 5) IA_HISTORICO.pop();
-    renderHistoricoIA();
+	  var conteudoDiv = document.getElementById('ia-conteudo');
+	  if(conteudoDiv) {
+	  // Se sua aplicação possuir função de tratamento de markdown, pode envolvê-la aqui
+	  conteudoDiv.innerText = textoResposta;
+	  }
 
-    toast('Analise concluida!','ok');
-  }catch(e){
-    console.error(e);
-    toast('Erro ao conectar com a IA. Tente novamente.','err');
-  }finally{
-    btn.innerHTML = '&#x2728; Analisar com IA';
-    btn.disabled = false;
-  }
-}
+	  var divResultado = document.getElementById('ia-resultado');
+	  if(divResultado) {
+	  divResultado.style.display = 'block';
+	  }
 
-function copiarAnalise(){
-  var texto = document.getElementById('ia-conteudo').textContent;
-  navigator.clipboard.writeText(texto).then(function(){toast('Copiado!','ok')});
-}
+	  // 7. Salva a resposta gerada na memória local estruturada (IA_HISTORICO)
+	  if (typeof IA_HISTORICO !== 'undefined') {
+	  IA_HISTORICO.unshift({
+	  data: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}),
+	  tipo: promptUser ? 'Dúvida: ' + promptUser.substring(0,20) + '...' : 'Análise: ' + tipoAnalise,
+	  texto: textoResposta
+	  });
+	  localStorage.setItem('saude_ia_hist', JSON.stringify(IA_HISTORICO));
+	  if(typeof renderHistoricoIA === 'function') {
+	  renderHistoricoIA();
+	  }
+	  }
 
-function novaAnalise(){
-  document.getElementById('ia-resultado').style.display = 'none';
-  document.getElementById('ia-pergunta').value = '';
-}
+	  toast("Análise da IA atualizada com sucesso!", "ok");
 
-function renderHistoricoIA(){
-  if(!IA_HISTORICO.length) return;
-  var wrap = document.getElementById('ia-historico-wrap');
-  var hist = document.getElementById('ia-historico');
-  wrap.style.display = 'block';
-  hist.innerHTML = IA_HISTORICO.map(function(h,i){
-    var div = document.createElement('div');
-    div.style.cssText = 'background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:14px;margin-bottom:8px;cursor:pointer';
-    div.innerHTML = '<div style="display:flex;justify-content:space-between"><span style="font-size:13px;font-weight:600;color:var(--p1)">'+h.data+' - '+h.tipo+'</span><span style="font-size:11px;color:var(--texto3)">clique</span></div><div class="ia-body" style="display:none;margin-top:12px;font-size:12px;color:var(--texto2);line-height:1.6">'+h.texto+'</div>';
+	  } catch(err) {
+	  console.error("Erro capturado durante a requisição:", err);
+	  toast("Falha na consulta: " + err.message, "erro");
+	  } finally {
+	  if(btn) {
+	  btn.disabled = false;
+	  btn.innerHTML = '&#x2728; Analisar com IA';
+	  }
+	  }
+	  }
+
+	  function renderHistoricoIA(){
+	  if(!IA_HISTORICO.length) return;
+	  var wrap = document.getElementById('ia-historico-wrap');
+	  var hist = document.getElementById('ia-historico');
+	  wrap.style.display = 'block';
+	  hist.innerHTML = IA_HISTORICO.map(function(h,i){
+	  var div = document.createElement('div');
+	  div.style.cssText = 'background:var(--card);border:1px solid var(--borda);border-radius:var(--rs);padding:14px;margin-bottom:8px;cursor:pointer';
+	  div.innerHTML = '<div style="display:flex;justify-content:space-between"><span style="font-size:13px;font-weight:600;color:var(--p1)">'+h.data+' - '+h.tipo+'</span><span style="font-size:11px;color:var(--texto3)">clique</span></div><div class="ia-body" style="display:none;margin-top:12px;font-size:12px;color:var(--texto2);line-height:1.6">'+h.texto+'</div>';
     div.onclick = function(){ var b=this.querySelector('.ia-body'); b.style.display=b.style.display==='none'?'block':'none'; };
     return div.outerHTML;
   }).join('');

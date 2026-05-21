@@ -293,6 +293,41 @@ def remover_despesa(mes, id):
     return jsonify({"ok": True})
 
 # ─── MAIN ─────────────────────────────────────────────────────────────────────
+
+@app.route("/api/saude/ia", methods=["POST"])
+@login_required
+def saude_ia():
+    import urllib.request, json as _json
+    body = request.json
+    prompt = body.get("prompt","")
+    if not prompt:
+        return jsonify({"ok": False, "erro": "prompt vazio"}), 400
+
+    GEMINI_KEY = os.environ.get("GEMINI_KEY", "AIzaSyCZApN5G4KZb98vU7dDrWurKsVJDE-Q4mA")
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_KEY}"
+
+    payload = _json.dumps({
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {"temperature": 0.7, "maxOutputTokens": 1500}
+    }).encode("utf-8")
+
+    try:
+        req = urllib.request.Request(url, data=payload, headers={"Content-Type": "application/json"})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            data = _json.loads(r.read().decode("utf-8"))
+        texto = data["candidates"][0]["content"]["parts"][0]["text"]
+        return jsonify({"ok": True, "texto": texto})
+    except urllib.error.HTTPError as e:
+        err = e.read().decode("utf-8")
+        try:
+            msg = _json.loads(err).get("error",{}).get("message","Erro na API")
+        except:
+            msg = err
+        code = e.code
+        return jsonify({"ok": False, "erro": msg, "code": code}), 200
+    except Exception as e:
+        return jsonify({"ok": False, "erro": str(e)}), 500
+
 def iniciar_bot():
     import time
     time.sleep(3)  # aguarda app subir
@@ -319,6 +354,9 @@ import threading
 _bot_thread = threading.Thread(target=iniciar_bot, daemon=True)
 _bot_thread.start()
 print("Thread do bot iniciada!")
+
+
+
 
 if __name__ == "__main__":
     import socket
